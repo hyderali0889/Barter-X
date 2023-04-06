@@ -3,22 +3,32 @@ import 'package:get/get.dart';
 import '../Themes/main_colors.dart';
 import 'package:unicons/unicons.dart';
 
+import '../Themes/spacing.dart';
+
 class BottomBar extends StatelessWidget {
   const BottomBar({
     super.key,
     required this.controller,
     required this.size,
+    required this.errorMsg,
+    required this.closeFunction,
+    required this.tryAgainFunction,
+    required this.errorTitle,
   });
 
   final dynamic controller;
   final Size size;
+  final String errorTitle;
+  final String errorMsg;
+  final VoidCallback closeFunction;
+  final VoidCallback tryAgainFunction;
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => AnimatedPositioned(
         bottom: 20,
-        left: controller.errorOcurred.value ? 45 : -445,
+        left: controller.errorOcurred.value ? size.width * 0.1 : -845,
         duration: const Duration(milliseconds: 500),
         child: Container(
           width: size.width * 0.8,
@@ -27,7 +37,7 @@ class BottomBar extends StatelessWidget {
               color: AppColors().labelOffBlack,
               borderRadius: BorderRadius.circular(14.0)),
           child: Padding(
-            padding: const EdgeInsets.all(25),
+            padding: EdgeInsets.all(Spacing().sm),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,29 +46,28 @@ class BottomBar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Login Error",
+                      errorTitle,
                       style: context.textTheme.displayMedium,
                     ),
                     IconButton(
-                        onPressed: () {
-                          controller.changeErrorStatus(false);
-
-                         }, icon: const Icon(UniconsLine.times))
+                        onPressed: closeFunction,
+                        icon: Icon(
+                          UniconsLine.times,
+                          color: AppColors().primaryWhite,
+                        ))
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 25.0),
+                  padding: EdgeInsets.only(top: Spacing().xs),
                   child: Text(
-                    "We Encountered an error trying to log into your account. Please Check your Network Connection and try again.",
+                    errorMsg,
                     style: context.textTheme.displaySmall,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 25),
+                  padding: EdgeInsets.only(top: Spacing().sm),
                   child: InkWell(
-                    onTap: () {
-
-                    },
+                    onTap: tryAgainFunction,
                     child: Container(
                       alignment: Alignment.center,
                       width: size.width * 0.8,

@@ -7,26 +7,24 @@ class AppTheme {
       brightness: Brightness.light,
       colorScheme: const ColorScheme.light()
           .copyWith(background: AppColors().primaryWhite),
-      fontFamily: "regular",
+      fontFamily: "medium",
       textTheme: TextTheme(
         //White
         bodyLarge: TextStyle(
-            color: AppColors().primaryText, fontSize: 30, fontFamily: "bold"),
+            color: AppColors().primaryText, fontSize: 25, fontFamily: "bold"),
         bodyMedium: TextStyle(
             color: AppColors().primaryText, fontSize: 20, fontFamily: "medium"),
         bodySmall: TextStyle(
-            color: AppColors().primaryText,
-            fontSize: 14,
-            fontFamily: "regular"),
+            color: AppColors().primaryText, fontSize: 16, fontFamily: "medium"),
         displayLarge: TextStyle(
-            color: AppColors().primaryWhite, fontSize: 30, fontFamily: "bold"),
+            color: AppColors().primaryWhite, fontSize: 25, fontFamily: "bold"),
         displayMedium: TextStyle(
             color: AppColors().primaryWhite,
             fontSize: 20,
             fontFamily: "medium"),
         displaySmall: TextStyle(
             color: AppColors().primaryWhite,
-            fontSize: 14,
-            fontFamily: "regular"),
+            fontSize: 16,
+            fontFamily: "medium"),
       ));
 }

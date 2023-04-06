@@ -2,19 +2,20 @@ import 'package:barter_x/Controllers/Auth_Controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Components/bottom_app_bar.dart';
+import '../../Controllers/Auth_Controllers/register_controller.dart';
 import '../../Routes/routes.dart';
 import '../../Themes/main_colors.dart';
 import '../../Themes/spacing.dart';
 import 'package:unicons/unicons.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -24,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
         "We Encountered an error trying to log into your account. Please Check your Network Connection and try again.";
 
     Size size = MediaQuery.of(context).size;
-    LoginController controller = LoginController();
+    RegisterController controller = RegisterController();
 
     void closeBottomBar() {
       controller.changeErrorStatus(false);
@@ -79,7 +80,7 @@ class MainView extends StatelessWidget {
   final Size size;
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final LoginController controller;
+  final RegisterController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +97,16 @@ class MainView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: const Icon(UniconsLine.angle_left),
+                ),
                 Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.1),
+                  padding: EdgeInsets.only(top: size.height * 0.05),
                   child: Text(
-                    "Welcome Back to\nBarter-X",
+                    "Register Account",
                     style: context.textTheme.bodyLarge,
                   ),
                 ),
@@ -117,7 +124,7 @@ class MainView extends StatelessWidget {
                   title: "Email Address",
                   hintText: "Please Enter Email Address",
                   obsecureText: false,
-                  loginController: controller,
+                  registerController: controller,
                 ),
                 Obx(
                   () => InputField(
@@ -127,7 +134,7 @@ class MainView extends StatelessWidget {
                     title: "Password",
                     hintText: "Please Enter your Password",
                     obsecureText: controller.obsecureText.value,
-                    loginController: controller,
+                    registerController: controller,
                   ),
                 ),
                 MainButton(size: size),
@@ -149,20 +156,18 @@ class BottomRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TextButton(
-            onPressed: () {},
-            child: Text(
-              "Forgot Password",
-              style: context.textTheme.bodySmall,
-            )),
+        Text(
+          "Already Have An Account ?",
+          style: context.textTheme.bodySmall,
+        ),
         TextButton(
             onPressed: () {
-              Get.toNamed(Routes().registerScreen);
+              Get.offAllNamed(Routes().loginScreen);
             },
             child: Text(
-              "Sign Up",
+              "Sign In",
               style: context.textTheme.bodySmall,
             ))
       ],
@@ -195,7 +200,7 @@ class MainButton extends StatelessWidget {
                   color: AppColors().primaryBlue,
                   borderRadius: BorderRadius.circular(10)),
               child: Text(
-                "Sign In",
+                "Sign Up",
                 style: context.textTheme.displayMedium,
               ),
             ),
@@ -214,7 +219,7 @@ class InputField extends StatelessWidget {
     required this.title,
     required this.hintText,
     required this.obsecureText,
-    required this.loginController,
+    required this.registerController,
     required this.isEmailField,
   });
 
@@ -224,7 +229,7 @@ class InputField extends StatelessWidget {
   final String hintText;
   final bool obsecureText;
   final bool isEmailField;
-  final LoginController loginController;
+  final RegisterController registerController;
 
   @override
   Widget build(BuildContext context) {
@@ -253,12 +258,12 @@ class InputField extends StatelessWidget {
                         : obsecureText
                             ? IconButton(
                                 onPressed: () {
-                                  loginController.changeObsecureText(false);
+                                  registerController.changeObsecureText(false);
                                 },
                                 icon: const Icon(UniconsLine.eye))
                             : IconButton(
                                 onPressed: () {
-                                  loginController.changeObsecureText(true);
+                                  registerController.changeObsecureText(true);
                                 },
                                 icon: const Icon(UniconsLine.eye_slash)),
                     enabledBorder: InputBorder.none,
