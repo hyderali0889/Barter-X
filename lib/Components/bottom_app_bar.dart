@@ -28,11 +28,11 @@ class BottomBar extends StatelessWidget {
     return Obx(
       () => AnimatedPositioned(
         bottom: 20,
-        left: controller.errorOcurred.value ? size.width * 0.1 : -845,
+        left: controller.errorOcurred.value ? size.width * 0.1 : -885,
         duration: const Duration(milliseconds: 500),
         child: Container(
           width: size.width * 0.8,
-          height: 250,
+          height: size.height * 0.35,
           decoration: BoxDecoration(
               color: AppColors().labelOffBlack,
               borderRadius: BorderRadius.circular(14.0)),

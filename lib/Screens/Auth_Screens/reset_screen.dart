@@ -1,21 +1,21 @@
-import 'package:barter_x/Controllers/Auth_Controllers/login_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Components/bottom_app_bar.dart';
+import '../../Controllers/Auth_Controllers/reset_controller.dart';
 import '../../Routes/routes.dart';
 import '../../Themes/main_colors.dart';
 import '../../Themes/spacing.dart';
 import 'package:unicons/unicons.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ResetScreen extends StatefulWidget {
+  const ResetScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ResetScreen> createState() => _ResetScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ResetScreenState extends State<ResetScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
         "We Encountered an error trying to log into your account. Please Check your Network Connection and try again.";
 
     Size size = MediaQuery.of(context).size;
-    LoginController controller = LoginController();
+    ResetController controller = ResetController();
 
     void closeBottomBar() {
       controller.changeErrorStatus(false);
@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
           BottomBar(
             controller: controller,
             size: size,
-            errorTitle: "Login Error",
+            errorTitle: "Reset Password Error",
             errorMsg: networkErrorMsg,
             closeFunction: closeBottomBar,
             tryAgainFunction: tryAgainBottomBar,
@@ -80,7 +80,7 @@ class MainView extends StatelessWidget {
   final Size size;
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final LoginController controller;
+  final ResetController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -97,10 +97,16 @@ class MainView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: const Icon(UniconsLine.angle_left),
+                ),
                 Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.1),
+                  padding: EdgeInsets.only(top: size.height * 0.05),
                   child: Text(
-                    "Welcome Back to\nBarter-X",
+                    "Register Account",
                     style: context.textTheme.bodyLarge,
                   ),
                 ),
@@ -118,29 +124,95 @@ class MainView extends StatelessWidget {
                   title: "Email Address",
                   hintText: "Please Enter Email Address",
                   obsecureText: false,
-                  loginController: controller,
-                ),
-                Obx(
-                  () => InputField(
-                    size: size,
-                    isEmailField: false,
-                    controller: passwordController,
-                    title: "Password",
-                    hintText: "Please Enter your Password",
-                    obsecureText: controller.obsecureText.value,
-                    loginController: controller,
-                  ),
+                  registerController: controller,
                 ),
                 MainButton(
                   size: size,
                   emailController: emailController,
-                  passwordController: passwordController,
                   controller: controller,
                 ),
               ],
             ),
             const BottomRow()
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class BottomRow extends StatelessWidget {
+  const BottomRow({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Already Have An Account ?",
+          style: context.textTheme.bodySmall,
+        ),
+        TextButton(
+            onPressed: () {
+              Get.offAllNamed(Routes().loginScreen);
+            },
+            child: Text(
+              "Sign In",
+              style: context.textTheme.bodySmall,
+            ))
+      ],
+    );
+  }
+}
+
+class MainButton extends StatelessWidget {
+  const MainButton({
+    super.key,
+    required this.size,
+    required this.emailController,
+    required this.controller,
+  });
+
+  final Size size;
+  final TextEditingController emailController;
+  final ResetController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size.width,
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.only(top: Spacing().lg),
+          child: InkWell(
+            onTap: () async{
+              try {
+                if (emailController.text.isEmpty) {
+                  controller.changeErrorStatus(true);
+                }
+               await FirebaseAuth.instance
+                    .sendPasswordResetEmail(email: emailController.text.trim())
+                    .timeout(const Duration(seconds: 5));
+              } catch (e) {
+                controller.changeErrorStatus(true);
+              }
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: size.width * 0.8,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: AppColors().primaryBlue,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Text(
+                "Reset Password",
+                style: context.textTheme.displayMedium,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -155,7 +227,7 @@ class InputField extends StatelessWidget {
     required this.title,
     required this.hintText,
     required this.obsecureText,
-    required this.loginController,
+    required this.registerController,
     required this.isEmailField,
   });
 
@@ -165,7 +237,7 @@ class InputField extends StatelessWidget {
   final String hintText;
   final bool obsecureText;
   final bool isEmailField;
-  final LoginController loginController;
+  final ResetController registerController;
 
   @override
   Widget build(BuildContext context) {
@@ -194,12 +266,12 @@ class InputField extends StatelessWidget {
                         : obsecureText
                             ? IconButton(
                                 onPressed: () {
-                                  loginController.changeObsecureText(false);
+                                  registerController.changeObsecureText(false);
                                 },
                                 icon: const Icon(UniconsLine.eye))
                             : IconButton(
                                 onPressed: () {
-                                  loginController.changeObsecureText(true);
+                                  registerController.changeObsecureText(true);
                                 },
                                 icon: const Icon(UniconsLine.eye_slash)),
                     enabledBorder: InputBorder.none,
@@ -211,96 +283,6 @@ class InputField extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class MainButton extends StatelessWidget {
-  const MainButton({
-    super.key,
-    required this.size,
-    required this.emailController,
-    required this.passwordController,
-    required this.controller,
-  });
-
-  final Size size;
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final LoginController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size.width,
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.only(top: Spacing().lg),
-          child: InkWell(
-            onTap: () async {
-              try {
-                if (emailController.text.isEmpty ||
-                    passwordController.text.isEmpty) {
-                  controller.changeErrorStatus(true);
-                }
-                FirebaseAuth authInstance = FirebaseAuth.instance;
-
-                await authInstance
-                    .signInWithEmailAndPassword(
-                        email: emailController.text.trim(),
-                        password: passwordController.text.trim())
-                    .timeout(const Duration(seconds: 5));
-                Get.offAllNamed(Routes().homeScreen);
-              } catch (e) {
-                controller.changeErrorStatus(true);
-              }
-            },
-            child: Container(
-              alignment: Alignment.center,
-              width: size.width * 0.8,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: AppColors().primaryBlue,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                "Sign In",
-                style: context.textTheme.displayMedium,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class BottomRow extends StatelessWidget {
-  const BottomRow({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TextButton(
-            onPressed: () {
-              Get.toNamed(Routes().resetScreen);
-            },
-            child: Text(
-              "Forgot Password",
-              style: context.textTheme.bodySmall,
-            )),
-        TextButton(
-            onPressed: () {
-              Get.toNamed(Routes().registerScreen);
-            },
-            child: Text(
-              "Sign Up",
-              style: context.textTheme.bodySmall,
-            ))
-      ],
     );
   }
 }

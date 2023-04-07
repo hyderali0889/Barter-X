@@ -1,4 +1,5 @@
-import 'package:barter_x/Controllers/Auth_Controllers/login_controller.dart';
+import 'package:barter_x/Utils/firebase_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Components/bottom_app_bar.dart';
@@ -57,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           BottomBar(
             controller: controller,
             size: size,
-            errorTitle: "Login Error",
+            errorTitle: "Register Error",
             errorMsg: networkErrorMsg,
             closeFunction: closeBottomBar,
             tryAgainFunction: tryAgainBottomBar,
@@ -137,74 +138,16 @@ class MainView extends StatelessWidget {
                     registerController: controller,
                   ),
                 ),
-                MainButton(size: size),
+                MainButton(
+                  size: size,
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  controller: controller,
+                ),
               ],
             ),
             const BottomRow()
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class BottomRow extends StatelessWidget {
-  const BottomRow({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "Already Have An Account ?",
-          style: context.textTheme.bodySmall,
-        ),
-        TextButton(
-            onPressed: () {
-              Get.offAllNamed(Routes().loginScreen);
-            },
-            child: Text(
-              "Sign In",
-              style: context.textTheme.bodySmall,
-            ))
-      ],
-    );
-  }
-}
-
-class MainButton extends StatelessWidget {
-  const MainButton({
-    super.key,
-    required this.size,
-  });
-
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size.width,
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.only(top: Spacing().lg),
-          child: InkWell(
-            onTap: () {},
-            child: Container(
-              alignment: Alignment.center,
-              width: size.width * 0.8,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: AppColors().primaryBlue,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                "Sign Up",
-                style: context.textTheme.displayMedium,
-              ),
-            ),
-          ),
         ),
       ),
     );
@@ -275,6 +218,90 @@ class InputField extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MainButton extends StatelessWidget {
+  const MainButton({
+    super.key,
+    required this.size,
+    required this.emailController,
+    required this.passwordController,
+    required this.controller,
+  });
+
+  final Size size;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final RegisterController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size.width,
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.only(top: Spacing().lg),
+          child: InkWell(
+            onTap: () async {
+              try {
+                if(emailController.text.isEmpty || passwordController.text.isEmpty){
+                  controller.changeErrorStatus(true);
+                }
+                FirebaseAuth authInstance = FirebaseAuth.instance;
+                await authInstance
+                    .createUserWithEmailAndPassword(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim())
+                    .timeout(const Duration(seconds: 5));
+                Get.offAllNamed(Routes().homeScreen);
+              } catch (e) {
+                controller.changeErrorStatus(true);
+              }
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: size.width * 0.8,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: AppColors().primaryBlue,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Text(
+                "Sign Up",
+                style: context.textTheme.displayMedium,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BottomRow extends StatelessWidget {
+  const BottomRow({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Already Have An Account ?",
+          style: context.textTheme.bodySmall,
+        ),
+        TextButton(
+            onPressed: () {
+              Get.offAllNamed(Routes().loginScreen);
+            },
+            child: Text(
+              "Sign In",
+              style: context.textTheme.bodySmall,
+            ))
+      ],
     );
   }
 }
