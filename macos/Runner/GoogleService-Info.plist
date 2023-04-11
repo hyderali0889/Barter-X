@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.barterx</string>
+	<string>dev.hyderali.barterX</string>
 	<key>PROJECT_ID</key>
 	<string>barter-x-bx0889</string>
 	<key>STORAGE_BUCKET</key>
