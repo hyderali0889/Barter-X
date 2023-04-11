@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   FirebaseAuth.instance.signOut();
                   Get.offAllNamed(Routes().loginScreen);
                 },
-                child: Text("Sign oUt"))
+                child: const Text("Sign oUt"))
           ],
         ),
       )),

@@ -14,6 +14,7 @@ class BottomBar extends StatelessWidget {
     required this.closeFunction,
     required this.tryAgainFunction,
     required this.errorTitle,
+    required this.buttonWidget,
   });
 
   final dynamic controller;
@@ -22,6 +23,7 @@ class BottomBar extends StatelessWidget {
   final String errorMsg;
   final VoidCallback closeFunction;
   final VoidCallback tryAgainFunction;
+  final Widget buttonWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class BottomBar extends StatelessWidget {
         duration: const Duration(milliseconds: 500),
         child: Container(
           width: size.width * 0.8,
-          height: size.height * 0.35,
+          height: 300,
           decoration: BoxDecoration(
               color: AppColors().labelOffBlack,
               borderRadius: BorderRadius.circular(14.0)),
@@ -69,17 +71,13 @@ class BottomBar extends StatelessWidget {
                   child: InkWell(
                     onTap: tryAgainFunction,
                     child: Container(
-                      alignment: Alignment.center,
-                      width: size.width * 0.8,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: AppColors().primaryBlue,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Text(
-                        "Try Again",
-                        style: context.textTheme.displaySmall,
-                      ),
-                    ),
+                        alignment: Alignment.center,
+                        width: size.width * 0.8,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: AppColors().primaryBlue,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: buttonWidget),
                   ),
                 )
               ],

@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Components/bottom_app_bar.dart';
+import '../../Components/input_field.dart';
+import '../../Components/main_button.dart';
 import '../../Controllers/Auth_Controllers/reset_controller.dart';
 import '../../Routes/routes.dart';
-import '../../Themes/main_colors.dart';
 import '../../Themes/spacing.dart';
 import 'package:unicons/unicons.dart';
 
@@ -21,9 +22,6 @@ class _ResetScreenState extends State<ResetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String networkErrorMsg =
-        "We Encountered an error trying to log into your account. Please Check your Network Connection and try again.";
-
     Size size = MediaQuery.of(context).size;
     ResetController controller = ResetController();
 
@@ -54,13 +52,19 @@ class _ResetScreenState extends State<ResetScreen> {
               ),
             ),
           ),
-          BottomBar(
-            controller: controller,
-            size: size,
-            errorTitle: "Reset Password Error",
-            errorMsg: networkErrorMsg,
-            closeFunction: closeBottomBar,
-            tryAgainFunction: tryAgainBottomBar,
+          Obx(
+            () => BottomBar(
+              controller: controller,
+              size: size,
+              errorTitle: "Reset Password Error",
+              errorMsg: controller.errorMsg.value,
+              closeFunction: closeBottomBar,
+              tryAgainFunction: tryAgainBottomBar,
+              buttonWidget: Text(
+                "Try Again",
+                style: context.textTheme.displayMedium,
+              ),
+            ),
           ),
         ],
       )),
@@ -84,6 +88,32 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void resetPassword() async {
+      controller.changeErrorStatus(false);
+      FocusScope.of(context).unfocus();
+      try {
+        if (emailController.text.isEmpty) {
+          controller.changeErrorStatus(true);
+          controller.changeErrorMessage(
+              "An Error Occurred, Email Field cannot be left blank.");
+          controller.startLoading(false);
+
+          return;
+        }
+        controller.startLoading(true);
+
+        await FirebaseAuth.instance
+            .sendPasswordResetEmail(email: emailController.text.trim())
+            .timeout(const Duration(seconds: 5));
+        controller.startLoading(false);
+      } catch (e) {
+        controller.changeErrorStatus(true);
+        controller.startLoading(false);
+
+        controller.changeErrorMessage("An Error Occurred, $e");
+      }
+    }
+
     return InkWell(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -106,14 +136,14 @@ class MainView extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: size.height * 0.05),
                   child: Text(
-                    "Register Account",
+                    "Reset Password",
                     style: context.textTheme.bodyLarge,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: Spacing().xs),
                   child: Text(
-                    "Your Own Barter Trade App.",
+                    "Enter your email to reset password.",
                     style: context.textTheme.bodySmall,
                   ),
                 ),
@@ -124,12 +154,15 @@ class MainView extends StatelessWidget {
                   title: "Email Address",
                   hintText: "Please Enter Email Address",
                   obsecureText: false,
-                  registerController: controller,
+                  mainController: controller,
+                  width: size.width * 0.85,
+                  height: 50,
                 ),
                 MainButton(
                   size: size,
-                  emailController: emailController,
-                  controller: controller,
+                  mainController: controller,
+                  buttonText: "Reset Password",
+                  actionFunction: resetPassword,
                 ),
               ],
             ),
@@ -164,125 +197,6 @@ class BottomRow extends StatelessWidget {
               style: context.textTheme.bodySmall,
             ))
       ],
-    );
-  }
-}
-
-class MainButton extends StatelessWidget {
-  const MainButton({
-    super.key,
-    required this.size,
-    required this.emailController,
-    required this.controller,
-  });
-
-  final Size size;
-  final TextEditingController emailController;
-  final ResetController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size.width,
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.only(top: Spacing().lg),
-          child: InkWell(
-            onTap: () async{
-              try {
-                if (emailController.text.isEmpty) {
-                  controller.changeErrorStatus(true);
-                }
-               await FirebaseAuth.instance
-                    .sendPasswordResetEmail(email: emailController.text.trim())
-                    .timeout(const Duration(seconds: 5));
-              } catch (e) {
-                controller.changeErrorStatus(true);
-              }
-            },
-            child: Container(
-              alignment: Alignment.center,
-              width: size.width * 0.8,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: AppColors().primaryBlue,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Text(
-                "Reset Password",
-                style: context.textTheme.displayMedium,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class InputField extends StatelessWidget {
-  const InputField({
-    super.key,
-    required this.size,
-    required this.controller,
-    required this.title,
-    required this.hintText,
-    required this.obsecureText,
-    required this.registerController,
-    required this.isEmailField,
-  });
-
-  final Size size;
-  final TextEditingController controller;
-  final String title;
-  final String hintText;
-  final bool obsecureText;
-  final bool isEmailField;
-  final ResetController registerController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: Spacing().lg),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: context.textTheme.bodySmall!.copyWith(fontFamily: "bold"),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: Spacing().xs - 5),
-            child: SizedBox(
-              width: size.width * 0.8,
-              height: 50,
-              child: TextFormField(
-                style: context.textTheme.bodyMedium,
-                obscureText: obsecureText,
-                controller: controller,
-                decoration: InputDecoration(
-                    suffixIcon: isEmailField
-                        ? null
-                        : obsecureText
-                            ? IconButton(
-                                onPressed: () {
-                                  registerController.changeObsecureText(false);
-                                },
-                                icon: const Icon(UniconsLine.eye))
-                            : IconButton(
-                                onPressed: () {
-                                  registerController.changeObsecureText(true);
-                                },
-                                icon: const Icon(UniconsLine.eye_slash)),
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    hintStyle: context.textTheme.bodySmall,
-                    hintText: hintText),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

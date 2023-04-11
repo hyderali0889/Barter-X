@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>147777543144-077aijcrrpa4s631dgh2ff1cbpg22qnd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.147777543144-077aijcrrpa4s631dgh2ff1cbpg22qnd</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>147777543144-0i2qdtkr9d9l7skfhngp1d7f5vte5ecs.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA-sctricgmnpBSaddLs2nsxVNYbBzUc6M</string>
+	<key>GCM_SENDER_ID</key>
+	<string>147777543144</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.barterx</string>
+	<key>PROJECT_ID</key>
+	<string>barter-x-bx0889</string>
+	<key>STORAGE_BUCKET</key>
+	<string>barter-x-bx0889.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:147777543144:ios:26e540502edcca931f625d</string>
+</dict>
+</plist>

@@ -72,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen>
                 animation: sizeAnimation,
                 builder: ((context, child) {
                   return Image.asset(
-                    'assets/icons/Barter-X-logos_black.png',
+                    'assets/icons/logo_transparent.png',
                     width: sizeAnimation.value,
                   );
                 }),

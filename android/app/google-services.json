@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "147777543144-3fslt0c1pu3cd9kfgpl1q9fbr12dtbp2.apps.googleusercontent.com",
+          "client_id": "147777543144-0i2qdtkr9d9l7skfhngp1d7f5vte5ecs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.hyderali.barterX",
+            "certificate_hash": "9d62501cd63af3f45ea4258929f5ed36f1e91ddc"
+          }
+        },
+        {
+          "client_id": "147777543144-81infpfkctunf0cfm4h24h8t9bnb8i6e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
