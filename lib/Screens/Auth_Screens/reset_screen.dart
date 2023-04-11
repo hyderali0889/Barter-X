@@ -45,10 +45,11 @@ class _ResetScreenState extends State<ResetScreen> {
                 width: size.width,
                 height: size.height,
                 child: MainView(
-                    size: size,
-                    emailController: emailController,
-                    passwordController: passwordController,
-                    controller: controller),
+                  size: size,
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  controller: controller,
+                ),
               ),
             ),
           ),
@@ -89,22 +90,28 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void resetPassword() async {
-      controller.changeErrorStatus(false);
-      FocusScope.of(context).unfocus();
       try {
+        // FocusScope.of(context).unfocus();
+
+        controller.startLoading(false);
+        controller.changeErrorStatus(false);
+
         if (emailController.text.isEmpty) {
           controller.changeErrorStatus(true);
+
           controller.changeErrorMessage(
               "An Error Occurred, Email Field cannot be left blank.");
           controller.startLoading(false);
 
           return;
         }
+
         controller.startLoading(true);
 
         await FirebaseAuth.instance
             .sendPasswordResetEmail(email: emailController.text.trim())
-            .timeout(const Duration(seconds: 5));
+            .timeout(const Duration(seconds: 15));
+
         controller.startLoading(false);
       } catch (e) {
         controller.changeErrorStatus(true);
@@ -114,61 +121,60 @@ class MainView extends StatelessWidget {
       }
     }
 
-    return InkWell(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Padding(
-        padding: EdgeInsets.all(Spacing().sm),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: const Icon(UniconsLine.angle_left),
+    return Padding(
+      padding: EdgeInsets.all(Spacing().sm),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: const Icon(UniconsLine.angle_left),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: size.height * 0.05),
+                child: Text(
+                  "Reset Password",
+                  style: context.textTheme.bodyLarge,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.05),
-                  child: Text(
-                    "Reset Password",
-                    style: context.textTheme.bodyLarge,
-                  ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: Spacing().xs),
+                child: Text(
+                  "Enter your email to reset password.",
+                  style: context.textTheme.bodySmall,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: Spacing().xs),
-                  child: Text(
-                    "Enter your email to reset password.",
-                    style: context.textTheme.bodySmall,
-                  ),
-                ),
-                InputField(
+              ),
+              InputField(
+                size: size,
+                isEmailField: true,
+                controller: emailController,
+                title: "Email Address",
+                hintText: "Please Enter Email Address",
+                obsecureText: false,
+                mainController: controller,
+                width: size.width * 0.85,
+                height: 50,
+              ),
+              Obx(
+               ()=> MainButton(
                   size: size,
-                  isEmailField: true,
-                  controller: emailController,
-                  title: "Email Address",
-                  hintText: "Please Enter Email Address",
-                  obsecureText: false,
-                  mainController: controller,
-                  width: size.width * 0.85,
-                  height: 50,
-                ),
-                MainButton(
-                  size: size,
-                  mainController: controller,
+                  mainController: controller.isLoading.value,
                   buttonText: "Reset Password",
-                  actionFunction: resetPassword,
+                  actionFunction: () {
+                    resetPassword();
+                  },
                 ),
-              ],
-            ),
-            const BottomRow()
-          ],
-        ),
+              ),
+            ],
+          ),
+          const BottomRow()
+        ],
       ),
     );
   }

@@ -105,7 +105,7 @@ class MainView extends StatelessWidget {
             .signInWithEmailAndPassword(
                 email: emailController.text.trim(),
                 password: passwordController.text.trim())
-            .timeout(const Duration(seconds: 5));
+            .timeout(const Duration(seconds: 15));
         controller.startLoading(false);
 
         Get.offAllNamed(Routes().homeScreen);
@@ -117,68 +117,65 @@ class MainView extends StatelessWidget {
       }
     }
 
-    return InkWell(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Padding(
-        padding: EdgeInsets.all(Spacing().sm),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.1),
-                  child: Text(
-                    "Welcome Back to\nBarter-X",
-                    style: context.textTheme.bodyLarge,
-                  ),
+    return Padding(
+      padding: EdgeInsets.all(Spacing().sm),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: size.height * 0.1),
+                child: Text(
+                  "Welcome Back to\nBarter-X",
+                  style: context.textTheme.bodyLarge,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: Spacing().xs),
-                  child: Text(
-                    "Your Own Barter Trade App.",
-                    style: context.textTheme.bodySmall,
-                  ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: Spacing().xs),
+                child: Text(
+                  "Your Own Barter Trade App.",
+                  style: context.textTheme.bodySmall,
                 ),
-                InputField(
+              ),
+              InputField(
+                size: size,
+                isEmailField: true,
+                controller: emailController,
+                title: "Email Address",
+                hintText: "Please Enter Email Address",
+                obsecureText: false,
+                mainController: controller,
+                width: size.width * 0.85,
+                height: 50,
+              ),
+              Obx(
+                () => InputField(
                   size: size,
-                  isEmailField: true,
-                  controller: emailController,
-                  title: "Email Address",
-                  hintText: "Please Enter Email Address",
-                  obsecureText: false,
+                  isEmailField: false,
+                  controller: passwordController,
+                  title: "Password",
+                  hintText: "Please Enter your Password",
+                  obsecureText: controller.obsecureText.value,
                   mainController: controller,
                   width: size.width * 0.85,
                   height: 50,
                 ),
-                Obx(
-                  () => InputField(
-                    size: size,
-                    isEmailField: false,
-                    controller: passwordController,
-                    title: "Password",
-                    hintText: "Please Enter your Password",
-                    obsecureText: controller.obsecureText.value,
-                    mainController: controller,
-                    width: size.width * 0.85,
-                    height: 50,
-                  ),
-                ),
-                MainButton(
+              ),
+              Obx(
+               () =>MainButton(
                   size: size,
-                  mainController: controller,
+                  mainController: controller.isLoading.value,
                   buttonText: "Sign In",
                   actionFunction: login,
                 ),
-              ],
-            ),
-            const BottomRow()
-          ],
-        ),
+              ),
+            ],
+          ),
+          const BottomRow()
+        ],
       ),
     );
   }
@@ -196,7 +193,7 @@ class BottomRow extends StatelessWidget {
       children: [
         TextButton(
             onPressed: () {
-              Get.toNamed(Routes().resetScreen);
+               Get.toNamed(Routes().resetScreen);
             },
             child: Text(
               "Forgot Password",

@@ -14,7 +14,7 @@ class MainButton extends StatelessWidget {
       required this.mainController});
 
   final Size size;
-  final dynamic mainController;
+  final bool mainController;
 
   final String buttonText;
   final VoidCallback actionFunction;
@@ -25,26 +25,24 @@ class MainButton extends StatelessWidget {
       width: size.width,
       child: Center(
         child: Padding(
-          padding: EdgeInsets.only(top: Spacing().lg),
+          padding: EdgeInsets.only(top: Spacing().md),
           child: InkWell(
-            onTap: mainController.isLoading.value ? null : actionFunction,
-            child: Obx(
-              () => Container(
-                alignment: Alignment.center,
-                width: size.width * 0.8,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: mainController.isLoading.value
-                        ? AppColors().secHalfGrey
-                        : AppColors().primaryBlue,
-                    borderRadius: BorderRadius.circular(10)),
-                child: mainController.isLoading.value
-                    ? Lottie.asset("assets/jsons/atom-loader.json")
-                    : Text(
-                        buttonText,
-                        style: context.textTheme.displayMedium,
-                      ),
-              ),
+            onTap: mainController ? null : actionFunction,
+            child: Container(
+              alignment: Alignment.center,
+              width: size.width * 0.8,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: mainController
+                      ? AppColors().secHalfGrey
+                      : AppColors().primaryBlue,
+                  borderRadius: BorderRadius.circular(10)),
+              child: mainController
+                  ? Lottie.asset("assets/jsons/atom-loader.json")
+                  : Text(
+                      buttonText,
+                      style: context.textTheme.displayMedium,
+                    ),
             ),
           ),
         ),

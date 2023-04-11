@@ -108,7 +108,7 @@ class MainView extends StatelessWidget {
             .createUserWithEmailAndPassword(
                 email: emailController.text.trim(),
                 password: passwordController.text.trim())
-            .timeout(const Duration(seconds: 5));
+            .timeout(const Duration(seconds: 15));
 
         if (authInstance.currentUser == null) {
             controller.startLoading(false);
@@ -117,7 +117,8 @@ class MainView extends StatelessWidget {
         await authInstance.currentUser!.sendEmailVerification();
         controller.startLoading(false);
 
-        Get.offAllNamed(Routes().homeScreen);
+        Get.offAllNamed(Routes().emailVerificationScreen);
+
       } catch (e) {
         controller.startLoading(false);
 
@@ -126,74 +127,71 @@ class MainView extends StatelessWidget {
       }
     }
 
-    return InkWell(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Padding(
-        padding: EdgeInsets.all(Spacing().sm),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: const Icon(UniconsLine.angle_left),
+    return Padding(
+      padding: EdgeInsets.all(Spacing().sm),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: const Icon(UniconsLine.angle_left),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: size.height * 0.05),
+                child: Text(
+                  "Register Account",
+                  style: context.textTheme.bodyLarge,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.05),
-                  child: Text(
-                    "Register Account",
-                    style: context.textTheme.bodyLarge,
-                  ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: Spacing().xs),
+                child: Text(
+                  "Register to Barter-X",
+                  style: context.textTheme.bodySmall,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: Spacing().xs),
-                  child: Text(
-                    "Register to Barter-X",
-                    style: context.textTheme.bodySmall,
-                  ),
-                ),
-                InputField(
+              ),
+              InputField(
+                size: size,
+                isEmailField: true,
+                controller: emailController,
+                title: "Email Address",
+                hintText: "Please Enter Email Address",
+                obsecureText: false,
+                mainController: controller,
+                width: size.width * 0.85,
+                height: 50,
+              ),
+              Obx(
+                () => InputField(
                   size: size,
-                  isEmailField: true,
-                  controller: emailController,
-                  title: "Email Address",
-                  hintText: "Please Enter Email Address",
-                  obsecureText: false,
+                  isEmailField: false,
+                  controller: passwordController,
+                  title: "Password",
+                  hintText: "Please Enter your Password",
+                  obsecureText: controller.obsecureText.value,
                   mainController: controller,
                   width: size.width * 0.85,
                   height: 50,
                 ),
-                Obx(
-                  () => InputField(
-                    size: size,
-                    isEmailField: false,
-                    controller: passwordController,
-                    title: "Password",
-                    hintText: "Please Enter your Password",
-                    obsecureText: controller.obsecureText.value,
-                    mainController: controller,
-                    width: size.width * 0.85,
-                    height: 50,
-                  ),
-                ),
-                MainButton(
+              ),
+              Obx(
+                ()=> MainButton(
                   size: size,
-                  mainController: controller,
+                  mainController: controller.isLoading.value,
                   buttonText: "Sign Up",
                   actionFunction: registerUser,
                 ),
-              ],
-            ),
-            const BottomRow()
-          ],
-        ),
+              ),
+            ],
+          ),
+          const BottomRow()
+        ],
       ),
     );
   }

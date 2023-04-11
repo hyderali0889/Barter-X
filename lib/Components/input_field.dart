@@ -6,18 +6,17 @@ import 'package:unicons/unicons.dart';
 import '../Themes/spacing.dart';
 
 class InputField extends StatefulWidget {
-  const InputField({
-    super.key,
-    required this.size,
-    required this.controller,
-    required this.title,
-    required this.hintText,
-    required this.obsecureText,
-    required this.isEmailField,
-    this.mainController,
-    required this.width,
-    required this.height,
-  });
+  const InputField(
+      {super.key,
+      required this.size,
+      required this.controller,
+      required this.title,
+      required this.hintText,
+      required this.obsecureText,
+      required this.isEmailField,
+      this.mainController,
+      required this.width,
+      required this.height});
 
   final Size size;
   final TextEditingController controller;
@@ -52,6 +51,9 @@ class _InputFieldState extends State<InputField> {
               width: widget.width,
               height: widget.height,
               child: TextFormField(
+                onTapOutside: (event) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
                 style: context.textTheme.bodyMedium,
                 obscureText: widget.obsecureText,
                 controller: widget.controller,
