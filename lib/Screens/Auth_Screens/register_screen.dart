@@ -90,7 +90,7 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     void registerUser() async {
       controller.changeErrorStatus(false);
-      FocusScope.of(context).unfocus();
+      
 
       try {
         if (emailController.text.isEmpty || passwordController.text.isEmpty) {
