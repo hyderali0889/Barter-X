@@ -4,7 +4,8 @@ class Routes {
   final String loginScreen = "/login";
   final String registerScreen = "/register";
   final String resetScreen = "/reset";
+  final String phoneAuthScreen = "/phoneAuthScreen";
   final String emailVerificationScreen = "/emailVerificationScreen";
 
-  
+
 }

@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:147777543144:android:204a234d967756381f625d",
+        "mobilesdk_app_id": "1:147777543144:android:47ae8e5dc4be26b01f625d",
         "android_client_info": {
           "package_name": "dev.hyderali.barterX"
         }
@@ -37,6 +37,13 @@
             {
               "client_id": "147777543144-3fslt0c1pu3cd9kfgpl1q9fbr12dtbp2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "147777543144-077aijcrrpa4s631dgh2ff1cbpg22qnd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.barterx"
+              }
             }
           ]
         }

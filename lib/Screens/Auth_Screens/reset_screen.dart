@@ -136,21 +136,41 @@ class MainView extends StatelessWidget {
                 },
                 child: const Icon(UniconsLine.angle_left),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: size.height * 0.05),
-                child: Text(
-                  "Reset Password",
-                  style: context.textTheme.bodyLarge,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: Spacing().xs),
-                child: Text(
-                  "Enter your email to reset password.",
-                  style: context.textTheme.bodySmall,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: size.height * 0.05),
+                        child: Text(
+                          "Reset Password",
+                          style: context.textTheme.bodyLarge,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: Spacing().xs),
+                        child: Text(
+                          "Enter your email\nto reset password.",
+                          style: context.textTheme.bodySmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: size.height * 0.05),
+                    child: Image.asset(
+                      "assets/icons/A3.png",
+                      width: 120,
+                      height: 120,
+                    ),
+                  )
+                ],
               ),
               InputField(
+                maxLenght: 64,
                 size: size,
                 isEmailField: true,
                 controller: emailController,
@@ -159,10 +179,10 @@ class MainView extends StatelessWidget {
                 obsecureText: false,
                 mainController: controller,
                 width: size.width * 0.85,
-                height: 50,
+
               ),
               Obx(
-               ()=> MainButton(
+                () => MainButton(
                   size: size,
                   mainController: controller.isLoading.value,
                   buttonText: "Reset Password",

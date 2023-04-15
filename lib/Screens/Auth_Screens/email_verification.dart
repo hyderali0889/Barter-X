@@ -31,7 +31,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       FirebaseAuth.instance.currentUser!.reload();
 
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
-        Get.offAllNamed(Routes().homeScreen);
+        Get.offAllNamed(Routes().phoneAuthScreen);
+      } else {
+        Get.find<EmailController>().changeErrorStatus(true);
+        Get.find<EmailController>()
+            .changeErrorMessage("An Error Occurred, Email not Confirmed yet.");
       }
       Get.find<EmailController>().startLoading1(false);
     } catch (e) {
@@ -137,18 +141,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             ),
           ),
           Obx(
-            () => Obx(
-              () => BottomBar(
-                controller: controller,
-                size: size,
-                errorTitle: "Network Connection Error",
-                errorMsg: controller.errorMsg.value,
-                closeFunction: closeBottomBar,
-                tryAgainFunction: tryAgainBottomBar,
-                buttonWidget: Text(
-                  "Try Again",
-                  style: context.textTheme.displayMedium,
-                ),
+            () => BottomBar(
+              controller: controller,
+              size: size,
+              errorTitle: "Network Connection Error",
+              errorMsg: controller.errorMsg.value,
+              closeFunction: closeBottomBar,
+              tryAgainFunction: tryAgainBottomBar,
+              buttonWidget: Text(
+                "Try Again",
+                style: context.textTheme.displayMedium,
               ),
             ),
           )

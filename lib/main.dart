@@ -1,3 +1,5 @@
+import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
+import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +10,10 @@ import 'Screens/Main_Screens/home_screen.dart';
 import 'Screens/Other_Screens/splash_screen.dart';
 import 'Themes/app_theme.dart';
 import 'Themes/main_colors.dart';
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -46,6 +45,11 @@ class MainApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done ||
             snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
+            if (!FirebaseAuth.instance.currentUser!.emailVerified) {
+              return const EmailVerificationScreen();
+            } else if (FirebaseAuth.instance.currentUser!.phoneNumber == null) {
+              return const PhoneAuthScreen();
+            }
             return const HomeScreen();
           } else {
             return const SplashScreen();

@@ -16,7 +16,7 @@ class InputField extends StatefulWidget {
       required this.isEmailField,
       this.mainController,
       required this.width,
-      required this.height});
+      required this.maxLenght});
 
   final Size size;
   final TextEditingController controller;
@@ -26,7 +26,8 @@ class InputField extends StatefulWidget {
   final bool isEmailField;
   final dynamic mainController;
   final double width;
-  final double height;
+
+  final int maxLenght;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -36,7 +37,7 @@ class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: Spacing().lg),
+      padding: EdgeInsets.only(top: Spacing().sm),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,11 +47,12 @@ class _InputFieldState extends State<InputField> {
             style: context.textTheme.bodySmall!.copyWith(fontFamily: "bold"),
           ),
           Padding(
-            padding: EdgeInsets.only(top: Spacing().xs - 5),
+            padding: const EdgeInsets.only(top: 5),
             child: SizedBox(
               width: widget.width,
-              height: widget.height,
+              height: 75,
               child: TextFormField(
+                maxLength: widget.maxLenght,
                 onTapOutside: (event) {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },

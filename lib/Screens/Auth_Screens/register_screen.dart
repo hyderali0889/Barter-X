@@ -72,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-class MainView extends StatelessWidget {
+class MainView extends StatefulWidget {
   const MainView({
     super.key,
     required this.size,
@@ -84,46 +84,51 @@ class MainView extends StatelessWidget {
   final Size size;
   final TextEditingController emailController;
   final TextEditingController passwordController;
+
   final RegisterController controller;
 
   @override
+  State<MainView> createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
+  @override
   Widget build(BuildContext context) {
     void registerUser() async {
-      controller.changeErrorStatus(false);
-      
+      widget.controller.changeErrorStatus(false);
 
       try {
-        if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-          controller.changeErrorStatus(true);
-          controller.startLoading(false);
+        if (widget.emailController.text.isEmpty ||
+            widget.passwordController.text.isEmpty) {
+          widget.controller.changeErrorStatus(true);
+          widget.controller.startLoading(false);
 
-          controller.changeErrorMessage(
+          widget.controller.changeErrorMessage(
               "An Error Occurred, Email and Password Fields cannot be left blank.");
           return;
         }
-        controller.startLoading(true);
+        widget.controller.startLoading(true);
 
         FirebaseAuth authInstance = FirebaseAuth.instance;
         await authInstance
             .createUserWithEmailAndPassword(
-                email: emailController.text.trim(),
-                password: passwordController.text.trim())
+                email: widget.emailController.text.trim(),
+                password: widget.passwordController.text.trim())
             .timeout(const Duration(seconds: 15));
 
         if (authInstance.currentUser == null) {
-            controller.startLoading(false);
+          widget.controller.startLoading(false);
           return;
         }
         await authInstance.currentUser!.sendEmailVerification();
-        controller.startLoading(false);
+        widget.controller.startLoading(false);
 
         Get.offAllNamed(Routes().emailVerificationScreen);
-
       } catch (e) {
-        controller.startLoading(false);
+        widget.controller.startLoading(false);
 
-        controller.changeErrorStatus(true);
-        controller.changeErrorMessage("An Error Occurred, $e");
+        widget.controller.changeErrorStatus(true);
+        widget.controller.changeErrorMessage("An Error Occurred, $e");
       }
     }
 
@@ -142,48 +147,70 @@ class MainView extends StatelessWidget {
                 },
                 child: const Icon(UniconsLine.angle_left),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: size.height * 0.05),
-                child: Text(
-                  "Register Account",
-                  style: context.textTheme.bodyLarge,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: Spacing().xs),
-                child: Text(
-                  "Register to Barter-X",
-                  style: context.textTheme.bodySmall,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.only(top: widget.size.height * 0.05),
+                        child: Text(
+                          "Register Yourself",
+                          style: context.textTheme.bodyLarge,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: Spacing().xs),
+                        child: Text(
+                          "Register to Barter-X",
+                          style: context.textTheme.bodySmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: widget.size.height * 0.05),
+                    child: Image.asset(
+                      "assets/icons/A2.png",
+                      width: 120,
+                      height: 120,
+                    ),
+                  )
+                ],
               ),
               InputField(
-                size: size,
+                maxLenght: 64,
+                size: widget.size,
                 isEmailField: true,
-                controller: emailController,
+                controller: widget.emailController,
                 title: "Email Address",
                 hintText: "Please Enter Email Address",
                 obsecureText: false,
-                mainController: controller,
-                width: size.width * 0.85,
-                height: 50,
+                mainController: widget.controller,
+                width: widget.size.width * 0.85,
+           
               ),
               Obx(
                 () => InputField(
-                  size: size,
+                  maxLenght: 64,
+                  size: widget.size,
                   isEmailField: false,
-                  controller: passwordController,
+                  controller: widget.passwordController,
                   title: "Password",
                   hintText: "Please Enter your Password",
-                  obsecureText: controller.obsecureText.value,
-                  mainController: controller,
-                  width: size.width * 0.85,
-                  height: 50,
+                  obsecureText: widget.controller.obsecureText.value,
+                  mainController: widget.controller,
+                  width: widget.size.width * 0.85,
+             
                 ),
               ),
               Obx(
-                ()=> MainButton(
-                  size: size,
-                  mainController: controller.isLoading.value,
+                () => MainButton(
+                  size: widget.size,
+                  mainController: widget.controller.isLoading.value,
                   buttonText: "Sign Up",
                   actionFunction: registerUser,
                 ),
