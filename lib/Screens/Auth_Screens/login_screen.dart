@@ -18,11 +18,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  LoginController controller = LoginController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    LoginController controller = LoginController();
 
     void closeBottomBar() {
       controller.changeErrorStatus(false);
@@ -88,6 +88,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void login() async {
+      FocusScope.of(context).unfocus();
       controller.changeErrorStatus(false);
 
       try {
@@ -107,12 +108,11 @@ class MainView extends StatelessWidget {
             .timeout(const Duration(seconds: 15));
         controller.startLoading(false);
 
-        Get.offAllNamed(Routes().homeScreen);
-      } catch (e) {
+        Get.offAllNamed(Routes().routeCheck);
+      } on FirebaseAuthException catch (e) {
         controller.startLoading(false);
-
         controller.changeErrorStatus(true);
-        controller.changeErrorMessage("An Error Occurred, $e");
+        controller.changeErrorMessage("An Error Occurred, ${e.message}");
       }
     }
 
@@ -168,7 +168,6 @@ class MainView extends StatelessWidget {
                 obsecureText: false,
                 mainController: controller,
                 width: size.width * 0.85,
-                
               ),
               Obx(
                 () => InputField(
@@ -181,7 +180,6 @@ class MainView extends StatelessWidget {
                   obsecureText: controller.obsecureText.value,
                   mainController: controller,
                   width: size.width * 0.85,
-                  
                 ),
               ),
               Obx(

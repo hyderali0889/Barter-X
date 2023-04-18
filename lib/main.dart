@@ -1,12 +1,10 @@
-import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
-import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
+import 'package:barter_x/Screens/Auth_Screens/route_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'Routes/app_routes.dart';
-import 'Screens/Main_Screens/home_screen.dart';
 import 'Screens/Other_Screens/splash_screen.dart';
 import 'Themes/app_theme.dart';
 import 'Themes/main_colors.dart';
@@ -26,7 +24,7 @@ class MyApp extends StatelessWidget {
         SystemUiOverlayStyle(statusBarColor: AppColors().secRed));
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Barter-X',
+        title: 'Barter X',
         theme: AppTheme().mainTheme,
         getPages: AppRouter().appRoutes,
         defaultTransition: Transition.leftToRightWithFade,
@@ -45,12 +43,8 @@ class MainApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done ||
             snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
-            if (!FirebaseAuth.instance.currentUser!.emailVerified) {
-              return const EmailVerificationScreen();
-            } else if (FirebaseAuth.instance.currentUser!.phoneNumber == null) {
-              return const PhoneAuthScreen();
-            }
-            return const HomeScreen();
+            return const RouteCheck();
+
           } else {
             return const SplashScreen();
           }
@@ -58,9 +52,9 @@ class MainApp extends StatelessWidget {
           return SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            child: const Center(
+            child: Center(
               child: CircularProgressIndicator(
-                color: Colors.white,
+                color: AppColors().primaryBlue,
               ),
             ),
           );

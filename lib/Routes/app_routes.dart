@@ -1,3 +1,4 @@
+import 'package:barter_x/Screens/Auth_Screens/otp_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:barter_x/Screens/Auth_Screens/reset_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/register_screen.dart';
@@ -5,7 +6,9 @@ import 'package:barter_x/Screens/Main_Screens/home_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
+import 'package:barter_x/Screens/Auth_Screens/route_check.dart';
 import '../Bindings/Auth_Bindings/login_bindings.dart';
+import '../Bindings/Auth_Bindings/otp_binding.dart';
 import '../Bindings/Auth_Bindings/phone_auth_bindings.dart';
 import '../Bindings/Auth_Bindings/register_binding.dart';
 import '../Bindings/Auth_Bindings/reset_binding.dart';
@@ -38,6 +41,17 @@ class AppRouter {
         name: Routes().emailVerificationScreen,
         page: (() => const EmailVerificationScreen()),
         binding: EmailVerificationBinding()),
+    GetPage(
+        name: Routes().otpScreen,
+        page: (() => const OTPScreen()),
+        binding: OTPBinding()
+       ),
+
+      // Route Check
+    GetPage(
+        name: Routes().routeCheck,
+        page: (() => const RouteCheck()),
+        ),
     // Main Screens
     GetPage(name: Routes().homeScreen, page: (() => const HomeScreen())),
   ];

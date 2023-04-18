@@ -19,11 +19,11 @@ class ResetScreen extends StatefulWidget {
 class _ResetScreenState extends State<ResetScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  ResetController controller = ResetController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    ResetController controller = ResetController();
 
     void closeBottomBar() {
       controller.changeErrorStatus(false);
@@ -91,7 +91,7 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     void resetPassword() async {
       try {
-        // FocusScope.of(context).unfocus();
+        FocusScope.of(context).unfocus();
 
         controller.startLoading(false);
         controller.changeErrorStatus(false);
@@ -112,12 +112,14 @@ class MainView extends StatelessWidget {
             .sendPasswordResetEmail(email: emailController.text.trim())
             .timeout(const Duration(seconds: 15));
 
+
+
         controller.startLoading(false);
-      } catch (e) {
+      }on FirebaseAuthException catch (e) {
         controller.changeErrorStatus(true);
         controller.startLoading(false);
 
-        controller.changeErrorMessage("An Error Occurred, $e");
+        controller.changeErrorMessage("An Error Occurred, ${e.message}");
       }
     }
 
@@ -179,7 +181,6 @@ class MainView extends StatelessWidget {
                 obsecureText: false,
                 mainController: controller,
                 width: size.width * 0.85,
-
               ),
               Obx(
                 () => MainButton(

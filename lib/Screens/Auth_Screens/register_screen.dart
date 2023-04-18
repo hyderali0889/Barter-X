@@ -19,11 +19,11 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+    RegisterController controller = RegisterController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    RegisterController controller = RegisterController();
 
     void closeBottomBar() {
       controller.changeErrorStatus(false);
@@ -95,6 +95,7 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     void registerUser() async {
+       FocusScope.of(context).unfocus();
       widget.controller.changeErrorStatus(false);
 
       try {
@@ -124,11 +125,11 @@ class _MainViewState extends State<MainView> {
         widget.controller.startLoading(false);
 
         Get.offAllNamed(Routes().emailVerificationScreen);
-      } catch (e) {
+      } on FirebaseAuthException catch (e) {
         widget.controller.startLoading(false);
 
         widget.controller.changeErrorStatus(true);
-        widget.controller.changeErrorMessage("An Error Occurred, $e");
+        widget.controller.changeErrorMessage("An Error Occurred, ${e.message}");
       }
     }
 
@@ -191,7 +192,7 @@ class _MainViewState extends State<MainView> {
                 obsecureText: false,
                 mainController: widget.controller,
                 width: widget.size.width * 0.85,
-           
+
               ),
               Obx(
                 () => InputField(
@@ -204,7 +205,7 @@ class _MainViewState extends State<MainView> {
                   obsecureText: widget.controller.obsecureText.value,
                   mainController: widget.controller,
                   width: widget.size.width * 0.85,
-             
+
                 ),
               ),
               Obx(

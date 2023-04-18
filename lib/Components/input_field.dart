@@ -26,8 +26,7 @@ class InputField extends StatefulWidget {
   final bool isEmailField;
   final dynamic mainController;
   final double width;
-
-  final int maxLenght;
+ final int maxLenght;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -53,9 +52,6 @@ class _InputFieldState extends State<InputField> {
               height: 75,
               child: TextFormField(
                 maxLength: widget.maxLenght,
-                onTapOutside: (event) {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                },
                 style: context.textTheme.bodyMedium,
                 obscureText: widget.obsecureText,
                 controller: widget.controller,

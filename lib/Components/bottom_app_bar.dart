@@ -49,6 +49,8 @@ class BottomBar extends StatelessWidget {
                   children: [
                     Text(
                       errorTitle,
+                      maxLines: 4,
+                      overflow: TextOverflow.clip,
                       style: context.textTheme.displayMedium,
                     ),
                     IconButton(
@@ -63,6 +65,8 @@ class BottomBar extends StatelessWidget {
                   padding: EdgeInsets.only(top: Spacing().xs),
                   child: Text(
                     errorMsg,
+                    maxLines: 4,
+                    overflow: TextOverflow.fade,
                     style: context.textTheme.displaySmall,
                   ),
                 ),

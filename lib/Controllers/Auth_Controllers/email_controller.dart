@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 class EmailController extends GetxController{
    RxBool isLoading1 = false.obs;
    RxBool isLoading2 = false.obs;
+   RxBool isLoading3 = false.obs;
 RxString errorMsg =
       "We Encountered an error trying to log into your account. Please Check your Network Connection and try again."
           .obs;
@@ -17,6 +18,9 @@ RxString errorMsg =
   }
   void startLoading2(bool loading) {
     isLoading2.value = loading;
+  }
+  void startLoading3(bool loading) {
+    isLoading3.value = loading;
   }
    void changeErrorStatus(bool errorStatus) {
     errorOcurred.value = errorStatus;
