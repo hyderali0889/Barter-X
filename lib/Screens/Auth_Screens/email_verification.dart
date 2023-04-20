@@ -38,6 +38,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       }
       Get.find<EmailController>().startLoading1(false);
     } on FirebaseAuthException catch (e) {
+      Get.find<EmailController>().startLoading1(false);
       Get.find<EmailController>().changeErrorStatus(true);
       Get.find<EmailController>().changeErrorMessage("An Error Occurred, ${e.message}");
     }
@@ -63,7 +64,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   // Step 4
   void stopTimer() {
-    setState(() => countdownTimer!.cancel());
+    if(countdownTimer != null){
+     countdownTimer!.cancel();
+    }
   }
 
   // Step 5

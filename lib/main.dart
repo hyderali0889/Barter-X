@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'Routes/app_routes.dart';
 import 'Screens/Other_Screens/splash_screen.dart';
 import 'Themes/app_theme.dart';
@@ -53,9 +54,7 @@ class MainApp extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Center(
-              child: CircularProgressIndicator(
-                color: AppColors().primaryBlue,
-              ),
+              child: Lottie.asset("assets/jsons/atom-loader.json" , width:420 , height:420)
             ),
           );
         }

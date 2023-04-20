@@ -20,11 +20,10 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   PhoneController controller = Get.find<PhoneController>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    int? token;
-    String? verificationId;
 
     void signInWithPhone() async {
       try {
@@ -43,26 +42,26 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
         FirebaseAuth auth = FirebaseAuth.instance;
 
         await auth.verifyPhoneNumber(
-            forceResendingToken: token,
+            forceResendingToken: controller.token.value,
             phoneNumber: "+92${phoneController.text.trim()}",
             verificationCompleted: (credential) async {
               await auth.signInWithCredential(credential);
-              Get.offAllNamed(Routes().homeScreen);
+              Get.offAllNamed(Routes().routeCheck);
             },
             verificationFailed: (verificationFailed) {
               controller.startLoading(false);
               controller.changeErrorStatus(true);
               controller.changeErrorMessage(
-                  "An Error Occurred, ${verificationFailed.message}.Please Try Again");
+                  "An Error Occurred, ${verificationFailed.message} Please Try Again");
             },
             codeSent: (verificationToken, forceResendToken) {
-              setState(() {
-                verificationId = verificationToken;
-                token = forceResendToken;
-              });
+              controller.setToken(forceResendToken!);
+              controller.setVerID(verificationToken);
 
-              Get.offAllNamed(Routes().otpScreen,
-                  arguments: {verificationId = verificationId});
+              Get.offAllNamed(
+                Routes().otpScreen,
+                arguments: verificationToken
+              );
             },
             codeAutoRetrievalTimeout: (verificationId) {
               controller.startLoading(false);
@@ -102,81 +101,122 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(Spacing().sm),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: size.height * 0.05),
+                                      child: Text(
+                                        "Register Yourself",
+                                        style: context.textTheme.bodyLarge,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.only(top: Spacing().xs),
+                                      child: Text(
+                                        "Register to Barter-X",
+                                        style: context.textTheme.bodySmall,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 Padding(
                                   padding:
                                       EdgeInsets.only(top: size.height * 0.05),
-                                  child: Text(
-                                    "Register Yourself",
-                                    style: context.textTheme.bodyLarge,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: Spacing().xs),
-                                  child: Text(
-                                    "Register to Barter-X",
-                                    style: context.textTheme.bodySmall,
+                                  child: Image.asset(
+                                    "assets/icons/A3.png",
+                                    width: 120,
+                                    height: 120,
                                   ),
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: size.height * 0.05),
-                              child: Image.asset(
-                                "assets/icons/A3.png",
-                                width: 120,
-                                height: 120,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: Spacing().sm),
-                              child: SizedBox(
-                                width: size.width * 0.1,
-                                height: 50,
-                                child: TextFormField(
-                                  initialValue: "+92",
-                                  style: context.textTheme.bodyMedium,
-                                  readOnly: true,
-                                  decoration: const InputDecoration(
-                                    enabledBorder: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: Spacing().sm),
+                                  child: SizedBox(
+                                    width: size.width * 0.1,
+                                    height: 50,
+                                    child: TextFormField(
+                                      initialValue: "+92",
+                                      keyboardType: TextInputType.number,
+                                      style: context.textTheme.bodyMedium,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                      ),
+                                    ),
                                   ),
                                 ),
+                                InputField(
+                                  maxLenght: 10,
+                                  size: size,
+                                  isEmailField: true,
+                                  controller: phoneController,
+                                  title: "Phone Number",
+                                  hintText: "Please Enter Your Phone Number",
+                                  obsecureText: false,
+                                  mainController: controller,
+                                  width: size.width * 0.75,
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: Spacing().xs),
+                              child: Text(
+                                "* Pakistan is the only country supported right now. Please remove the first 0 from your phone number before entering.",
+                                style: context.textTheme.bodySmall,
                               ),
                             ),
-                            InputField(
-                              maxLenght: 10,
+                            MainButton(
                               size: size,
-                              isEmailField: true,
-                              controller: phoneController,
-                              title: "Phone Number",
-                              hintText: "Please Enter Your Phone Number",
-                              obsecureText: false,
-                              mainController: controller,
-                              width: size.width * 0.75,
+                              mainController: controller.isLoading.value,
+                              buttonText: "Send OTP",
+                              actionFunction: () {
+                                signInWithPhone();
+                              },
+                            ),
+                            MainButton(
+                              size: size,
+                              mainController: controller.isLoading1.value,
+                              buttonText: "Back To Login",
+                              actionFunction: () async {
+                                try {
+                                  FocusScope.of(context).unfocus();
+                                  controller.errorOcurred(false);
+
+                                  controller.startLoading1(true);
+
+                                  await FirebaseAuth.instance.currentUser!
+                                      .delete()
+                                      .timeout(const Duration(seconds: 15));
+                                  controller.startLoading1(false);
+
+                                  Get.offAllNamed(Routes().loginScreen);
+                                } catch (e) {
+                                  controller.startLoading1(false);
+                                  controller.errorOcurred(true);
+                                  controller.changeErrorMessage(
+                                      "An Error Occurred, $e");
+                                }
+                              },
                             ),
                           ],
-                        ),
-                        MainButton(
-                          size: size,
-                          mainController: controller.isLoading.value,
-                          buttonText: "Send OTP",
-                          actionFunction: () {
-                            signInWithPhone();
-                          },
                         ),
                       ],
                     ),

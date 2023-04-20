@@ -1,4 +1,5 @@
 import 'package:barter_x/Components/main_button.dart';
+import 'package:barter_x/Controllers/Auth_Controllers/phone_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,7 @@ class _OTPScreenState extends State<OTPScreen> {
   FocusNode focusNode6 = FocusNode();
 
   OTPController controller = Get.find<OTPController>();
+  PhoneController phncontroller = Get.find<PhoneController>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,27 +44,25 @@ class _OTPScreenState extends State<OTPScreen> {
       try {
         if (otpController.trim().length < 6) {
           controller.changeErrorStatus(true);
-
           controller.changeErrorMessage("An Error Occurred, Invalid OTP");
           return;
         }
         FocusScope.of(context).unfocus();
         controller.startLoading1(true);
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: Get.arguments[0].verificationId!,
-            smsCode: otpController.trim());
+            verificationId: Get.arguments, smsCode: otpController.trim());
 
         await FirebaseAuth.instance.currentUser!.linkWithCredential(credential);
         controller.startLoading1(false);
 
-        Get.offAllNamed(Routes().routeCheck);
-      }on FirebaseAuthException catch (e) {
+         Get.offAllNamed(Routes().routeCheck);
+      } on FirebaseAuthException catch (e) {
         controller.startLoading1(false);
 
         controller.changeErrorStatus(true);
 
-        controller
-            .changeErrorMessage("An Error Occurred, ${e.message}. Please Try Again");
+        controller.changeErrorMessage(
+            "An Error Occurred, ${e.message}. Please Try Again");
       }
     }
 
@@ -249,9 +249,19 @@ class _OTPScreenState extends State<OTPScreen> {
                                       MainButton(
                                           size: size,
                                           buttonText: "Proceed",
-                                          actionFunction: checkOTP,
+                                          actionFunction: () {
+                                            checkOTP();
+                                          },
                                           mainController:
                                               controller.isLoading1.value),
+                                      MainButton(
+                                          size: size,
+                                          buttonText: "Resend Token",
+                                          actionFunction: () {
+                                            Get.offAllNamed(
+                                                Routes().phoneAuthScreen);
+                                          },
+                                          mainController: false),
                                       MainButton(
                                           size: size,
                                           buttonText: "Back To Login",
@@ -272,6 +282,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                               Get.offAllNamed(
                                                   Routes().loginScreen);
                                             } catch (e) {
+                                              controller.startLoading2(false);
                                               controller.errorOcurred(true);
                                               controller.changeErrorMessage(
                                                   "An Error Occurred, $e");

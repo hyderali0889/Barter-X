@@ -94,6 +94,8 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
+
+    
     void registerUser() async {
        FocusScope.of(context).unfocus();
       widget.controller.changeErrorStatus(false);
