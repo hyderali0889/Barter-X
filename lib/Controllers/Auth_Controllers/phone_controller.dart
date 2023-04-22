@@ -6,13 +6,10 @@ class PhoneController extends GetxController {
   RxString verificationId = "".obs;
 
   void setVerID(String verId) {
-    print("This is the Id $verId");
     verificationId.value = verId;
   }
 
   void setToken(int toke) {
-    print("This is the token $toke");
-
     token.value = toke;
   }
 

@@ -19,7 +19,7 @@ class ResetScreen extends StatefulWidget {
 class _ResetScreenState extends State<ResetScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  ResetController controller = ResetController();
+  ResetController controller = Get.find<ResetController>();
 
   @override
   Widget build(BuildContext context) {

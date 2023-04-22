@@ -22,68 +22,63 @@ class EmailVerificationScreen extends StatefulWidget {
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   EmailController controller = Get.find<EmailController>();
 
+  Timer? countdownTimer;
+
+  void resetTimer() {
+    stopTimer();
+
+    controller.changeDuration(const Duration(seconds: 30));
+  }
+
+  void startTimer() {
+    controller.startTimer(true);
+
+    resetTimer();
+    countdownTimer =
+        Timer.periodic(const Duration(seconds: 1), (_) => {setCountDown()});
+  }
+
+  // Step 4
+  void stopTimer() {
+    if (countdownTimer != null) {
+      countdownTimer!.cancel();
+    }
+  }
+
+  void setCountDown() {
+    const reduceSecondsBy = 1;
+    controller.startTimer(true);
+    final seconds = controller.myDuration.value.inSeconds - reduceSecondsBy;
+    if (seconds < 0) {
+      countdownTimer!.cancel();
+      controller.startTimer(false);
+    } else {
+      controller.changeDuration(Duration(seconds: seconds));
+    }
+  }
+
   void checkEmailVerification() {
     try {
-      Get.find<EmailController>().changeErrorStatus(false);
+      controller.changeErrorStatus(false);
 
-      Get.find<EmailController>().startLoading1(true);
+      controller.startLoading1(true);
       FirebaseAuth.instance.currentUser!.reload();
 
       if (FirebaseAuth.instance.currentUser!.emailVerified) {
         Get.offAllNamed(Routes().phoneAuthScreen);
       } else {
-        Get.find<EmailController>().changeErrorStatus(true);
-        Get.find<EmailController>()
+        controller.changeErrorStatus(true);
+        controller
             .changeErrorMessage("An Error Occurred, Email not Confirmed yet.");
       }
-      Get.find<EmailController>().startLoading1(false);
+      controller.startLoading1(false);
     } on FirebaseAuthException catch (e) {
-      Get.find<EmailController>().startLoading1(false);
-      Get.find<EmailController>().changeErrorStatus(true);
-      Get.find<EmailController>().changeErrorMessage("An Error Occurred, ${e.message}");
+      stopTimer();
+      controller.startTimer(false);
+      controller.startLoading1(false);
+      controller.changeErrorStatus(true);
+      controller.changeErrorMessage("An Error Occurred, ${e.message}");
     }
-  }
-
-  Timer? countdownTimer;
-  Duration myDuration = const Duration(seconds: 30);
-  bool isTimerRunning = false;
-
-  void resetTimer() {
-    stopTimer();
-    setState(() => myDuration = const Duration(seconds: 30));
-  }
-
-  void startTimer() {
-    setState(() {
-      isTimerRunning = true;
-    });
-    resetTimer();
-    countdownTimer =
-        Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
-  }
-
-  // Step 4
-  void stopTimer() {
-    if(countdownTimer != null){
-     countdownTimer!.cancel();
-    }
-  }
-
-  // Step 5
-
-  // Step 6
-  void setCountDown() {
-    const reduceSecondsBy = 1;
-    setState(() {
-      isTimerRunning = true;
-      final seconds = myDuration.inSeconds - reduceSecondsBy;
-      if (seconds < 0) {
-        countdownTimer!.cancel();
-        isTimerRunning = false;
-      } else {
-        myDuration = Duration(seconds: seconds);
-      }
-    });
   }
 
   @override
@@ -94,8 +89,8 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String strDigits(int n) => n.toString().padLeft(2, '0');
-    final seconds = strDigits(myDuration.inSeconds.remainder(60));
+
+
     void closeBottomBar() {
       controller.changeErrorStatus(false);
     }
@@ -153,60 +148,65 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                               child: Center(
                                 child: Padding(
                                   padding: EdgeInsets.only(top: Spacing().md),
-                                  child: InkWell(
-                                    onTap: isTimerRunning
-                                        ? null
-                                        : () async {
-                                            try {
-                                              startTimer();
+                                  child: Obx(
+                                    () => InkWell(
+                                      onTap: controller.isTimerRunning.value
+                                          ? null
+                                          : () async {
+                                              try {
+                                                startTimer();
 
-                                              await FirebaseAuth
-                                                  .instance.currentUser!
-                                                  .sendEmailVerification();
-                                            } on FirebaseAuthException catch (e) {
-                                              controller
-                                                  .changeErrorStatus(true);
-                                              controller.changeErrorMessage(
-                                                  "An Error Occurred, ${e.message}");
-                                            }
-                                          },
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: size.width * 0.8,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                          color: isTimerRunning
-                                              ? AppColors().secHalfGrey
-                                              : AppColors().primaryBlue,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: isTimerRunning
-                                          ? Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: Spacing().sm),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    "Resend Email",
-                                                    style: context.textTheme
-                                                        .displayMedium,
-                                                  ),
-                                                  Text(
-                                                    seconds,
-                                                    style: context.textTheme
-                                                        .displayMedium,
-                                                  ),
-                                                ],
+                                                 await FirebaseAuth
+                                                 .instance.currentUser!
+                                                   .sendEmailVerification();
+                                              } on FirebaseAuthException catch (e) {
+                                                 stopTimer();
+      controller.startTimer(false);
+                                                controller
+                                                    .changeErrorStatus(true);
+                                                controller.changeErrorMessage(
+                                                    "An Error Occurred, ${e.message}");
+                                              }
+                                            },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: size.width * 0.8,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            color:
+                                                controller.isTimerRunning.value
+                                                    ? AppColors().secHalfGrey
+                                                    : AppColors().primaryBlue,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: controller.isTimerRunning.value
+                                            ? Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: Spacing().sm),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      "Resend Email",
+                                                      style: context.textTheme
+                                                          .displayMedium,
+                                                    ),
+                                                    Text(
+                                                      controller.myDuration.value.inSeconds.remainder(60).toString().padLeft(2, "0"),
+                                                      style: context.textTheme
+                                                          .displayMedium,
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Text(
+                                                "Resend Email",
+                                                style: context
+                                                    .textTheme.displayMedium,
                                               ),
-                                            )
-                                          : Text(
-                                              "Resend Email",
-                                              style: context
-                                                  .textTheme.displayMedium,
-                                            ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -230,17 +230,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                                       FocusScope.of(context).unfocus();
                                       controller.errorOcurred(false);
 
-                                      controller
-                                          .startLoading2(true);
+                                      controller.startLoading2(true);
 
                                       await FirebaseAuth.instance.currentUser!
                                           .delete()
                                           .timeout(const Duration(seconds: 15));
-                                      Get.find<EmailController>()
-                                          .startLoading2(false);
+                                      controller.startLoading2(false);
 
                                       Get.offAllNamed(Routes().loginScreen);
-                                    }on FirebaseAuthException catch (e) {
+                                    } on FirebaseAuthException catch (e) {
+
                                       controller.errorOcurred(true);
                                       controller.changeErrorMessage(
                                           "An Error Occurred, ${e.message}");

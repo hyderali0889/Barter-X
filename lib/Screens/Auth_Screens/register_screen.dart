@@ -19,7 +19,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-    RegisterController controller = RegisterController();
+    RegisterController controller = Get.find<RegisterController>();
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +95,7 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
 
-    
+
     void registerUser() async {
        FocusScope.of(context).unfocus();
       widget.controller.changeErrorStatus(false);
