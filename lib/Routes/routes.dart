@@ -1,6 +1,10 @@
 class Routes {
   // Main Screens
-  final String homeScreen = "/home";
+  // final String homeScreen = "/home";
+  // final String auctionScreen = "/auctionScreen";
+  // final String eWasteScreen = "/eWasteScreen";
+  // final String notificationScreen = "/notificationScreen";
+  // final String profileScreen = "/profileScreen";
   // Other Screens
   final String splashScreen = "/splash";
   // Auth Screens
@@ -10,8 +14,9 @@ class Routes {
   final String phoneAuthScreen = "/phoneAuthScreen";
   final String emailVerificationScreen = "/emailVerificationScreen";
   final String otpScreen = "/otpScreen";
-  //Route Check
+  //Navigation Screens
   final String routeCheck = "/routeCheck";
+  final String navigationScreen = "/navigationScreen";
 
 
 }

@@ -36,38 +36,43 @@ class _ResetScreenState extends State<ResetScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: Stack(
-        children: [
-          Obx(
-            () => Opacity(
-              opacity: controller.errorOcurred.value ? 0.6 : 1,
-              child: SizedBox(
-                width: size.width,
-                height: size.height,
-                child: MainView(
-                  size: size,
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  controller: controller,
+          child: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Stack(
+          children: [
+            Obx(
+              () => Opacity(
+                opacity: controller.errorOcurred.value ? 0.6 : 1,
+                child: SizedBox(
+                  width: size.width,
+                  height: size.height,
+                  child: MainView(
+                    size: size,
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    controller: controller,
+                  ),
                 ),
               ),
             ),
-          ),
-          Obx(
-            () => BottomBar(
-              controller: controller,
-              size: size,
-              errorTitle: "Reset Password Error",
-              errorMsg: controller.errorMsg.value,
-              closeFunction: closeBottomBar,
-              tryAgainFunction: tryAgainBottomBar,
-              buttonWidget: Text(
-                "Try Again",
-                style: context.textTheme.displayMedium,
+            Obx(
+              () => BottomBar(
+                controller: controller,
+                size: size,
+                errorTitle: "Reset Password Error",
+                errorMsg: controller.errorMsg.value,
+                closeFunction: closeBottomBar,
+                tryAgainFunction: tryAgainBottomBar,
+                buttonWidget: Text(
+                  "Try Again",
+                  style: context.textTheme.displayMedium,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       )),
     );
   }
@@ -112,10 +117,8 @@ class MainView extends StatelessWidget {
             .sendPasswordResetEmail(email: emailController.text.trim())
             .timeout(const Duration(seconds: 15));
 
-
-
         controller.startLoading(false);
-      }on FirebaseAuthException catch (e) {
+      } on FirebaseAuthException catch (e) {
         controller.changeErrorStatus(true);
         controller.startLoading(false);
 

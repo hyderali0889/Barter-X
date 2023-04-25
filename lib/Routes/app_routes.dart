@@ -3,16 +3,22 @@ import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:barter_x/Screens/Auth_Screens/reset_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/register_screen.dart';
 import 'package:barter_x/Screens/Main_Screens/home_screen.dart';
+import 'package:barter_x/Screens/Main_Screens/auction_screen.dart';
+import 'package:barter_x/Screens/Main_Screens/e_waste_screen.dart';
+import 'package:barter_x/Screens/Main_Screens/notification_screen.dart';
+import 'package:barter_x/Screens/Main_Screens/profile_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
-import 'package:barter_x/Screens/Auth_Screens/route_check.dart';
+import 'package:barter_x/Screens/Main_Screens/Navigation/route_check.dart';
+import 'package:barter_x/Screens/Main_Screens/Navigation/navigation_screen.dart';
 import '../Bindings/Auth_Bindings/login_bindings.dart';
 import '../Bindings/Auth_Bindings/otp_binding.dart';
 import '../Bindings/Auth_Bindings/phone_auth_bindings.dart';
 import '../Bindings/Auth_Bindings/register_binding.dart';
 import '../Bindings/Auth_Bindings/reset_binding.dart';
 import '../Bindings/Auth_Bindings/email_verification_binding.dart';
+import '../Bindings/Main_Bindings/Navigation_bindings/navigation_binding.dart';
 import './routes.dart';
 import 'package:get/get.dart';
 
@@ -47,12 +53,21 @@ class AppRouter {
         binding: OTPBinding()
        ),
 
-      // Route Check
+      // Navigation Screen
     GetPage(
         name: Routes().routeCheck,
         page: (() => const RouteCheck()),
         ),
+    GetPage(
+        name: Routes().navigationScreen,
+        page: (() => const NavigationScreen()),
+        binding: NavigationBinding()
+        ),
     // Main Screens
-    GetPage(name: Routes().homeScreen, page: (() => const HomeScreen())),
+    // GetPage(name: Routes().homeScreen, page: (() => const HomeScreen())),
+    // GetPage(name: Routes().auctionScreen, page: (() => const AuctionScreen())),
+    // GetPage(name: Routes().eWasteScreen, page: (() => const EWasteScreen())),
+    // GetPage(name: Routes().notificationScreen, page: (() => const NotificationScreen())),
+    // GetPage(name: Routes().profileScreen, page: (() => const ProfileScreen())),
   ];
 }

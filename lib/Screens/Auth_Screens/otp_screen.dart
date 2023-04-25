@@ -55,7 +55,7 @@ class _OTPScreenState extends State<OTPScreen> {
         await FirebaseAuth.instance.currentUser!.linkWithCredential(credential);
         controller.startLoading1(false);
 
-         Get.offAllNamed(Routes().routeCheck);
+        Get.offAllNamed(Routes().routeCheck);
       } on FirebaseAuthException catch (e) {
         controller.startLoading1(false);
 
@@ -96,11 +96,13 @@ class _OTPScreenState extends State<OTPScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.only(
@@ -121,8 +123,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                   ],
                                 ),
                                 Padding(
-                                  padding:
-                                      EdgeInsets.only(top: size.height * 0.05),
+                                  padding: EdgeInsets.only(
+                                      top: size.height * 0.05),
                                   child: Image.asset(
                                     "assets/icons/A6.png",
                                     width: 120,
@@ -139,16 +141,16 @@ class _OTPScreenState extends State<OTPScreen> {
                                   Column(
                                     children: [
                                       Padding(
-                                        padding:
-                                            EdgeInsets.only(top: Spacing().sm),
+                                        padding: EdgeInsets.only(
+                                            top: Spacing().sm),
                                         child: Text(
                                           "Enter Your OTP",
                                           style: context.textTheme.bodySmall,
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            EdgeInsets.only(top: Spacing().xs),
+                                        padding: EdgeInsets.only(
+                                            top: Spacing().xs),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -156,7 +158,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                             Row(
                                               children: [
                                                 InputFieldArea(
-                                                    controller: otpController1,
+                                                    controller:
+                                                        otpController1,
                                                     functionToCall:
                                                         (String val) {
                                                       if (val.length == 1) {
@@ -167,7 +170,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                                     focusNode: focusNode1,
                                                     size: size),
                                                 InputFieldArea(
-                                                    controller: otpController2,
+                                                    controller:
+                                                        otpController2,
                                                     functionToCall:
                                                         (String val) {
                                                       if (val.length == 1) {
@@ -181,7 +185,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                                     focusNode: focusNode2,
                                                     size: size),
                                                 InputFieldArea(
-                                                    controller: otpController3,
+                                                    controller:
+                                                        otpController3,
                                                     functionToCall:
                                                         (String val) {
                                                       if (val.length == 1) {
@@ -199,7 +204,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                             Row(
                                               children: [
                                                 InputFieldArea(
-                                                    controller: otpController4,
+                                                    controller:
+                                                        otpController4,
                                                     functionToCall:
                                                         (String val) {
                                                       if (val.length == 1) {
@@ -213,7 +219,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                                     focusNode: focusNode4,
                                                     size: size),
                                                 InputFieldArea(
-                                                    controller: otpController5,
+                                                    controller:
+                                                        otpController5,
                                                     functionToCall:
                                                         (String val) {
                                                       if (val.length == 1) {
@@ -227,7 +234,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                                     focusNode: focusNode5,
                                                     size: size),
                                                 InputFieldArea(
-                                                    controller: otpController6,
+                                                    controller:
+                                                        otpController6,
                                                     functionToCall:
                                                         (String val) {
                                                       if (val.length != 1) {
@@ -267,7 +275,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                           buttonText: "Back To Login",
                                           actionFunction: () async {
                                             try {
-                                              FocusScope.of(context).unfocus();
+                                              FocusScope.of(context)
+                                                  .unfocus();
                                               controller.errorOcurred(false);
 
                                               controller.startLoading2(true);

@@ -1,4 +1,4 @@
-import 'package:barter_x/Screens/Auth_Screens/route_check.dart';
+import 'package:barter_x/Screens/Main_Screens/Navigation/route_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

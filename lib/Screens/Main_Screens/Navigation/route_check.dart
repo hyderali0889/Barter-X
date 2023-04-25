@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import '../../Routes/routes.dart';
-import '../../Themes/spacing.dart';
+import '../../../Routes/routes.dart';
+import '../../../Themes/spacing.dart';
 
 class RouteCheck extends StatefulWidget {
   const RouteCheck({super.key});
@@ -28,7 +28,7 @@ class _RouteCheckState extends State<RouteCheck> {
       } else if (FirebaseAuth.instance.currentUser!.phoneNumber == null) {
         Get.offAllNamed(Routes().phoneAuthScreen);
       } else {
-        Get.offAllNamed(Routes().homeScreen);
+        Get.offAllNamed(Routes().navigationScreen);
       }
     } on FirebaseAuthException catch (e) {
       debugPrint(e.message);
