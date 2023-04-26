@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
 
-import '../../Components/main_button.dart';
-import '../../Themes/main_colors.dart';
-import '../../Themes/spacing.dart';
+
+import '../../Components/placeholder_widget.dart';
+import '../../Components/top_row_no_back.dart';
+import '../../Controllers/Main_Controllers/EWaste_controller.dart';
 
 class EWasteScreen extends StatefulWidget {
   const EWasteScreen({super.key});
@@ -14,6 +15,10 @@ class EWasteScreen extends StatefulWidget {
 }
 
 class _EWasteScreenState extends State<EWasteScreen> {
+
+  
+  EWasteController controller = Get.find<EWasteController>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -24,54 +29,20 @@ class _EWasteScreenState extends State<EWasteScreen> {
         height: size.height,
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: Spacing().sm),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0),
-                    child: Text(
-                      "E-Wastes",
-                      style: context.textTheme.bodyMedium!.copyWith(
-                          color: AppColors().primaryBlack,
-                          fontFamily: "medium"),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: InkWell(
-                        onTap: () {},
-                        child: const Icon(
-                          UniconsLine.shopping_cart_alt,
-                        )),
-                  ),
-                ],
-              ),
+            TopRowNoBack(
+              text: "E-Wastes",
+              icon: UniconsLine.shopping_cart_alt,
+              firstFunc: () {},
             ),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/icons/A8.png",
-                    height: 350,
-                    width: 350,
-                  ),
-                  Text(
-                    "No E-Waste Found In Your Area",
-                    style: context.textTheme.bodySmall,
-                  ),
-                  MainButton(
-                      size: size,
-                      buttonText: "Start an Auction",
-                      actionFunction: () {},
-                      mainController: false)
-                ],
-              ),
-            ),
+                child: PlaceHolderWidget(
+              size: size,
+              image: "A8",
+              mainText: "No EWaste Products Found in your area.",
+              buttonText: "Start a Trade",
+              isLoading: false,
+              buttonFunc: () {},
+            )),
           ],
         ),
       )),

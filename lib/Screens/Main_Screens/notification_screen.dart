@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
 
+import '../../Components/top_row_no_back.dart';
 import '../../Controllers/Main_Controllers/notification_controller.dart';
 import '../../Themes/main_colors.dart';
 import '../../Themes/spacing.dart';
@@ -17,15 +18,13 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   NotificationController controller = Get.find<NotificationController>();
-  PageController pageController = PageController(initialPage: Get.find<NotificationController>().selectedPill.value);
+  PageController pageController = PageController(
+      initialPage: Get.find<NotificationController>().selectedPill.value);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<Widget> notificationPages = [
-      const SubNotificationScreen(),
-      const TradingHistoryScreen()
-    ];
+
     return Scaffold(
       body: SafeArea(
           child: SizedBox(
@@ -33,31 +32,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
         height: size.height,
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: Spacing().sm),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0),
-                    child: Text(
-                      "Notifications",
-                      style: context.textTheme.bodyMedium!.copyWith(
-                          color: AppColors().primaryBlack,
-                          fontFamily: "medium"),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: InkWell(
-                        onTap: () {},
-                        child: const Icon(
-                          UniconsLine.shopping_cart_alt,
-                        )),
-                  ),
-                ],
-              ),
+            TopRowNoBack(
+              text: "Notifications",
+              icon: UniconsLine.shopping_cart_alt,
+              firstFunc: () {},
             ),
             Padding(
               padding: EdgeInsets.only(top: Spacing().sm),
@@ -97,25 +75,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 20.0),
-                            child: InkWell(
-                                onTap: () {
-                                  controller.changePill(1);
-                                },
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 100),
-                                  alignment: Alignment.center,
-                                  height: 40,
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                      color: controller.selectedPill.value == 1
-                                          ? AppColors().secRed
-                                          : AppColors().secSoftGrey,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Text(
-                                    "History",
-                                    style: context.textTheme.bodySmall,
-                                  ),
-                                )),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 100),
+                              alignment: Alignment.center,
+                              height: 40,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                  color: controller.selectedPill.value == 1
+                                      ? AppColors().secRed
+                                      : AppColors().secSoftGrey,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text(
+                                "History",
+                                style: context.textTheme.bodySmall,
+                              ),
+                            ),
                           )
                         ],
                       ),
@@ -124,16 +98,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   SizedBox(
                       width: size.width,
                       height: size.height * 0.7,
-                      child:PageView(
-                            controller: pageController,
-                            onPageChanged: (int page) {
-                              controller.changePill(page);
-                            },
-                            children: const [
-                              SubNotificationScreen(),
-                              TradingHistoryScreen()
-                            ],
-                          ))
+                      child: PageView(
+                        controller: pageController,
+                        onPageChanged: (int page) {
+                          controller.changePill(page);
+                        },
+                        children: const [
+                          SubNotificationScreen(),
+                          TradingHistoryScreen()
+                        ],
+                      ))
                 ],
               ),
             )

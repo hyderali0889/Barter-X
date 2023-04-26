@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
 
-import '../../Themes/main_colors.dart';
-import '../../Themes/spacing.dart';
+import '../../Components/top_row_no_back.dart';
+import '../../Controllers/Main_Controllers/profile_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,6 +13,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  
+  ProfileController controller = Get.find<ProfileController>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -23,31 +27,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         height: size.height,
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: Spacing().sm),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0),
-                    child: Text(
-                      "Profile",
-                      style: context.textTheme.bodyMedium!.copyWith(
-                          color: AppColors().primaryBlack,
-                          fontFamily: "medium"),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: InkWell(
-                        onTap: () {},
-                        child: const Icon(
-                          UniconsLine.shopping_cart_alt,
-                        )),
-                  ),
-                ],
-              ),
+            TopRowNoBack(
+              text: "Profile",
+              icon: UniconsLine.shopping_cart_alt,
+              firstFunc: () {},
             ),
           ],
         ),

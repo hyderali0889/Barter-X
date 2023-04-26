@@ -18,7 +18,9 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   NavigationController controller = Get.find<NavigationController>();
-  
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -30,7 +32,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       const ProfileScreen()
     ];
     return Scaffold(
-      body: Obx(() => SafeArea(child: screen[controller.selectedPage.value])),
+      body: Obx(() => SafeArea(child: screen[ controller.selectedPage.value])),
       bottomNavigationBar: Container(
         height: size.height * 0.06,
         decoration: BoxDecoration(
@@ -43,6 +45,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               InkWell(
                   onTap: () {
                     controller.changePage(0);
+
                   },
                   child: Icon(UniconsLine.home_alt,
                       color: controller.selectedPage.value == 0
@@ -51,6 +54,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               InkWell(
                   onTap: () {
                     controller.changePage(1);
+
                   },
                   child: Icon(UniconsLine.hourglass,
                       color: controller.selectedPage.value == 1
@@ -59,6 +63,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               InkWell(
                   onTap: () {
                     controller.changePage(2);
+
                   },
                   child: Icon(UniconsLine.battery_empty,
                       color: controller.selectedPage.value == 2
@@ -67,6 +72,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               InkWell(
                   onTap: () {
                     controller.changePage(3);
+
                   },
                   child: Icon(UniconsLine.clipboard_notes,
                       color: controller.selectedPage.value == 3
@@ -75,6 +81,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               InkWell(
                   onTap: () {
                     controller.changePage(4);
+
                   },
                   child: Icon(UniconsLine.setting,
                       color: controller.selectedPage.value == 4

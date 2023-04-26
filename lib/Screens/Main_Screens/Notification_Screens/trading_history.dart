@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../Components/placeholder_widget.dart';
+import '../../../Controllers/Main_Controllers/Navigation_Controller/navigation_controller.dart';
 
 class TradingHistoryScreen extends StatefulWidget {
   const TradingHistoryScreen({super.key});
@@ -8,13 +12,27 @@ class TradingHistoryScreen extends StatefulWidget {
 }
 
 class _TradingHistoryScreenState extends State<TradingHistoryScreen> {
+  NavigationController navController = Get.find<NavigationController>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
           child: Column(
-        children: [Text("Trading History")],
+        children: [
+          Expanded(
+              child: PlaceHolderWidget(
+            size: size,
+            image: "B1",
+            mainText: "No History Found. Start Trading!",
+            buttonText: "Go Home",
+            isLoading: false,
+            buttonFunc: () {
+              navController.changePage(0);
+            },
+          )),
+        ],
       )),
     );
   }

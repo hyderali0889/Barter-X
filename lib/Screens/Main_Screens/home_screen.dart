@@ -1,10 +1,11 @@
-import 'package:barter_x/Components/main_button.dart';
 import 'package:barter_x/Themes/main_colors.dart';
 import 'package:unicons/unicons.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../Components/placeholder_widget.dart';
+import '../../Controllers/Main_Controllers/home_controller.dart';
 import '../../Themes/spacing.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,9 +16,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
+
+
+  HomeController controller = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: SafeArea(
           child: SizedBox(
@@ -60,27 +67,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/icons/A6.png",
-                    height: 350,
-                    width: 350,
-                  ),
-                  Text(
-                    "No Trades Found In Your Area",
-                    style: context.textTheme.bodySmall,
-                  ),
-                  MainButton(
-                      size: size,
-                      buttonText: "Start a Trade",
-                      actionFunction: () {},
-                      mainController: false)
-                ],
-              ),
-            )
+                child: PlaceHolderWidget(
+              size: size,
+              image: "A6",
+              mainText: "No Trades Found in your area.",
+              buttonText: "Start a Trade",
+              isLoading: false,
+              buttonFunc: () {},
+            ))
           ],
         ),
       )),
