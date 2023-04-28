@@ -1,7 +1,5 @@
 import 'package:barter_x/Screens/Main_Screens/Notification_Screens/notifications.dart';
 import 'package:barter_x/Screens/Main_Screens/Notification_Screens/trading_history.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
@@ -9,11 +7,9 @@ import 'package:unicons/unicons.dart';
 import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/top_row_no_back.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/notification_controller.dart';
-import '../../../Routes/routes.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
 
-import 'wallet_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -27,21 +23,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   PageController pageController = PageController(
       initialPage: Get.find<NotificationController>().selectedPill.value);
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   searchForPoints();
-  // }
 
-  // void searchForPoints() async {
-  //   dynamic query = await FirebaseFirestore.instance
-  //       .collection(FirebaseAuth.instance.currentUser!.uid)
-  //       .doc("user_data")
-  //       .get();
-  //   if (query == null) {
-  //     controller.initWallet(query["Points"]);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -137,9 +119,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             controller: pageController,
                             onPageChanged: (int page) {
                               controller.changePill(page);
-                              // if (page == 1 ) {
-                              //   Get.offAllNamed(Routes().registerWallet);
-                              // }
                             },
                             children: const [
                               SubNotificationScreen(),
@@ -152,7 +131,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ],
             ),
           ),
-             errorMsg: controller.errorMsg.value,
+          Obx(
+            () => BottomBar(
+              controller: controller,
+              size: size,
+              errorTitle: "An Error Occurred",
+              errorMsg: controller.errorMsg.value,
               closeFunction: closeBottomBar,
               tryAgainFunction: tryAgainBottomBar,
               buttonWidget: Text(
@@ -160,12 +144,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 style: context.textTheme.displayMedium,
               ),
             ),
-          )Obx(
-            () => BottomBar(
-              controller: controller,
-              size: size,
-              errorTitle: "An Error Occurred",
-
+          )
         ],
       )),
     );
