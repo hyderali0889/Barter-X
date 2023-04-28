@@ -1,13 +1,14 @@
-import 'package:barter_x/Screens/Main_Screens/auction_screen.dart';
-import 'package:barter_x/Screens/Main_Screens/e_waste_screen.dart';
-import 'package:barter_x/Screens/Main_Screens/home_screen.dart';
-import 'package:barter_x/Screens/Main_Screens/notification_screen.dart';
-import 'package:barter_x/Screens/Main_Screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
 import '../../../Controllers/Main_Controllers/Navigation_Controller/navigation_controller.dart';
 import '../../../Themes/main_colors.dart';
+import '../Routes/auction_screen.dart';
+import '../Routes/e_waste_screen.dart';
+import '../Routes/home_screen.dart';
+import '../Routes/notification_screen.dart';
+import '../Routes/profile_screen.dart';
+import '../Routes/wallet_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -19,8 +20,6 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
   NavigationController controller = Get.find<NavigationController>();
 
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -28,11 +27,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
       const HomeScreen(),
       const AuctionScreen(),
       const EWasteScreen(),
+      const WalletScreen(),
       const NotificationScreen(),
       const ProfileScreen()
     ];
     return Scaffold(
-      body: Obx(() => SafeArea(child: screen[ controller.selectedPage.value])),
+      body: Obx(() => SafeArea(child: screen[controller.selectedPage.value])),
       bottomNavigationBar: Container(
         height: size.height * 0.06,
         decoration: BoxDecoration(
@@ -45,7 +45,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
               InkWell(
                   onTap: () {
                     controller.changePage(0);
-
                   },
                   child: Icon(UniconsLine.home_alt,
                       color: controller.selectedPage.value == 0
@@ -54,37 +53,41 @@ class _NavigationScreenState extends State<NavigationScreen> {
               InkWell(
                   onTap: () {
                     controller.changePage(1);
-
                   },
-                  child: Icon(UniconsLine.hourglass,
+                  child: Icon(UniconsLine.podium,
                       color: controller.selectedPage.value == 1
                           ? AppColors().secRed
                           : AppColors().secHalfGrey)),
               InkWell(
                   onTap: () {
                     controller.changePage(2);
-
                   },
-                  child: Icon(UniconsLine.battery_empty,
+                  child: Icon(UniconsLine.hdd,
                       color: controller.selectedPage.value == 2
                           ? AppColors().secRed
                           : AppColors().secHalfGrey)),
               InkWell(
                   onTap: () {
                     controller.changePage(3);
-
                   },
-                  child: Icon(UniconsLine.clipboard_notes,
+                  child: Icon(UniconsLine.wallet,
                       color: controller.selectedPage.value == 3
                           ? AppColors().secRed
                           : AppColors().secHalfGrey)),
               InkWell(
                   onTap: () {
                     controller.changePage(4);
-
+                  },
+                  child: Icon(UniconsLine.clipboard_notes,
+                      color: controller.selectedPage.value == 4
+                          ? AppColors().secRed
+                          : AppColors().secHalfGrey)),
+              InkWell(
+                  onTap: () {
+                    controller.changePage(5);
                   },
                   child: Icon(UniconsLine.setting,
-                      color: controller.selectedPage.value == 4
+                      color: controller.selectedPage.value == 5
                           ? AppColors().secRed
                           : AppColors().secHalfGrey)),
             ],

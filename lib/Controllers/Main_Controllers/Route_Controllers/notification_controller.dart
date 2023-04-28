@@ -1,11 +1,17 @@
 import 'package:get/get.dart';
 
-class NavigationController extends GetxController {
-  RxInt selectedPage = 0.obs;
+class NotificationController extends GetxController {
+  RxInt selectedPill = 0.obs;
+  RxInt walletPoints = 0.obs;
 
-  void changePage(int page) {
-    selectedPage.value = page;
+  initWallet(int val) {
+    walletPoints.value = val;
   }
+
+  changePill(int val) {
+    selectedPill.value = val;
+  }
+
   RxString errorMsg =
       "We Encountered an error trying to log into your account. Please Check your Network Connection and try again."
           .obs;

@@ -1,12 +1,7 @@
 import 'package:get/get.dart';
 
-class NavigationController extends GetxController {
-  RxInt selectedPage = 0.obs;
-
-  void changePage(int page) {
-    selectedPage.value = page;
-  }
-  RxString errorMsg =
+class EWasteController extends GetxController {
+RxString errorMsg =
       "We Encountered an error trying to log into your account. Please Check your Network Connection and try again."
           .obs;
 
@@ -18,4 +13,4 @@ class NavigationController extends GetxController {
   void changeErrorStatus(bool errorStatus) {
     errorOcurred.value = errorStatus;
   }
-}
+ }
