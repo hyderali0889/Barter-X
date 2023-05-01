@@ -13,4 +13,4 @@ class AuctionController extends GetxController {
   void changeErrorStatus(bool errorStatus) {
     errorOcurred.value = errorStatus;
   }
- }
+}

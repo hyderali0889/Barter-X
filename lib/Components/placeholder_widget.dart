@@ -10,7 +10,8 @@ class PlaceHolderWidget extends StatelessWidget {
       required this.image,
       required this.mainText,
       required this.buttonText,
-      required this.buttonFunc, required this.isLoading});
+      required this.buttonFunc,
+      required this.isLoading});
 
   final Size size;
   final String image;
@@ -29,9 +30,12 @@ class PlaceHolderWidget extends StatelessWidget {
           height: 350,
           width: 350,
         ),
-        Text(
-          mainText,
-          style: context.textTheme.bodySmall,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            mainText,
+            style: context.textTheme.bodyMedium,
+          ),
         ),
         MainButton(
             size: size,

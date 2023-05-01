@@ -23,6 +23,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.5
+  image_picker: ^0.8.7+4
   lottie: ^2.3.1
   objectbox: ^2.0.0
   objectbox_flutter_libs: ^2.0.0

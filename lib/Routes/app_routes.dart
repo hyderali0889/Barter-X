@@ -3,7 +3,6 @@ import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:barter_x/Screens/Auth_Screens/reset_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/register_screen.dart';
 import 'package:barter_x/Screens/Main_Screens/Forms/main_form.dart';
-import 'package:barter_x/Screens/Main_Screens/loading_Screens/register_wallet.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
@@ -15,14 +14,21 @@ import '../Bindings/Auth_Bindings/phone_auth_bindings.dart';
 import '../Bindings/Auth_Bindings/register_binding.dart';
 import '../Bindings/Auth_Bindings/reset_binding.dart';
 import '../Bindings/Auth_Bindings/email_verification_binding.dart';
+import '../Bindings/Main_Bindings/Form_Bindings/main_form_bindings.dart';
 import '../Bindings/Main_Bindings/Navigation_bindings/navigation_binding.dart';
-import '../Bindings/Main_Bindings/loading_Binding/register_wallet_bindings.dart';
 import './routes.dart';
 import 'package:get/get.dart';
 
 class AppRouter {
   List<GetPage> appRoutes = [
-    // Other Screens
+
+    /*
+         dP"Yb  888888 88  88 888888 88""Yb     .dP"Y8  dP""b8 88""Yb 888888 888888 88b 88 .dP"Y8
+        dP   Yb   88   88  88 88__   88__dP     `Ybo." dP   `" 88__dP 88__   88__   88Yb88 `Ybo."
+        Yb   dP   88   888888 88""   88"Yb      o.`Y8b Yb      88"Yb  88""   88""   88 Y88 o.`Y8b
+         YbodP    88   88  88 888888 88  Yb     8bodP'  YboodP 88  Yb 888888 888888 88  Y8 8bodP'
+    */
+
     GetPage(name: Routes().splashScreen, page: (() => const SplashScreen())),
     // Auth Screens
     GetPage(
@@ -51,6 +57,7 @@ class AppRouter {
         binding: OTPBinding()),
 
     // Navigation Screen
+
     GetPage(
       name: Routes().routeCheck,
       page: (() => const RouteCheck()),
@@ -59,7 +66,9 @@ class AppRouter {
         name: Routes().navigationScreen,
         page: (() => const NavigationScreen()),
         binding: NavigationBinding()),
+
     // Main Screens
+
     // GetPage(name: Routes().homeScreen, page: (() => const HomeScreen())),
     // GetPage(name: Routes().auctionScreen, page: (() => const AuctionScreen())),
     // GetPage(name: Routes().eWasteScreen, page: (() => const EWasteScreen())),
@@ -71,14 +80,7 @@ class AppRouter {
     GetPage(
       name: Routes().addTradeForm,
       page: (() => const MainForm()
-      )
-    ),
-    //Loading Screens
-
-     GetPage(
-      name: Routes().registerWallet,
-      page: (() => const RegisterWallet()
-      ) ,binding: RegisterWalletBinding()
+      ),binding: MainFormBinding()
     ),
   ];
 }

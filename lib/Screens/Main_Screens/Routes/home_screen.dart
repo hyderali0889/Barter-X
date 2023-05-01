@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/placeholder_widget.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/home_controller.dart';
+import '../../../Routes/routes.dart';
 import '../../../Themes/spacing.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,10 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
-
-
   HomeController controller = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
@@ -36,11 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: SafeArea(
           child: Stack(
-            children: [
-              SizedBox(
-        width: size.width,
-        height: size.height,
-        child: Column(
+        children: [
+          SizedBox(
+            width: size.width,
+            height: size.height,
+            child: Column(
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: Spacing().sm),
@@ -53,7 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           "Barter X",
                           style: context.textTheme.bodyMedium!.copyWith(
-                              color: AppColors().primaryBlue, fontFamily: "bold"),
+                              color: AppColors().primaryBlue,
+                              fontFamily: "bold"),
                         ),
                       ),
                       Row(
@@ -61,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
                             child: InkWell(
-                                onTap: () {}, child: const Icon(UniconsLine.bell)),
+                                onTap: () {},
+                                child: const Icon(UniconsLine.bell)),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 20.0),
@@ -80,15 +78,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: PlaceHolderWidget(
                   size: size,
                   image: "A6",
-                  mainText: "No Trades Found in your area.",
+                  mainText:
+                      "Barter Screen is where you enlist a product to be traded with a specific object. ",
                   buttonText: "Start a Trade",
                   isLoading: false,
-                  buttonFunc: () {},
-                ))
+                  buttonFunc: () {
+                    Get.toNamed(Routes().addTradeForm, arguments: "a");
+                  },
+                )),
               ],
-        ),
-      ),
-      Obx(
+            ),
+          ),
+          Obx(
             () => BottomBar(
               controller: controller,
               size: size,
@@ -102,8 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           )
-            ],
-          )),
+        ],
+      )),
     );
   }
 }

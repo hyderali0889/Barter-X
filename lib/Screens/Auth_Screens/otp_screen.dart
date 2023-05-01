@@ -352,6 +352,7 @@ class InputFieldArea extends StatelessWidget {
         width: size.width * 0.1,
         height: 75,
         child: TextFormField(
+          keyboardType: TextInputType.number,
           focusNode: focusNode,
           onChanged: functionToCall,
           maxLength: 1,

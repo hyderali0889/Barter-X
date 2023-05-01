@@ -8,7 +8,6 @@ import '../Routes/e_waste_screen.dart';
 import '../Routes/home_screen.dart';
 import '../Routes/notification_screen.dart';
 import '../Routes/profile_screen.dart';
-import '../Routes/wallet_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -27,7 +26,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
       const HomeScreen(),
       const AuctionScreen(),
       const EWasteScreen(),
-      const WalletScreen(),
       const NotificationScreen(),
       const ProfileScreen()
     ];
@@ -66,11 +64,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       color: controller.selectedPage.value == 2
                           ? AppColors().secRed
                           : AppColors().secHalfGrey)),
+
               InkWell(
                   onTap: () {
                     controller.changePage(3);
                   },
-                  child: Icon(UniconsLine.wallet,
+                  child: Icon(UniconsLine.clipboard_notes,
                       color: controller.selectedPage.value == 3
                           ? AppColors().secRed
                           : AppColors().secHalfGrey)),
@@ -78,16 +77,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   onTap: () {
                     controller.changePage(4);
                   },
-                  child: Icon(UniconsLine.clipboard_notes,
-                      color: controller.selectedPage.value == 4
-                          ? AppColors().secRed
-                          : AppColors().secHalfGrey)),
-              InkWell(
-                  onTap: () {
-                    controller.changePage(5);
-                  },
                   child: Icon(UniconsLine.setting,
-                      color: controller.selectedPage.value == 5
+                      color: controller.selectedPage.value == 4
                           ? AppColors().secRed
                           : AppColors().secHalfGrey)),
             ],

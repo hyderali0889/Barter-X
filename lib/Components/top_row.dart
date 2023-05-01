@@ -27,20 +27,17 @@ class TopRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(left: 20.0),
             child: InkWell(
                 onTap: () {
                   Get.back();
                 },
                 child: const Icon(UniconsLine.arrow_left)),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 50.0),
-            child: Text(
-              text,
-              style: context.textTheme.bodyMedium!.copyWith(
-                  color: AppColors().primaryBlack, fontFamily: "medium"),
-            ),
+          Text(
+            text,
+            style: context.textTheme.bodyMedium!.copyWith(
+                color: AppColors().primaryBlack, fontFamily: "medium"),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20.0),

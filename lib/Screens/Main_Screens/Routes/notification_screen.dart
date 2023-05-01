@@ -10,7 +10,6 @@ import '../../../Controllers/Main_Controllers/Route_Controllers/notification_con
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
 
-
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -22,8 +21,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   NotificationController controller = Get.find<NotificationController>();
   PageController pageController = PageController(
       initialPage: Get.find<NotificationController>().selectedPill.value);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +95,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   height: 40,
                                   width: size.width * 0.40,
                                   decoration: BoxDecoration(
-                                      color: controller.selectedPill.value == 2
+                                      color: controller.selectedPill.value == 1
                                           ? AppColors().secRed
                                           : AppColors().secSoftGrey,
                                       borderRadius: BorderRadius.circular(20)),

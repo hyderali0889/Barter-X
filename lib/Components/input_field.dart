@@ -51,6 +51,7 @@ class _InputFieldState extends State<InputField> {
               width: widget.width,
               height: 75,
               child: TextFormField(
+                keyboardType: widget.isEmailField? TextInputType.emailAddress : TextInputType.visiblePassword,
                 maxLength: widget.maxLenght,
                 style: context.textTheme.bodyMedium,
                 obscureText: widget.obsecureText,
