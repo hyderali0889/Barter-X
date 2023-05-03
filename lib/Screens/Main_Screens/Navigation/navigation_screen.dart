@@ -20,8 +20,20 @@ class _NavigationScreenState extends State<NavigationScreen> {
   NavigationController controller = Get.find<NavigationController>();
 
   @override
+  void initState() {
+    super.initState();
+
+    if (Get.arguments != null)  {
+      controller.changePage(Get.arguments);
+    } else {
+      return;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     List<Widget> screen = [
       const HomeScreen(),
       const AuctionScreen(),
@@ -64,7 +76,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       color: controller.selectedPage.value == 2
                           ? AppColors().secRed
                           : AppColors().secHalfGrey)),
-
               InkWell(
                   onTap: () {
                     controller.changePage(3);

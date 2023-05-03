@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../Components/placeholder_widget.dart';
 import '../../../Controllers/Main_Controllers/Navigation_Controller/navigation_controller.dart';
+import '../../../Routes/routes.dart';
 
 class TradingHistoryScreen extends StatefulWidget {
   const TradingHistoryScreen({super.key});
@@ -29,7 +30,8 @@ class _TradingHistoryScreenState extends State<TradingHistoryScreen> {
             buttonText: "Go Home",
             isLoading: false,
             buttonFunc: () {
-              navController.changePage(0);
+                  Get.offAllNamed(Routes().navigationScreen, arguments: 0);
+
             },
           )),
         ],

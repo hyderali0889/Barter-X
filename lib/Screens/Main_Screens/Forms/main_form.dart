@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:barter_x/Components/main_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unicons/unicons.dart';
@@ -8,6 +14,7 @@ import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/form_text_field.dart';
 import '../../../Components/top_row.dart';
 import '../../../Controllers/Main_Controllers/Form_Controllers/main_form_controller.dart';
+import '../../../Routes/routes.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
 
@@ -161,12 +168,60 @@ class _MainFormState extends State<MainForm> {
   }
 
   TextEditingController titleController = TextEditingController();
+  TextEditingController tradeWithController = TextEditingController();
   TextEditingController desController = TextEditingController();
 
   TextEditingController userEmailController =
       TextEditingController(text: FirebaseAuth.instance.currentUser!.email);
   TextEditingController userPhoneController = TextEditingController(
       text: FirebaseAuth.instance.currentUser!.phoneNumber);
+
+  void addToFirebase() async {
+    try {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      FirebaseAuth auth = FirebaseAuth.instance;
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      if (controller.image.value == null ||
+          titleController.text.isEmpty ||
+          tradeWithController.text.isEmpty ||
+          controller.selectedDistrict.value == "" ||
+          controller.selectedCat.value == "" ||
+          desController.text.isEmpty) {
+        controller.errorOcurred(true);
+        controller.errorMsg(
+            "NO Image Selected or any field is empty. Please fill all the fields and try again.");
+        return;
+      }
+      controller.startLoading(true);
+      String path = "file/${DateTime.now()}";
+      File file = File(controller.image.value!.path);
+
+      UploadTask fileurl = storage.ref().child(path).putFile(file);
+
+      final snapshot = await fileurl.whenComplete(() {});
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+
+      firestore.collection("Barters").doc("Trades").set({
+        "title": titleController.text.trim(),
+        "tradewith": tradeWithController.text.trim(),
+        "imageurl": downloadUrl,
+        "description": desController.text.trim(),
+        "email": auth.currentUser!.email,
+        "phone": auth.currentUser!.phoneNumber,
+        "district": controller.selectedDistrict.value,
+        "category": controller.selectedCat.value
+      });
+      controller.startLoading(false);
+      Get.offAllNamed(Routes().navigationScreen, arguments: 0);
+    } on PlatformException catch (e) {
+      controller.startLoading(false);
+
+      controller.errorOcurred(true);
+      controller.errorMsg("An Error Occured ${e.message}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -175,36 +230,51 @@ class _MainFormState extends State<MainForm> {
       body: SafeArea(
           child: Stack(
         children: [
-          InkWell(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: SizedBox(
-              width: size.width,
-              height: size.height,
-              child: Column(
-                children: [
-                  TopRow(
-                    text: "Add Trade",
-                    firstFunc: () {},
-                    icon: UniconsLine.bell,
-                  ),
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        TheForm(
-                          titleController: titleController,
-                          desController: desController,
-                          userEmailController: userEmailController,
-                          userPhoneController: userPhoneController,
-                          allDistricts: allDistricts,
-                          categories: categories,
-                          controller: controller,
+          Obx(
+            () => Opacity(
+              opacity: controller.errorOcurred.value ? 0.6 : 1,
+              child: InkWell(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: SizedBox(
+                  width: size.width,
+                  height: size.height,
+                  child: Column(
+                    children: [
+                      TopRow(
+                        text: "Add Trade",
+                        firstFunc: () {},
+                        icon: UniconsLine.bell,
+                      ),
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            TheForm(
+                              titleController: titleController,
+                              tradeWithController: tradeWithController,
+                              desController: desController,
+                              userEmailController: userEmailController,
+                              userPhoneController: userPhoneController,
+                              allDistricts: allDistricts,
+                              categories: categories,
+                              controller: controller,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: Spacing().sm),
+                              child: MainButton(
+                                size: size,
+                                buttonText: "Add Trade",
+                                actionFunction: addToFirebase,
+                                mainController: controller.isLoading.value,
+                              ),
+                            )
+                          ],
                         ),
-                      ],
-                    ),
-                  )
-                ],
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -238,11 +308,13 @@ class TheForm extends StatelessWidget {
     required this.allDistricts,
     required this.controller,
     required this.categories,
+    required this.tradeWithController,
   });
   final TextEditingController titleController;
   final TextEditingController desController;
   final TextEditingController userEmailController;
   final TextEditingController userPhoneController;
+  final TextEditingController tradeWithController;
   final List<String> allDistricts;
   final List<String> categories;
   final MainFormController controller;
@@ -250,6 +322,28 @@ class TheForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Future<void> selectImage(ImageSource source) async {
+      try {
+        controller.errorOcurred(false);
+        controller.startLoading(true);
+
+        XFile? imagePath = await ImagePicker().pickImage(source: source);
+        controller.startLoading(false);
+
+        if (imagePath == null) {
+          controller.errorOcurred(true);
+          controller.errorMsg("NO Image Selected");
+          return;
+        }
+
+        File imgFile = File(imagePath.path);
+
+        controller.addImage(imgFile);
+      } on PlatformException catch (e) {
+        controller.errorOcurred(true);
+        controller.errorMsg("An Error Occured ${e.message}");
+      }
+    }
 
     return Padding(
       padding: EdgeInsets.only(
@@ -259,118 +353,147 @@ class TheForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
-            onTap: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return SizedBox(
-                      height: 200,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Future<XFile?> pickedImage = ImagePicker()
-                                    .pickImage(source: ImageSource.gallery);
-                                print(pickedImage);
-                              },
-                              child: Container(
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                      color: AppColors().secSoftGrey,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  height: 120,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: const [
-                                      Icon(UniconsLine.image),
-                                      Text('Gallery'),
-                                    ],
-                                  )),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Future<XFile?> pickedImage = ImagePicker()
-                                    .pickImage(source: ImageSource.camera);
-                              },
-                              child: Container(
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                      color: AppColors().secSoftGrey,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  height: 120,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: const [
-                                      Icon(UniconsLine.camera),
-                                      Text('Camera'),
-                                    ],
-                                  )),
-                            ),
-                          ],
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return SizedBox(
+                        height: 200,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  selectImage(ImageSource.gallery);
+                                },
+                                child: Container(
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                        color: AppColors().secSoftGrey,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    height: 120,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(UniconsLine.image),
+                                        Text('Gallery'),
+                                      ],
+                                    )),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  selectImage(ImageSource.camera);
+                                },
+                                child: Container(
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                        color: AppColors().secSoftGrey,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    height: 120,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(UniconsLine.camera),
+                                        Text('Camera'),
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  });
-            },
-            child: Container(
+                      );
+                    });
+              },
+              child: Container(
                 width: 120,
                 decoration: BoxDecoration(
                     color: AppColors().secSoftGrey,
                     borderRadius: BorderRadius.circular(20)),
                 height: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Icon(UniconsLine.image),
-                    Text('Add Image'),
-                  ],
-                )),
+                child: controller.image.value == null
+                    ? Obx(
+                        () => Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(UniconsLine.image),
+                            Text('Add Image'),
+                          ],
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.file(
+                          File(controller.image.value!.path),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+              )),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: TextFieldForForm(
+              heading: "Enter Title",
+              opacity: 1.0,
+              readOnly: false,
+              maxLines: 1,
+              width: size.width * 0.9,
+              height: 115,
+              maxLength: 64,
+              hintText: "Enter Title",
+              controller: titleController,
+            ),
           ),
           TextFieldForForm(
+            heading: "Trade with",
             opacity: 1.0,
             readOnly: false,
             maxLines: 1,
             width: size.width * 0.9,
-            height: 100,
+            height: 115,
             maxLength: 64,
-            hintText: "Enter Title",
-            controller: titleController,
+            hintText: "Enter the title of the desired trade",
+            controller: tradeWithController,
           ),
           TextFieldForForm(
+            heading: "Enter Description",
             opacity: 1.0,
             readOnly: false,
             maxLines: 5,
             width: size.width * 0.9,
-            height: 150,
+            height: 210,
             maxLength: 150,
             hintText: "Enter Description",
             controller: desController,
           ),
           TextFieldForForm(
+            heading: "User's Email",
             opacity: 0.5,
             readOnly: true,
-            maxLines: 5,
+            maxLines: 1,
             width: size.width * 0.9,
-            height: 100,
-            maxLength: 150,
+            height: 115,
+            maxLength: 62,
             hintText: "",
             controller: userEmailController,
           ),
           TextFieldForForm(
+            heading: "User's Phone Number",
             opacity: 0.5,
             readOnly: true,
-            maxLines: 5,
+            maxLines: 1,
             width: size.width * 0.9,
-            height: 100,
-            maxLength: 150,
+            height: 115,
+            maxLength: 25,
             hintText: "",
             controller: userPhoneController,
           ),
@@ -379,69 +502,93 @@ class TheForm extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: size.width * 0.4,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: AppColors().primaryBlack),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Obx(
-                      () => DropdownButton<String>(
-                          isExpanded: true,
-                          underline: Container(),
-                          value: controller.selectedDistrict.value != ""
-                              ? controller.selectedDistrict.value
-                              : allDistricts[0],
-                          hint: const Text("Select District"),
-                          style: context.textTheme.bodySmall,
-                          borderRadius: BorderRadius.circular(20),
-                          items: allDistricts.map((String e) {
-                            return DropdownMenuItem<String>(
-                                value: e, child: Text(e));
-                          }).toList(),
-                          onChanged: (String? para) {
-                            if (para == null) {
-                              return;
-                            }
-
-                            controller.selectDistrict(para);
-                          }),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        "Select District",
+                        style: context.textTheme.bodySmall,
+                      ),
                     ),
-                  ),
+                    Container(
+                      width: size.width * 0.4,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors().primaryBlack),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Obx(
+                          () => DropdownButton<String>(
+                              isExpanded: true,
+                              underline: Container(),
+                              value: controller.selectedDistrict.value != ""
+                                  ? controller.selectedDistrict.value
+                                  : allDistricts[0],
+                              hint: const Text("Select District"),
+                              style: context.textTheme.bodySmall,
+                              borderRadius: BorderRadius.circular(20),
+                              items: allDistricts.map((String e) {
+                                return DropdownMenuItem<String>(
+                                    value: e, child: Text(e));
+                              }).toList(),
+                              onChanged: (String? para) {
+                                if (para == null) {
+                                  return;
+                                }
+
+                                controller.selectDistrict(para);
+                              }),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  width: size.width * 0.4,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: AppColors().primaryBlack),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Obx(
-                      () => DropdownButton<String>(
-                          isExpanded: true,
-                          underline: Container(),
-                          value: controller.selectedCat.value != ""
-                              ? controller.selectedCat.value
-                              : categories[0],
-                          hint: const Text("Select Category"),
-                          style: context.textTheme.bodySmall,
-                          borderRadius: BorderRadius.circular(20),
-                          items: categories.map((String e) {
-                            return DropdownMenuItem<String>(
-                                value: e, child: Text(e));
-                          }).toList(),
-                          onChanged: (String? para) {
-                            if (para == null) {
-                              return;
-                            }
-
-                            controller.selectCat(para);
-                          }),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        "Select Category",
+                        style: context.textTheme.bodySmall,
+                      ),
                     ),
-                  ),
+                    Container(
+                      width: size.width * 0.4,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors().primaryBlack),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Obx(
+                          () => DropdownButton<String>(
+                              isExpanded: true,
+                              underline: Container(),
+                              value: controller.selectedCat.value != ""
+                                  ? controller.selectedCat.value
+                                  : categories[0],
+                              hint: const Text("Select Category"),
+                              style: context.textTheme.bodySmall,
+                              borderRadius: BorderRadius.circular(20),
+                              items: categories.map((String e) {
+                                return DropdownMenuItem<String>(
+                                    value: e, child: Text(e));
+                              }).toList(),
+                              onChanged: (String? para) {
+                                if (para == null) {
+                                  return;
+                                }
+
+                                controller.selectCat(para);
+                              }),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
