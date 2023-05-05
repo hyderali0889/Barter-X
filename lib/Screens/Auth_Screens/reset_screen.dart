@@ -18,8 +18,13 @@ class ResetScreen extends StatefulWidget {
 
 class _ResetScreenState extends State<ResetScreen> {
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   ResetController controller = Get.find<ResetController>();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,6 @@ class _ResetScreenState extends State<ResetScreen> {
                   child: MainView(
                     size: size,
                     emailController: emailController,
-                    passwordController: passwordController,
                     controller: controller,
                   ),
                 ),
@@ -83,13 +87,11 @@ class MainView extends StatelessWidget {
     super.key,
     required this.size,
     required this.emailController,
-    required this.passwordController,
     required this.controller,
   });
 
   final Size size;
   final TextEditingController emailController;
-  final TextEditingController passwordController;
   final ResetController controller;
 
   @override

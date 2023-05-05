@@ -14,6 +14,7 @@ import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/form_text_field.dart';
 import '../../../Components/top_row.dart';
 import '../../../Controllers/Main_Controllers/Form_Controllers/main_form_controller.dart';
+import '../../../Models/trade_form_model.dart';
 import '../../../Routes/routes.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
@@ -29,6 +30,7 @@ class _MainFormState extends State<MainForm> {
   MainFormController controller = Get.find<MainFormController>();
 
   List<String> allDistricts = [
+    "Select District",
     "Abbottabad",
     "Astore",
     "Athmuqam",
@@ -149,6 +151,7 @@ class _MainFormState extends State<MainForm> {
   ];
 
   List<String> categories = [
+    "Select Category",
     "Books",
     "Furniture",
     "Glass-Items",
@@ -176,17 +179,36 @@ class _MainFormState extends State<MainForm> {
   TextEditingController userPhoneController = TextEditingController(
       text: FirebaseAuth.instance.currentUser!.phoneNumber);
 
+  @override
+  void dispose() {
+    titleController.dispose();
+    tradeWithController.dispose();
+    desController.dispose();
+    userEmailController.dispose();
+    userPhoneController.dispose();
+    super.dispose();
+  }
+
   void addToFirebase() async {
     try {
       FirebaseStorage storage = FirebaseStorage.instance;
       FirebaseAuth auth = FirebaseAuth.instance;
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-      if (controller.image.value == null ||
+      bool isAuction = Get.arguments == "a" &&
+          (tradeWithController.text.isNotEmpty ||
+              controller.selectedCat.value == "");
+      bool isEWaste = Get.arguments == "e" && tradeWithController.text.isEmpty;
+      bool isTrade = Get.arguments == null &&
+          (tradeWithController.text.isEmpty ||
+              controller.selectedCat.value == "");
+
+      bool sel = (isAuction || isTrade || isEWaste);
+
+      if (sel ||
+          controller.image.value == null ||
           titleController.text.isEmpty ||
-          tradeWithController.text.isEmpty ||
           controller.selectedDistrict.value == "" ||
-          controller.selectedCat.value == "" ||
           desController.text.isEmpty) {
         controller.errorOcurred(true);
         controller.errorMsg(
@@ -202,15 +224,20 @@ class _MainFormState extends State<MainForm> {
       final snapshot = await fileurl.whenComplete(() {});
       final downloadUrl = await snapshot.ref.getDownloadURL();
 
-      firestore.collection("Barters").doc("Trades").set({
-        "title": titleController.text.trim(),
-        "tradewith": tradeWithController.text.trim(),
-        "imageurl": downloadUrl,
-        "description": desController.text.trim(),
-        "email": auth.currentUser!.email,
-        "phone": auth.currentUser!.phoneNumber,
-        "district": controller.selectedDistrict.value,
-        "category": controller.selectedCat.value
+      firestore.collection("Barters").doc(DateTime.now().toString()).set({
+        TradeFormModel().title: titleController.text.trim(),
+        TradeFormModel().tradeWith:
+            Get.arguments != null && Get.arguments == "a"
+                ? "Auction"
+                : tradeWithController.text.trim(),
+        TradeFormModel().img: downloadUrl,
+        TradeFormModel().des: desController.text.trim(),
+        TradeFormModel().email: auth.currentUser!.email,
+        TradeFormModel().phone: auth.currentUser!.phoneNumber,
+        TradeFormModel().district: controller.selectedDistrict.value,
+        TradeFormModel().cat: Get.arguments != null && Get.arguments == "e"
+            ? "E-Waste"
+            : controller.selectedCat.value
       });
       controller.startLoading(false);
       Get.offAllNamed(Routes().navigationScreen, arguments: 0);
@@ -339,6 +366,8 @@ class TheForm extends StatelessWidget {
         File imgFile = File(imagePath.path);
 
         controller.addImage(imgFile);
+
+        Get.back();
       } on PlatformException catch (e) {
         controller.errorOcurred(true);
         controller.errorMsg("An Error Occured ${e.message}");
@@ -421,15 +450,13 @@ class TheForm extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20)),
                 height: 120,
                 child: controller.image.value == null
-                    ? Obx(
-                        () => Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Icon(UniconsLine.image),
-                            Text('Add Image'),
-                          ],
-                        ),
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          Icon(UniconsLine.image),
+                          Text('Add Image'),
+                        ],
                       )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(20),
@@ -453,17 +480,19 @@ class TheForm extends StatelessWidget {
               controller: titleController,
             ),
           ),
-          TextFieldForForm(
-            heading: "Trade with",
-            opacity: 1.0,
-            readOnly: false,
-            maxLines: 1,
-            width: size.width * 0.9,
-            height: 115,
-            maxLength: 64,
-            hintText: "Enter the title of the desired trade",
-            controller: tradeWithController,
-          ),
+          Get.arguments != null && Get.arguments == "a"
+              ? Container()
+              : TextFieldForForm(
+                  heading: "Trade with",
+                  opacity: 1.0,
+                  readOnly: false,
+                  maxLines: 1,
+                  width: size.width * 0.9,
+                  height: 115,
+                  maxLength: 64,
+                  hintText: "Enter the title of the desired trade",
+                  controller: tradeWithController,
+                ),
           TextFieldForForm(
             heading: "Enter Description",
             opacity: 1.0,
@@ -535,7 +564,7 @@ class TheForm extends StatelessWidget {
                                     value: e, child: Text(e));
                               }).toList(),
                               onChanged: (String? para) {
-                                if (para == null) {
+                                if (para == null || para == "Select District") {
                                   return;
                                 }
 
@@ -557,6 +586,7 @@ class TheForm extends StatelessWidget {
                       ),
                     ),
                     Container(
+                      alignment: Alignment.center,
                       width: size.width * 0.4,
                       height: 60,
                       decoration: BoxDecoration(
@@ -564,28 +594,34 @@ class TheForm extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Obx(
-                          () => DropdownButton<String>(
-                              isExpanded: true,
-                              underline: Container(),
-                              value: controller.selectedCat.value != ""
-                                  ? controller.selectedCat.value
-                                  : categories[0],
-                              hint: const Text("Select Category"),
-                              style: context.textTheme.bodySmall,
-                              borderRadius: BorderRadius.circular(20),
-                              items: categories.map((String e) {
-                                return DropdownMenuItem<String>(
-                                    value: e, child: Text(e));
-                              }).toList(),
-                              onChanged: (String? para) {
-                                if (para == null) {
-                                  return;
-                                }
+                        child: Get.arguments != null && Get.arguments == "e"
+                            ? Text(
+                                "E-Waste",
+                                style: context.textTheme.bodySmall,
+                              )
+                            : Obx(
+                                () => DropdownButton<String>(
+                                    isExpanded: true,
+                                    underline: Container(),
+                                    value: controller.selectedCat.value != ""
+                                        ? controller.selectedCat.value
+                                        : categories[0],
+                                    hint: const Text("Select Category"),
+                                    style: context.textTheme.bodySmall,
+                                    borderRadius: BorderRadius.circular(20),
+                                    items: categories.map((String e) {
+                                      return DropdownMenuItem<String>(
+                                          value: e, child: Text(e));
+                                    }).toList(),
+                                    onChanged: (String? para) {
+                                      if (para == null ||
+                                          para == "Select Category") {
+                                        return;
+                                      }
 
-                                controller.selectCat(para);
-                              }),
-                        ),
+                                      controller.selectCat(para);
+                                    }),
+                              ),
                       ),
                     ),
                   ],

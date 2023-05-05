@@ -22,6 +22,13 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   PhoneController controller = Get.find<PhoneController>();
 
   @override
+  void dispose() {
+    phoneController.dispose();
+    otpController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
@@ -58,10 +65,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
               controller.setToken(forceResendToken!);
               controller.setVerID(verificationToken);
 
-              Get.offAllNamed(
-                Routes().otpScreen,
-                arguments: verificationToken
-              );
+              Get.offAllNamed(Routes().otpScreen, arguments: verificationToken);
             },
             codeAutoRetrievalTimeout: (verificationId) {
               controller.startLoading(false);

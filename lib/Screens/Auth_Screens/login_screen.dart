@@ -21,6 +21,13 @@ class _LoginScreenState extends State<LoginScreen> {
   LoginController controller = Get.find<LoginController>();
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 

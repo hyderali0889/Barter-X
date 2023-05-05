@@ -6,6 +6,7 @@ import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/placeholder_widget.dart';
 import '../../../Components/top_row_no_back.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/auction_controller.dart';
+import '../../../Routes/routes.dart';
 
 class AuctionScreen extends StatefulWidget {
   const AuctionScreen({super.key});
@@ -50,7 +51,9 @@ class _AuctionScreenState extends State<AuctionScreen> {
                       "Auction Screen is where you enlist a product and wait for others to bid on your product.",
                   buttonText: "Start an Auction",
                   isLoading: false,
-                  buttonFunc: () {},
+                  buttonFunc: () {
+                    Get.toNamed(Routes().addTradeForm, arguments: "a");
+                  },
                 )),
               ],
             ),

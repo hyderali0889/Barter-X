@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   buttonText: "Start a Trade",
                   isLoading: false,
                   buttonFunc: () {
-                    Get.toNamed(Routes().addTradeForm, arguments: "a");
+                    Get.toNamed(Routes().addTradeForm);
                   },
                 )),
               ],

@@ -19,7 +19,14 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-    RegisterController controller = Get.find<RegisterController>();
+  RegisterController controller = Get.find<RegisterController>();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +44,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: InkWell(
-            onTap: (){
-                FocusScope.of(context).unfocus();
-            },
-            child: Stack(
-                  children: [
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Stack(
+          children: [
             Obx(
               () => Opacity(
                 opacity: controller.errorOcurred.value ? 0.6 : 1,
@@ -70,9 +77,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
             ),
-                  ],
-                ),
-          )),
+          ],
+        ),
+      )),
     );
   }
 }
@@ -99,10 +106,8 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
-
-
     void registerUser() async {
-       FocusScope.of(context).unfocus();
+      FocusScope.of(context).unfocus();
       widget.controller.changeErrorStatus(false);
 
       try {
@@ -199,7 +204,6 @@ class _MainViewState extends State<MainView> {
                 obsecureText: false,
                 mainController: widget.controller,
                 width: widget.size.width * 0.85,
-
               ),
               Obx(
                 () => InputField(
@@ -212,7 +216,6 @@ class _MainViewState extends State<MainView> {
                   obsecureText: widget.controller.obsecureText.value,
                   mainController: widget.controller,
                   width: widget.size.width * 0.85,
-
                 ),
               ),
               Obx(
