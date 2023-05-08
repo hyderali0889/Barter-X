@@ -224,14 +224,26 @@ class _MainFormState extends State<MainForm> {
       final snapshot = await fileurl.whenComplete(() {});
       final downloadUrl = await snapshot.ref.getDownloadURL();
 
-      firestore.collection("Barters").doc(DateTime.now().toString()).set({
+      DateTime nowDate = DateTime.now();
+      firestore
+          .collection(Get.arguments == null
+              ? "Trade"
+              : Get.arguments == "a"
+                  ? "Auction"
+                  : "E-Waste")
+          .doc(DateTime.now().toString())
+          .set({
         TradeFormModel().title: titleController.text.trim(),
         TradeFormModel().tradeWith:
             Get.arguments != null && Get.arguments == "a"
                 ? "Auction"
                 : tradeWithController.text.trim(),
+        TradeFormModel().isActive: true,
         TradeFormModel().img: downloadUrl,
         TradeFormModel().des: desController.text.trim(),
+        TradeFormModel().date: Get.arguments != null && Get.arguments == "a"
+            ? DateTime(nowDate.year, nowDate.month, nowDate.day + 3)
+            : null,
         TradeFormModel().email: auth.currentUser!.email,
         TradeFormModel().phone: auth.currentUser!.phoneNumber,
         TradeFormModel().district: controller.selectedDistrict.value,
@@ -291,7 +303,11 @@ class _MainFormState extends State<MainForm> {
                               padding: EdgeInsets.only(bottom: Spacing().sm),
                               child: MainButton(
                                 size: size,
-                                buttonText: "Add Trade",
+                                buttonText: Get.arguments == null
+                                    ? "Add Trade"
+                                    : Get.arguments == "a"
+                                        ? "Start the Auction"
+                                        : "Add E-Waste Product",
                                 actionFunction: addToFirebase,
                                 mainController: controller.isLoading.value,
                               ),
@@ -628,7 +644,15 @@ class TheForm extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
+          Get.arguments != null && Get.arguments == "a"
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 15.0),
+                  child: Text("* Each Auction Ends after 3 Days.",
+                      style: context.textTheme.bodyMedium!
+                          .copyWith(color: Colors.red)),
+                )
+              : Container()
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:barter_x/Components/main_button.dart';
 import 'package:barter_x/Controllers/Auth_Controllers/phone_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,6 +72,15 @@ class _OTPScreenState extends State<OTPScreen> {
 
         await FirebaseAuth.instance.currentUser!.linkWithCredential(credential);
         controller.startLoading1(false);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({
+          "userId": FirebaseAuth.instance.currentUser!.uid.toString(),
+          "Points": 0,
+          "Ratings" : 0
+        });
 
         Get.offAllNamed(Routes().routeCheck);
       } on FirebaseAuthException catch (e) {

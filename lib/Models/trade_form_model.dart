@@ -2,7 +2,8 @@ class TradeFormModel {
   final String title = "Title";
   final String email = "Email";
   final String phone = "Phone";
-
+  final String date = "endDate";
+  final String isActive = "isActive";
   final String des = "Description";
   final String img = "ImageURL";
   final String tradeWith = "Trade-with";

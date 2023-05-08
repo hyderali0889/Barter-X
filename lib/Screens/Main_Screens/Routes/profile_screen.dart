@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
@@ -41,6 +42,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: UniconsLine.shopping_cart_alt,
                   firstFunc: () {},
                 ),
+                Expanded(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                        },
+                        child: Text(
+                          "Sign Out",
+                          style: context.textTheme.bodySmall,
+                        ))
+                  ],
+                ))
               ],
             ),
           ),
