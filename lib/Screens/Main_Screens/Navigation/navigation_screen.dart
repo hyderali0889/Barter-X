@@ -23,7 +23,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void initState() {
     super.initState();
 
-    if (Get.arguments != null)  {
+    if (Get.arguments != null) {
       controller.changePage(Get.arguments);
     } else {
       return;
@@ -56,42 +56,62 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   onTap: () {
                     controller.changePage(0);
                   },
-                  child: Icon(UniconsLine.home_alt,
-                      color: controller.selectedPage.value == 0
-                          ? AppColors().secRed
-                          : AppColors().secHalfGrey)),
+                  child: SizedBox(
+                    width: size.width * 0.2,
+                    height: size.height * 0.06,
+                    child: Icon(UniconsLine.home_alt,
+                        color: controller.selectedPage.value == 0
+                            ? AppColors().secRed
+                            : AppColors().secHalfGrey),
+                  )),
               InkWell(
                   onTap: () {
                     controller.changePage(1);
                   },
-                  child: Icon(UniconsLine.podium,
-                      color: controller.selectedPage.value == 1
-                          ? AppColors().secRed
-                          : AppColors().secHalfGrey)),
+                  child: SizedBox(
+                    width: size.width * 0.2,
+                    height: size.height * 0.06,
+                    child: Icon(UniconsLine.podium,
+                        color: controller.selectedPage.value == 1
+                            ? AppColors().secRed
+                            : AppColors().secHalfGrey),
+                  )),
               InkWell(
                   onTap: () {
                     controller.changePage(2);
                   },
-                  child: Icon(UniconsLine.hdd,
-                      color: controller.selectedPage.value == 2
-                          ? AppColors().secRed
-                          : AppColors().secHalfGrey)),
+                  child: SizedBox(
+                    width: size.width * 0.2,
+                    height: size.height * 0.06,
+                    child: Icon(UniconsLine.hdd,
+                        color: controller.selectedPage.value == 2
+                            ? AppColors().secRed
+                            : AppColors().secHalfGrey),
+                  )),
               InkWell(
                   onTap: () {
                     controller.changePage(3);
                   },
-                  child: Icon(UniconsLine.clipboard_notes,
-                      color: controller.selectedPage.value == 3
-                          ? AppColors().secRed
-                          : AppColors().secHalfGrey)),
+                  child: SizedBox(
+                    width: size.width * 0.2,
+                    height: size.height * 0.06,
+                    child: Icon(UniconsLine.clipboard_notes,
+                        color: controller.selectedPage.value == 3
+                            ? AppColors().secRed
+                            : AppColors().secHalfGrey),
+                  )),
               InkWell(
                   onTap: () {
                     controller.changePage(4);
                   },
-                  child: Icon(UniconsLine.setting,
-                      color: controller.selectedPage.value == 4
-                          ? AppColors().secRed
-                          : AppColors().secHalfGrey)),
+                  child: SizedBox(
+                    width: size.width * 0.2,
+                    height: size.height * 0.06,
+                    child: Icon(UniconsLine.setting,
+                        color: controller.selectedPage.value == 4
+                            ? AppColors().secRed
+                            : AppColors().secHalfGrey),
+                  )),
             ],
           ),
         ),

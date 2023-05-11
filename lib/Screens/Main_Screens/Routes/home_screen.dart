@@ -1,3 +1,4 @@
+import 'package:barter_x/Models/trade_form_model.dart';
 import 'package:barter_x/Themes/main_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unicons/unicons.dart';
@@ -18,20 +19,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController controller = Get.find<HomeController>();
-
-  Future getFirebaseData() async {
-    QuerySnapshot<Map<String, dynamic>> da =
-        await FirebaseFirestore.instance.collection("Trade").get();
-
-    controller.addData(da);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    getFirebaseData();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,36 +77,48 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                Obx(
-                  () => Expanded(
-                      child: controller.data.value != null
-                          ? Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: Spacing().md),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.red,
-                                    ),
-                                    width: 380,
-                                    height: 200,
+                Expanded(
+                  child: FutureBuilder(
+                    
+                      future:
+                          FirebaseFirestore.instance.collection("Trade").get(),
+                      builder: (context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              data) {
+                        if (!data.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (data.data!.docs.isNotEmpty ) {
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: Spacing().md),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.red,
                                   ),
+                                  width: 380,
+                                  height: 200,
                                 ),
-                              ],
-                            )
-                          : PlaceHolderWidget(
-                              size: size,
-                              image: "A6",
-                              mainText:
-                                  "Barter Screen is where you enlist a product to be traded with a specific object. ",
-                              buttonText: "Start a Trade",
-                              isLoading: false,
-                              buttonFunc: () {
-                                Get.toNamed(Routes().addTradeForm);
-                              },
-                            )),
-                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return PlaceHolderWidget(
+                            size: size,
+                            image: "A6",
+                            mainText:
+                                "Barter Screen is where you enlist a product to be traded with a specific object. ",
+                            buttonText: "Start a Trade",
+                            isLoading: false,
+                            buttonFunc: () {
+                              Get.toNamed(Routes().addTradeForm);
+                            },
+                          );
+                        }
+                      }),
+                )
               ],
             ),
           ),

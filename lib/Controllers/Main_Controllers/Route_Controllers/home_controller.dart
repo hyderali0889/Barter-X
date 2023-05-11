@@ -5,15 +5,12 @@ class HomeController extends GetxController {
   RxString errorMsg =
       "We Encountered an error trying to log into your account. Please Check your Network Connection and try again."
           .obs;
-  Rxn<QuerySnapshot<Map<String, dynamic>>> data =
-      Rxn<QuerySnapshot<Map<String, dynamic>>>();
+
   changeErrorMessage(String errormsg) {
     errorMsg.value = errormsg;
   }
 
-  void addData(QuerySnapshot<Map<String, dynamic>> da) {
-    data.value = da;
-  }
+ 
 
   RxBool errorOcurred = false.obs;
   void changeErrorStatus(bool errorStatus) {
