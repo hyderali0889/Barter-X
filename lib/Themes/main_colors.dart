@@ -6,6 +6,7 @@ class AppColors {
   final Color primaryYellow = const Color(0xfffda429);
   final Color primaryText = const Color(0xff13181F);
   final Color primaryBlue = const Color(0xff3669c9);
+  final Color primaryPurple = const Color(0xff9B81E5);
   final Color secGreen = const Color(0xff3a9b7a);
   final Color secRed = const Color(0xffc93545);
   final Color secDarkGrey = const Color(0xfffafafa);
