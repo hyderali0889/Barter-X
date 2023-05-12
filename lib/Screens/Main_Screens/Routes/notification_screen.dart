@@ -9,6 +9,7 @@ import '../../../Components/top_row_no_back.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/notification_controller.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
+import '../Notification_Screens/wishlist.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -73,7 +74,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           const Duration(milliseconds: 100),
                                       alignment: Alignment.center,
                                       height: 40,
-                                      width: size.width * 0.40,
+                                      width: size.width * 0.25,
                                       decoration: BoxDecoration(
                                           color:
                                               controller.selectedPill.value == 0
@@ -93,9 +94,27 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   duration: const Duration(milliseconds: 100),
                                   alignment: Alignment.center,
                                   height: 40,
-                                  width: size.width * 0.40,
+                                  width: size.width * 0.25,
                                   decoration: BoxDecoration(
                                       color: controller.selectedPill.value == 1
+                                          ? AppColors().secRed
+                                          : AppColors().secSoftGrey,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Text(
+                                    "Wishlist",
+                                    style: context.textTheme.bodySmall,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20.0),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 100),
+                                  alignment: Alignment.center,
+                                  height: 40,
+                                  width: size.width * 0.25,
+                                  decoration: BoxDecoration(
+                                      color: controller.selectedPill.value == 2
                                           ? AppColors().secRed
                                           : AppColors().secSoftGrey,
                                       borderRadius: BorderRadius.circular(20)),
@@ -119,7 +138,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             },
                             children: const [
                               SubNotificationScreen(),
-                              TradingHistoryScreen()
+                              Wishlist(),
+                              TradingHistoryScreen(),
                             ],
                           ))
                     ],

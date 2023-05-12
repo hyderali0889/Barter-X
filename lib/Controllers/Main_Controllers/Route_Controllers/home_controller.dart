@@ -6,6 +6,12 @@ class HomeController extends GetxController {
       "We Encountered an error trying to log into your account. Please Check your Network Connection and try again."
           .obs;
 
+  RxBool isRefreshing = false.obs;
+
+  void refreshData(bool value) {
+    isRefreshing.value = value;
+  }
+
   Rxn<Future<QuerySnapshot<Map<String, dynamic>>>> data =
       Rxn<Future<QuerySnapshot<Map<String, dynamic>>>>();
 
