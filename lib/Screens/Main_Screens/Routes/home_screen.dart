@@ -1,4 +1,3 @@
-import 'package:barter_x/Models/trade_form_model.dart';
 import 'package:barter_x/Themes/main_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -32,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void getFirestoreData() async {
     try {
+      controller.refreshData(true);
       FirebaseFunctions().getFirebaseTradeData(controller);
       await Future.delayed(const Duration(seconds: 2));
       controller.refreshData(false);
@@ -54,12 +54,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: Stack(
         children: [
           RefreshIndicator(
             onRefresh: () async {
               try {
+                controller.refreshData(true);
+
                 FirebaseFunctions().getFirebaseTradeData(controller);
                 await Future.delayed(const Duration(seconds: 2));
                 controller.refreshData(false);
@@ -149,6 +152,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+/*
+███╗   ███╗ █████╗ ██╗███╗   ██╗    ██╗   ██╗██╗███████╗██╗    ██╗
+████╗ ████║██╔══██╗██║████╗  ██║    ██║   ██║██║██╔════╝██║    ██║
+██╔████╔██║███████║██║██╔██╗ ██║    ██║   ██║██║█████╗  ██║ █╗ ██║
+██║╚██╔╝██║██╔══██║██║██║╚██╗██║    ╚██╗ ██╔╝██║██╔══╝  ██║███╗██║
+██║ ╚═╝ ██║██║  ██║██║██║ ╚████║     ╚████╔╝ ██║███████╗╚███╔███╔╝
+╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝      ╚═══╝  ╚═╝╚══════╝ ╚══╝╚══╝
+
+*/
+
 class FutureWidget extends StatelessWidget {
   const FutureWidget(
       {super.key,
@@ -170,16 +183,22 @@ class FutureWidget extends StatelessWidget {
             builder: (context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data) {
               if (data.hasData && data.data!.docs.isEmpty) {
-                return PlaceHolderWidget(
-                  size: size,
-                  image: "A6",
-                  mainText:
-                      "Barter Screen is where you enlist a product to be traded with a specific object. ",
-                  buttonText: "Start a Trade",
-                  isLoading: false,
-                  buttonFunc: () {
-                    Get.toNamed(Routes().addTradeForm);
-                  },
+                return SizedBox(
+                  width: size.width,
+                  height: size.height * 0.82,
+                  child: Center(
+                    child: PlaceHolderWidget(
+                      size: size,
+                      image: "A6",
+                      mainText:
+                          "Barter Screen is where you enlist a product to be traded with a specific object. ",
+                      buttonText: "Start a Trade",
+                      isLoading: false,
+                      buttonFunc: () {
+                        Get.toNamed(Routes().addTradeForm);
+                      },
+                    ),
+                  ),
                 );
               }
 
@@ -281,6 +300,16 @@ class MainView extends StatelessWidget {
   }
 }
 
+/*
+ █████╗ ██╗     ██╗          ██████╗ ██████╗ ███╗   ███╗██████╗  ██████╗ ███╗   ██╗███████╗███╗   ██╗████████╗███████╗
+██╔══██╗██║     ██║         ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██╔═══██╗████╗  ██║██╔════╝████╗  ██║╚══██╔══╝██╔════╝
+███████║██║     ██║         ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║██╔██╗ ██║█████╗  ██╔██╗ ██║   ██║   ███████╗
+██╔══██║██║     ██║         ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║██║╚██╗██║██╔══╝  ██║╚██╗██║   ██║   ╚════██║
+██║  ██║███████╗███████╗    ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝██║ ╚████║███████╗██║ ╚████║   ██║   ███████║
+╚═╝  ╚═╝╚══════╝╚══════╝     ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝
+
+*/
+
 class SearchBar extends StatelessWidget {
   const SearchBar({
     super.key,
@@ -342,7 +371,8 @@ class ImageArea extends StatelessWidget {
             itemCount: 3,
             itemBuilder: ((context, index) {
               return Padding(
-                padding: EdgeInsets.only(right: size.width * 0.1),
+                padding: EdgeInsets.only(
+                    right: index == 2 ? size.width * 0.05 : size.width * 0.13),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset("assets/cards/Barter$index.png"),
@@ -435,26 +465,111 @@ class FeaturedProducts extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Featured Products",
-          style: context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Featured Products",
+              style: context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
+            ),
+            InkWell(
+              onTap: () {},
+              child: Padding(
+                padding: const EdgeInsets.only(right: 30.0),
+                child: Text(
+                  "See All",
+                  style: context.textTheme.bodySmall!
+                      .copyWith(color: AppColors().primaryBlue),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: Spacing().sm),
+          child: Column(
+            children: [
+              SizedBox(
+                width: size.width,
+                height: 260,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    MainShimmerContainer(
+                        data: data, controller: controller, size: size),
+                    MainShimmerContainer(
+                        data: data, controller: controller, size: size),
+                  ],
+                ),
+              ),
+              LongShimmerContainer(
+                controller: controller,
+                data: data,
+                size: size,
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class NewArrivals extends StatelessWidget {
+  const NewArrivals({
+    super.key,
+    required this.data,
+    required this.controller,
+    required this.size,
+  });
+  final HomeController controller;
+  final Size size;
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: Spacing().lg),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "New Arrivals",
+                style:
+                    context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
+              ),
+              InkWell(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 30.0),
+                  child: Text(
+                    "See All",
+                    style: context.textTheme.bodySmall!
+                        .copyWith(color: AppColors().primaryBlue),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         Padding(
           padding: EdgeInsets.only(top: Spacing().sm),
           child: SizedBox(
             width: size.width,
             height: 260,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 MainShimmerContainer(
-                  data: data,
-                  controller: controller,
-                ),
+                    data: data, controller: controller, size: size),
                 MainShimmerContainer(
-                  data: data,
-                  controller: controller,
-                ),
+                    data: data, controller: controller, size: size),
               ],
             ),
           ),
@@ -464,14 +579,173 @@ class FeaturedProducts extends StatelessWidget {
   }
 }
 
+class TopRatedProducts extends StatelessWidget {
+  const TopRatedProducts({
+    super.key,
+    required this.data,
+    required this.controller,
+    required this.size,
+  });
+  final HomeController controller;
+  final Size size;
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: Spacing().lg),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: Spacing().lg),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Top Rated Products",
+                  style: context.textTheme.bodyMedium!
+                      .copyWith(fontFamily: "bold"),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 30.0),
+                    child: Text(
+                      "See All",
+                      style: context.textTheme.bodySmall!
+                          .copyWith(color: AppColors().primaryBlue),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: Spacing().sm),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: size.width,
+                  height: 260,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      MainShimmerContainer(
+                          data: data, controller: controller, size: size),
+                      MainShimmerContainer(
+                          data: data, controller: controller, size: size),
+                    ],
+                  ),
+                ),
+                LongShimmerContainer(
+                  controller: controller,
+                  data: data,
+                  size: size,
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+/*
+ █████╗ ██╗     ██╗         ███████╗██╗   ██╗██████╗        ██████╗ ██████╗ ███╗   ███╗██████╗  ██████╗ ███╗   ██╗███████╗███╗   ██╗████████╗███████╗
+██╔══██╗██║     ██║         ██╔════╝██║   ██║██╔══██╗      ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██╔═══██╗████╗  ██║██╔════╝████╗  ██║╚══██╔══╝██╔════╝
+███████║██║     ██║         ███████╗██║   ██║██████╔╝█████╗██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║██╔██╗ ██║█████╗  ██╔██╗ ██║   ██║   ███████╗
+██╔══██║██║     ██║         ╚════██║██║   ██║██╔══██╗╚════╝██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║██║╚██╗██║██╔══╝  ██║╚██╗██║   ██║   ╚════██║
+██║  ██║███████╗███████╗    ███████║╚██████╔╝██████╔╝      ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝██║ ╚████║███████╗██║ ╚████║   ██║   ███████║
+╚═╝  ╚═╝╚══════╝╚══════╝    ╚══════╝ ╚═════╝ ╚═════╝        ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝
+
+*/
+
+class LongShimmerContainer extends StatelessWidget {
+  const LongShimmerContainer({
+    super.key,
+    required this.controller,
+    required this.data,
+    required this.size,
+  });
+
+  final HomeController controller;
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    //  bool isRefreshing = controller.isRefreshing.value || !data.hasData;
+    return Padding(
+      padding: EdgeInsets.only(top: Spacing().sm),
+      child: Container(
+        width: size.width * 0.9,
+        height: 171,
+        decoration: BoxDecoration(
+            color: AppColors().secDarkGrey,
+            borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(
+                () => Shimmer(
+                  gradient: LinearGradient(colors: [
+                    AppColors().secHalfGrey,
+                    AppColors().secSoftGrey
+                  ]),
+                  enabled: controller.isRefreshing.value || !data.hasData,
+                  child: Container(
+                    width: 160,
+                    height: 20,
+                    decoration: BoxDecoration(
+                        color: AppColors().secSoftGrey,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Obx(
+                  () => Shimmer(
+                    gradient: LinearGradient(colors: [
+                      AppColors().secHalfGrey,
+                      AppColors().secSoftGrey
+                    ]),
+                    enabled: controller.isRefreshing.value || !data.hasData,
+                    child: Container(
+                      width: 98,
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: AppColors().secSoftGrey,
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class MainShimmerContainer extends StatelessWidget {
   const MainShimmerContainer({
     super.key,
     required this.data,
     required this.controller,
+    required this.size,
   });
   final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
   final HomeController controller;
+  final Size size;
 
   @override
   Widget build(BuildContext context) {
@@ -481,7 +755,7 @@ class MainShimmerContainer extends StatelessWidget {
         decoration: BoxDecoration(
             color: AppColors().secDarkGrey,
             borderRadius: BorderRadius.circular(10)),
-        width: 156,
+        width: size.width * 0.38,
         height: 242,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -497,7 +771,7 @@ class MainShimmerContainer extends StatelessWidget {
                   ]),
                   enabled: controller.isRefreshing.value || !data.hasData,
                   child: Container(
-                    width: 125,
+                    width: size.width * 0.35,
                     height: 136,
                     decoration: BoxDecoration(
                         color: AppColors().secSoftGrey,
@@ -544,104 +818,6 @@ class MainShimmerContainer extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class NewArrivals extends StatelessWidget {
-  const NewArrivals({
-    super.key,
-    required this.data,
-    required this.controller,
-    required this.size,
-  });
-  final HomeController controller;
-  final Size size;
-  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: Spacing().sm),
-          child: Text(
-            "New Arrivals",
-            style: context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: Spacing().sm),
-          child: SizedBox(
-            width: size.width,
-            height: 260,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                MainShimmerContainer(
-                  data: data,
-                  controller: controller,
-                ),
-                MainShimmerContainer(
-                  data: data,
-                  controller: controller,
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class TopRatedProducts extends StatelessWidget {
-  const TopRatedProducts({
-    super.key,
-    required this.data,
-    required this.controller,
-    required this.size,
-  });
-  final HomeController controller;
-  final Size size;
-  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: Spacing().sm),
-          child: Text(
-            "Top Rated Products",
-            style: context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: Spacing().sm),
-          child: SizedBox(
-            width: size.width,
-            height: 260,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                MainShimmerContainer(
-                  data: data,
-                  controller: controller,
-                ),
-                MainShimmerContainer(
-                  data: data,
-                  controller: controller,
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
     );
   }
 }

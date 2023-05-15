@@ -59,10 +59,24 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   child: SizedBox(
                     width: size.width * 0.2,
                     height: size.height * 0.06,
-                    child: Icon(UniconsLine.home_alt,
-                        color: controller.selectedPage.value == 0
-                            ? AppColors().secRed
-                            : AppColors().secHalfGrey),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(UniconsLine.home_alt,
+                            color: controller.selectedPage.value == 0
+                                ? AppColors().secRed
+                                : AppColors().secHalfGrey),
+                        controller.selectedPage.value == 0
+                            ? Text(
+                                "Home",
+                                style: context.textTheme.bodySmall!.copyWith(
+                                    color: AppColors().secRed,
+                                    fontFamily: "bold"),
+                              )
+                            : Container()
+                      ],
+                    ),
                   )),
               InkWell(
                   onTap: () {
@@ -71,10 +85,24 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   child: SizedBox(
                     width: size.width * 0.2,
                     height: size.height * 0.06,
-                    child: Icon(UniconsLine.podium,
-                        color: controller.selectedPage.value == 1
-                            ? AppColors().secRed
-                            : AppColors().secHalfGrey),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(UniconsLine.podium,
+                            color: controller.selectedPage.value == 1
+                                ? AppColors().secRed
+                                : AppColors().secHalfGrey),
+                        controller.selectedPage.value == 1
+                            ? Text(
+                                "Auctions",
+                                style: context.textTheme.bodySmall!.copyWith(
+                                    color: AppColors().secRed,
+                                    fontFamily: "bold"),
+                              )
+                            : Container()
+                      ],
+                    ),
                   )),
               InkWell(
                   onTap: () {
@@ -83,10 +111,24 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   child: SizedBox(
                     width: size.width * 0.2,
                     height: size.height * 0.06,
-                    child: Icon(UniconsLine.hdd,
-                        color: controller.selectedPage.value == 2
-                            ? AppColors().secRed
-                            : AppColors().secHalfGrey),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(UniconsLine.hdd,
+                            color: controller.selectedPage.value == 2
+                                ? AppColors().secRed
+                                : AppColors().secHalfGrey),
+                        controller.selectedPage.value == 2
+                            ? Text(
+                                "E-Wastes",
+                                style: context.textTheme.bodySmall!.copyWith(
+                                    color: AppColors().secRed,
+                                    fontFamily: "bold"),
+                              )
+                            : Container()
+                      ],
+                    ),
                   )),
               InkWell(
                   onTap: () {
@@ -95,10 +137,24 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   child: SizedBox(
                     width: size.width * 0.2,
                     height: size.height * 0.06,
-                    child: Icon(UniconsLine.clipboard_notes,
-                        color: controller.selectedPage.value == 3
-                            ? AppColors().secRed
-                            : AppColors().secHalfGrey),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(UniconsLine.clipboard_notes,
+                            color: controller.selectedPage.value == 3
+                                ? AppColors().secRed
+                                : AppColors().secHalfGrey),
+                        controller.selectedPage.value == 3
+                            ? Text(
+                                "Notifications",
+                                style: context.textTheme.bodySmall!.copyWith(
+                                    color: AppColors().secRed,
+                                    fontFamily: "bold"),
+                              )
+                            : Container()
+                      ],
+                    ),
                   )),
               InkWell(
                   onTap: () {
@@ -107,10 +163,24 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   child: SizedBox(
                     width: size.width * 0.2,
                     height: size.height * 0.06,
-                    child: Icon(UniconsLine.setting,
-                        color: controller.selectedPage.value == 4
-                            ? AppColors().secRed
-                            : AppColors().secHalfGrey),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(UniconsLine.setting,
+                            color: controller.selectedPage.value == 4
+                                ? AppColors().secRed
+                                : AppColors().secHalfGrey),
+                        controller.selectedPage.value == 4
+                            ? Text(
+                                "Profile",
+                                style: context.textTheme.bodySmall!.copyWith(
+                                    color: AppColors().secRed,
+                                    fontFamily: "bold"),
+                              )
+                            : Container()
+                      ],
+                    ),
                   )),
             ],
           ),
