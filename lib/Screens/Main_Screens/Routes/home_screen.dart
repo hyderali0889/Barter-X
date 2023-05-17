@@ -1,6 +1,7 @@
 import 'package:barter_x/Themes/main_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:unicons/unicons.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import '../../../Components/placeholder_widget.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/home_controller.dart';
 import '../../../Routes/routes.dart';
 import '../../../Themes/spacing.dart';
+import '../../../Utils/admob_ids.dart';
 import '../../../Utils/firebase_function.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getFirestoreData();
+    loadAd();
   }
 
   void getFirestoreData() async {
@@ -41,6 +44,26 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  BannerAd? _bannerAd;
+
+  void loadAd() {
+    controller.changeErrorStatus(false);
+
+    _bannerAd = BannerAd(
+      adUnitId: AdmobIds().bannerId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {},
+        onAdFailedToLoad: (ad, err) {
+          controller.changeErrorMessage('Cannot Load Ads ${err.message}');
+          controller.changeErrorStatus(true);
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -51,103 +74,133 @@ class _HomeScreenState extends State<HomeScreen> {
 
     void tryAgainBottomBar() {
       controller.changeErrorStatus(false);
+      loadAd();
     }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: Stack(
-        children: [
-          RefreshIndicator(
-            onRefresh: () async {
-              try {
-                controller.refreshData(true);
-
-                FirebaseFunctions().getFirebaseTradeData(controller);
-                await Future.delayed(const Duration(seconds: 2));
-                controller.refreshData(false);
-              } on PlatformException catch (e) {
-                controller.changeErrorMessage(e.message.toString());
-                controller.changeErrorStatus(true);
-              }
-            },
-            child: Stack(
-              children: [
-                ListView(),
-                SizedBox(
-                  width: size.width,
-                  height: size.height,
-                  child: Column(
+        child: Stack(
+          children: [
+            RefreshIndicator(
+              onRefresh: () async {
+                try {
+                  controller.refreshData(true);
+                  FirebaseFunctions().getFirebaseTradeData(controller);
+                  await Future.delayed(const Duration(seconds: 2));
+                  controller.refreshData(false);
+                } on PlatformException catch (e) {
+                  controller.changeErrorMessage(e.message.toString());
+                  controller.changeErrorStatus(true);
+                }
+              },
+              child: Obx(
+                () => Opacity(
+                  opacity: controller.errorOcurred.value ? 0.6 : 1,
+                  child: Stack(
                     children: [
+                      ListView(),
                       SizedBox(
                         width: size.width,
-                        height: size.height * 0.08,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        height: size.height,
+                        child: Column(
                           children: [
-                            Container(),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 50.0),
-                              child: Text(
-                                "Barter X",
-                                style: context.textTheme.bodyMedium!.copyWith(
-                                    color: AppColors().primaryBlue,
-                                    fontFamily: "bold"),
+                            SizedBox(
+                              width: size.width,
+                              height: size.height * 0.08,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 50.0),
+                                    child: Text(
+                                      "Barter X",
+                                      style: context.textTheme.bodyMedium!
+                                          .copyWith(
+                                              color: AppColors().primaryBlue,
+                                              fontFamily: "bold"),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8.0),
+                                        child: InkWell(
+                                            onTap: () {},
+                                            child:
+                                                const Icon(UniconsLine.bell)),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 20.0),
+                                        child: InkWell(
+                                            onTap: () {},
+                                            child: const Icon(
+                                              UniconsLine.shopping_cart_alt,
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: InkWell(
-                                      onTap: () {},
-                                      child: const Icon(UniconsLine.bell)),
+                            Expanded(
+                              child: Column(children: [
+                                SizedBox(
+                                  width: size.width,
+                                  height: size.height * 0.77,
+                                  child: ListView(children: [
+                                    FutureWidget(
+                                      controller: controller,
+                                      size: size,
+                                      searchController: searchController,
+                                    ),
+                                  ]),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 20.0),
-                                  child: InkWell(
-                                      onTap: () {},
-                                      child: const Icon(
-                                        UniconsLine.shopping_cart_alt,
-                                      )),
-                                )
-                              ],
-                            ),
+                                _bannerAd != null
+                                    ? Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: SafeArea(
+                                          child: SizedBox(
+                                            width: _bannerAd!.size.width
+                                                .toDouble(),
+                                            height: _bannerAd!.size.height
+                                                .toDouble(),
+                                            child: AdWidget(ad: _bannerAd!),
+                                          ),
+                                        ),
+                                      )
+                                    : Container()
+                              ]),
+                            )
                           ],
                         ),
                       ),
-                      SizedBox(
-                          width: size.width,
-                          height: size.height * 0.82,
-                          child: ListView(children: [
-                            FutureWidget(
-                              controller: controller,
-                              size: size,
-                              searchController: searchController,
-                            ),
-                          ]))
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          Obx(
-            () => BottomBar(
-              controller: controller,
-              size: size,
-              errorTitle: "An Error Occurred",
-              errorMsg: controller.errorMsg.value,
-              closeFunction: closeBottomBar,
-              tryAgainFunction: tryAgainBottomBar,
-              buttonWidget: Text(
-                "Try Again",
-                style: context.textTheme.displayMedium,
               ),
             ),
-          )
-        ],
-      )),
+            Obx(
+              () => BottomBar(
+                controller: controller,
+                size: size,
+                errorTitle: "An Error Occurred",
+                errorMsg: controller.errorMsg.value,
+                closeFunction: closeBottomBar,
+                tryAgainFunction: tryAgainBottomBar,
+                buttonWidget: Text(
+                  "Try Again",
+                  style: context.textTheme.displayMedium,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

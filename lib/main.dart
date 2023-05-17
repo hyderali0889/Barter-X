@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'Routes/app_routes.dart';
 import 'Screens/Other_Screens/splash_screen.dart';
@@ -12,6 +13,7 @@ import 'Themes/main_colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await MobileAds.instance.initialize(  );
   await Firebase.initializeApp();
   runApp(const MyApp());
 }

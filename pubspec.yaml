@@ -14,7 +14,7 @@ environment:
   sdk: ">=2.19.6 <3.0.0"
 
 dependencies:
-#  google_mobile_ads: ^3.0.0
+  google_mobile_ads: ^3.0.0
   cached_network_image: ^3.2.3
   cloud_firestore: ^4.5.0
   cupertino_icons: ^1.0.2

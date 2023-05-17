@@ -2,6 +2,7 @@ import 'package:barter_x/Screens/Main_Screens/Notification_Screens/notifications
 import 'package:barter_x/Screens/Main_Screens/Notification_Screens/trading_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../Components/bottom_app_bar.dart';
@@ -9,6 +10,7 @@ import '../../../Components/top_row_no_back.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/notification_controller.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
+import '../../../Utils/admob_ids.dart';
 import '../Notification_Screens/wishlist.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -22,6 +24,32 @@ class _NotificationScreenState extends State<NotificationScreen> {
   NotificationController controller = Get.find<NotificationController>();
   PageController pageController = PageController(
       initialPage: Get.find<NotificationController>().selectedPill.value);
+
+  BannerAd? _bannerAd;
+
+  void loadAd() {
+    controller.changeErrorStatus(false);
+
+    _bannerAd = BannerAd(
+      adUnitId: AdmobIds().bannerId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {},
+        onAdFailedToLoad: (ad, err) {
+          controller.changeErrorMessage('Cannot Load Ads ${err.message}');
+          controller.changeErrorStatus(true);
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadAd();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,23 +156,40 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                          width: size.width,
-                          height: size.height * 0.7,
-                          child: PageView(
-                            controller: pageController,
-                            onPageChanged: (int page) {
-                              controller.changePill(page);
-                            },
-                            children: const [
-                              SubNotificationScreen(),
-                              Wishlist(),
-                              TradingHistoryScreen(),
-                            ],
-                          ))
                     ],
                   ),
-                )
+                ),
+                Expanded(
+                    child: Column(
+                  children: [
+                    SizedBox(
+                      height: size.height * 0.73,
+                      child: PageView(
+                        controller: pageController,
+                        onPageChanged: (int page) {
+                          controller.changePill(page);
+                        },
+                        children: const [
+                          SubNotificationScreen(),
+                          Wishlist(),
+                          TradingHistoryScreen(),
+                        ],
+                      ),
+                    ),
+                    _bannerAd != null
+                        ? Align(
+                            alignment: Alignment.bottomCenter,
+                            child: SafeArea(
+                              child: SizedBox(
+                                width: _bannerAd!.size.width.toDouble(),
+                                height: _bannerAd!.size.height.toDouble(),
+                                child: AdWidget(ad: _bannerAd!),
+                              ),
+                            ),
+                          )
+                        : Container()
+                  ],
+                )),
               ],
             ),
           ),
