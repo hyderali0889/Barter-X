@@ -28,8 +28,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   BannerAd? _bannerAd;
 
   void loadAd() {
-    controller.changeErrorStatus(false);
-
+    controller.changeAdError(false);
     _bannerAd = BannerAd(
       adUnitId: AdmobIds().bannerId,
       request: const AdRequest(),
@@ -37,8 +36,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       listener: BannerAdListener(
         onAdLoaded: (ad) {},
         onAdFailedToLoad: (ad, err) {
-          controller.changeErrorMessage('Cannot Load Ads ${err.message}');
-          controller.changeErrorStatus(true);
+          controller.changeAdError(true);
           ad.dispose();
         },
       ),
@@ -187,7 +185,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               ),
                             ),
                           )
-                        : Container()
+                        : Container(
+                            alignment: Alignment.center,
+                            width: size.width,
+                            height: 60,
+                            child: Obx(() => Text(!controller.isAdError.value
+                                ? " Loading Ad ... "
+                                : "Error While Loading Ad")))
                   ],
                 )),
               ],

@@ -1,4 +1,6 @@
 class TradeFormModel {
+  final String userId = "UserId";
+  final String productId = "ProductId";
   final String title = "Title";
   final String email = "Email";
   final String phone = "Phone";

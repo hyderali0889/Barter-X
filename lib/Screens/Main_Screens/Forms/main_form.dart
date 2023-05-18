@@ -18,6 +18,7 @@ import '../../../Models/trade_form_model.dart';
 import '../../../Routes/routes.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
+import '../../../Utils/random_alpha_generator.dart';
 
 class MainForm extends StatefulWidget {
   const MainForm({super.key});
@@ -191,6 +192,10 @@ class _MainFormState extends State<MainForm> {
 
   void addToFirebase() async {
     try {
+      String randomId = RandomGenerator().generateRandomString(10);
+
+    
+
       FirebaseStorage storage = FirebaseStorage.instance;
       FirebaseAuth auth = FirebaseAuth.instance;
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -238,6 +243,8 @@ class _MainFormState extends State<MainForm> {
             Get.arguments != null && Get.arguments == "a"
                 ? "Auction"
                 : tradeWithController.text.trim(),
+        TradeFormModel().userId: auth.currentUser!.uid,
+        TradeFormModel().productId: randomId,
         TradeFormModel().isActive: true,
         TradeFormModel().img: downloadUrl,
         TradeFormModel().des: desController.text.trim(),

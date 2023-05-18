@@ -5,6 +5,11 @@ class HomeController extends GetxController {
   RxString errorMsg =
       "We Encountered an error trying to log into your account. Please Check your Network Connection and try again."
           .obs;
+  RxBool isAdError = false.obs;
+
+  void changeAdError(bool value) {
+    isAdError.value = value;
+  }
 
   RxBool isRefreshing = false.obs;
 

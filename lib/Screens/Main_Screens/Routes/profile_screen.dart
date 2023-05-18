@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   BannerAd? _bannerAd;
 
   void loadAd() {
-    controller.changeErrorStatus(false);
+    controller.changeAdError(false);
 
     _bannerAd = BannerAd(
       adUnitId: AdmobIds().bannerId,
@@ -35,18 +36,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
       listener: BannerAdListener(
         onAdLoaded: (ad) {},
         onAdFailedToLoad: (ad, err) {
-          controller.changeErrorMessage('Cannot Load Ads ${err.message}');
-          controller.changeErrorStatus(true);
+          controller.changeAdError(true);
           ad.dispose();
         },
       ),
     )..load();
   }
 
+  void getUserPoints() async {
+    DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+        .instance
+        .collection("Users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    if (data.exists) {
+      controller.setUserPoints(data.data()!["Points"]);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     loadAd();
+    getUserPoints();
   }
 
   @override
@@ -112,10 +125,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ],
     );
+    Row otherSettings = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        MenuIcons(
+          bgColor: AppColors().secRed,
+          func: () {},
+          icon: UniconsLine.user,
+          innerText: "Profile",
+        ),
+        MenuIcons(
+          bgColor: AppColors().secHalfGrey,
+          func: () {},
+          icon: UniconsLine.key_skeleton_alt,
+          innerText: "Change Password",
+        ),
+        MenuIcons(
+          bgColor: AppColors().primaryPurple,
+          func: () {
+            FirebaseAuth.instance.signOut();
 
-    String userName = FirebaseAuth.instance.currentUser!.email
-        .toString()
-        .replaceAll("@gmail.com", "");
+            Get.offAllNamed(Routes().splashScreen);
+          },
+          icon: UniconsLine.exit,
+          innerText: "Log Out",
+        ),
+      ],
+    );
+
+    List<String> userName =
+        FirebaseAuth.instance.currentUser!.email.toString().split("@");
 
     return Scaffold(
       body: SafeArea(
@@ -145,28 +184,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: size.width,
                             height: size.height * 0.275,
                             color: AppColors().primaryPurple,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 175,
-                                  width: 175,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors().secHalfGrey),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Text(
-                                    "Welcome $userName",
-                                    style: context.textTheme.bodyMedium!
-                                        .copyWith(
-                                            color: AppColors().primaryWhite,
-                                            fontFamily: "bold"),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                        width: 150,
+                                        height: 150,
+                                        child: CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              "assets/icons/img.jpg"),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: Text(
+                                          "Welcome ${userName[0]}",
+                                          style: context.textTheme.bodyMedium!
+                                              .copyWith(
+                                                  color:
+                                                      AppColors().primaryWhite,
+                                                  fontFamily: "bold"),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: AppColors().labelOffRed,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    width: 150,
+                                    height: 50,
+                                    child: Text(
+                                      "Points : ${controller.userPoints.value != "" ? controller.userPoints.value : "Loading"}",
+                                      style: context.textTheme.bodyMedium!
+                                          .copyWith(fontFamily: "bold"),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -180,6 +247,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               MainView(
                                 title: "See All of Your",
                                 row: seeAllRows,
+                              ),
+                              MainView(
+                                title: "Other Settings",
+                                row: otherSettings,
                               ),
                             ],
                           ),
@@ -198,7 +269,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         )
-                      : Container()
+                      : Container(
+                          alignment: Alignment.center,
+                          width: size.width,
+                          height: 60,
+                          child: Obx(() => Text(!controller.isAdError.value
+                              ? " Loading Ad ... "
+                              : "Error While Loading Ad")))
                 ]))
               ],
             ),
