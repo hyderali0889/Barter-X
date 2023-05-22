@@ -144,7 +144,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           bgColor: AppColors().primaryPurple,
           func: () {
             FirebaseAuth.instance.signOut();
-
             Get.offAllNamed(Routes().splashScreen);
           },
           icon: UniconsLine.exit,
