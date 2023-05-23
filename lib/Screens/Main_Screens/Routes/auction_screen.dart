@@ -52,7 +52,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                   buttonText: "Start an Auction",
                   isLoading: false,
                   buttonFunc: () {
-                    Get.toNamed(Routes().addTradeForm, arguments: "a");
+                    Get.toNamed(Routes().addAuctionForm);
                   },
                 )),
               ],

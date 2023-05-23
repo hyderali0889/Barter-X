@@ -9,26 +9,25 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unicons/unicons.dart';
-
 import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/form_text_field.dart';
 import '../../../Components/top_row.dart';
-import '../../../Controllers/Main_Controllers/Form_Controllers/main_form_controller.dart';
+import '../../../Controllers/Main_Controllers/Form_Controllers/auction_form_controller.dart';
 import '../../../Models/trade_form_model.dart';
 import '../../../Routes/routes.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
 import '../../../Utils/random_alpha_generator.dart';
 
-class MainForm extends StatefulWidget {
-  const MainForm({super.key});
+class AuctionForm extends StatefulWidget {
+  const AuctionForm({super.key});
 
   @override
-  State<MainForm> createState() => _MainFormState();
+  State<AuctionForm> createState() => _AuctionFormState();
 }
 
-class _MainFormState extends State<MainForm> {
-  MainFormController controller = Get.find<MainFormController>();
+class _AuctionFormState extends State<AuctionForm> {
+  AuctionFormController controller = Get.find<AuctionFormController>();
 
   List<String> allDistricts = [
     "Select District",
@@ -153,6 +152,7 @@ class _MainFormState extends State<MainForm> {
 
   List<String> categories = [
     "Select Category",
+    "E-Waste",
     "Books",
     "Furniture",
     "Glass-Items",
@@ -172,7 +172,6 @@ class _MainFormState extends State<MainForm> {
   }
 
   TextEditingController titleController = TextEditingController();
-  TextEditingController tradeWithController = TextEditingController();
   TextEditingController desController = TextEditingController();
 
   TextEditingController userEmailController =
@@ -183,7 +182,6 @@ class _MainFormState extends State<MainForm> {
   @override
   void dispose() {
     titleController.dispose();
-    tradeWithController.dispose();
     desController.dispose();
     userEmailController.dispose();
     userPhoneController.dispose();
@@ -194,23 +192,14 @@ class _MainFormState extends State<MainForm> {
     try {
       String randomId = RandomGenerator().generateRandomString(10);
 
-    
+
 
       FirebaseStorage storage = FirebaseStorage.instance;
       FirebaseAuth auth = FirebaseAuth.instance;
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-      bool isAuction = Get.arguments == "a" &&
-          (tradeWithController.text.isNotEmpty ||
-              controller.selectedCat.value == "");
-      bool isEWaste = Get.arguments == "e" && tradeWithController.text.isEmpty;
-      bool isTrade = Get.arguments == null &&
-          (tradeWithController.text.isEmpty ||
-              controller.selectedCat.value == "");
 
-      bool sel = (isAuction || isTrade || isEWaste);
-
-      if (sel ||
+      if ( controller.selectedCat.value == "" ||
           controller.image.value == null ||
           titleController.text.isEmpty ||
           controller.selectedDistrict.value == "" ||
@@ -231,32 +220,23 @@ class _MainFormState extends State<MainForm> {
 
       DateTime nowDate = DateTime.now();
       firestore
-          .collection(Get.arguments == null
-              ? "Trade"
-              : Get.arguments == "a"
-                  ? "Auction"
-                  : "E-Waste")
+          .collection( "Auction"
+                 )
           .doc(DateTime.now().toString())
           .set({
         TradeFormModel().title: titleController.text.trim(),
-        TradeFormModel().tradeWith:
-            Get.arguments != null && Get.arguments == "a"
-                ? "Auction"
-                : tradeWithController.text.trim(),
+
         TradeFormModel().userId: auth.currentUser!.uid,
         TradeFormModel().productId: randomId,
         TradeFormModel().isActive: true,
         TradeFormModel().img: downloadUrl,
         TradeFormModel().des: desController.text.trim(),
-        TradeFormModel().date: Get.arguments != null && Get.arguments == "a"
-            ? DateTime(nowDate.year, nowDate.month, nowDate.day + 3)
-            : null,
+        TradeFormModel().date:DateTime(nowDate.year, nowDate.month, nowDate.day + 3)
+            ,
         TradeFormModel().email: auth.currentUser!.email,
         TradeFormModel().phone: auth.currentUser!.phoneNumber,
         TradeFormModel().district: controller.selectedDistrict.value,
-        TradeFormModel().cat: Get.arguments != null && Get.arguments == "e"
-            ? "E-Waste"
-            : controller.selectedCat.value
+        TradeFormModel().cat: controller.selectedCat.value
       });
       controller.startLoading(false);
       Get.offAllNamed(Routes().navigationScreen, arguments: 0);
@@ -298,7 +278,7 @@ class _MainFormState extends State<MainForm> {
                           children: [
                             TheForm(
                               titleController: titleController,
-                              tradeWithController: tradeWithController,
+
                               desController: desController,
                               userEmailController: userEmailController,
                               userPhoneController: userPhoneController,
@@ -358,16 +338,14 @@ class TheForm extends StatelessWidget {
     required this.allDistricts,
     required this.controller,
     required this.categories,
-    required this.tradeWithController,
   });
   final TextEditingController titleController;
   final TextEditingController desController;
   final TextEditingController userEmailController;
   final TextEditingController userPhoneController;
-  final TextEditingController tradeWithController;
   final List<String> allDistricts;
   final List<String> categories;
-  final MainFormController controller;
+  final AuctionFormController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -427,12 +405,12 @@ class TheForm extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                     height: 120,
-                                    child: Column(
+                                    child: const Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children: const [
+                                      children: [
                                         Icon(UniconsLine.image),
                                         Text('Gallery'),
                                       ],
@@ -449,12 +427,12 @@ class TheForm extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                     height: 120,
-                                    child: Column(
+                                    child: const Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children: const [
+                                      children:  [
                                         Icon(UniconsLine.camera),
                                         Text('Camera'),
                                       ],
@@ -473,10 +451,10 @@ class TheForm extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20)),
                 height: 120,
                 child: controller.image.value == null
-                    ? Column(
+                    ? const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(UniconsLine.image),
                           Text('Add Image'),
                         ],
@@ -503,19 +481,6 @@ class TheForm extends StatelessWidget {
               controller: titleController,
             ),
           ),
-          Get.arguments != null && Get.arguments == "a"
-              ? Container()
-              : TextFieldForForm(
-                  heading: "Trade with",
-                  opacity: 1.0,
-                  readOnly: false,
-                  maxLines: 1,
-                  width: size.width * 0.9,
-                  height: 115,
-                  maxLength: 64,
-                  hintText: "Enter the title of the desired trade",
-                  controller: tradeWithController,
-                ),
           TextFieldForForm(
             heading: "Enter Description",
             opacity: 1.0,
@@ -617,12 +582,7 @@ class TheForm extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Get.arguments != null && Get.arguments == "e"
-                            ? Text(
-                                "E-Waste",
-                                style: context.textTheme.bodySmall,
-                              )
-                            : Obx(
+                        child:  Obx(
                                 () => DropdownButton<String>(
                                     isExpanded: true,
                                     underline: Container(),
@@ -652,14 +612,13 @@ class TheForm extends StatelessWidget {
               ],
             ),
           ),
-          Get.arguments != null && Get.arguments == "a"
-              ? Padding(
+           Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Text("* Each Auction Ends after 3 Days.",
                       style: context.textTheme.bodyMedium!
                           .copyWith(color: Colors.red)),
                 )
-              : Container()
+
         ],
       ),
     );

@@ -7,6 +7,8 @@ class Routes {
   // final String profileScreen = "/profileScreen";
   //Forms
   final String addTradeForm = "/addTrade";
+  final String addAuctionForm = "/addAuction";
+  final String addEWasteForm = "/addEWaste";
   // Other Screens
   final String splashScreen = "/splash";
   // Auth Screens

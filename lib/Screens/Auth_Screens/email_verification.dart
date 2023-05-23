@@ -35,7 +35,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
     resetTimer();
     countdownTimer =
-        Timer.periodic(const Duration(seconds: 1), (_) => {setCountDown()});
+        Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
   }
 
   // Step 4

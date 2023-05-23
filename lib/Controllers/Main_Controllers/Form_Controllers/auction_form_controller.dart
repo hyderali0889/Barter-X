@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 
-class MainFormController extends GetxController {
+class AuctionFormController extends GetxController {
   RxString selectedDistrict = "".obs;
   RxString selectedCat = "".obs;
   RxBool isLoading = false.obs;

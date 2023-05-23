@@ -51,7 +51,7 @@ class _EWasteScreenState extends State<EWasteScreen> {
                   buttonText: "Start a Trade",
                   isLoading: false,
                   buttonFunc: () {
-                    Get.toNamed(Routes().addTradeForm , arguments: "e");
+                    Get.toNamed(Routes().addEWasteForm);
 
                    },
                 )),

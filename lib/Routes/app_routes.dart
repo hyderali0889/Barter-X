@@ -2,7 +2,7 @@ import 'package:barter_x/Screens/Auth_Screens/otp_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:barter_x/Screens/Auth_Screens/reset_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/register_screen.dart';
-import 'package:barter_x/Screens/Main_Screens/Forms/main_form.dart';
+import 'package:barter_x/Screens/Main_Screens/Forms/auction_form.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
@@ -14,8 +14,12 @@ import '../Bindings/Auth_Bindings/phone_auth_bindings.dart';
 import '../Bindings/Auth_Bindings/register_binding.dart';
 import '../Bindings/Auth_Bindings/reset_binding.dart';
 import '../Bindings/Auth_Bindings/email_verification_binding.dart';
-import '../Bindings/Main_Bindings/Form_Bindings/main_form_bindings.dart';
+import '../Bindings/Main_Bindings/Form_Bindings/auction_form_bindings.dart';
+import '../Bindings/Main_Bindings/Form_Bindings/ewaste_form_bindings.dart';
+import '../Bindings/Main_Bindings/Form_Bindings/trade_form_bindings.dart';
 import '../Bindings/Main_Bindings/Navigation_bindings/navigation_binding.dart';
+import '../Screens/Main_Screens/Forms/e_waste_form.dart';
+import '../Screens/Main_Screens/Forms/trade_form.dart';
 import './routes.dart';
 import 'package:get/get.dart';
 
@@ -79,8 +83,20 @@ class AppRouter {
 
     GetPage(
       name: Routes().addTradeForm,
-      page: (() => const MainForm()
-      ),binding: MainFormBinding()
+      page: (() => const TradeForm()
+      ),binding: TradeFormBinding()
+    ),
+
+    GetPage(
+      name: Routes().addAuctionForm,
+      page: (() => const AuctionForm()
+      ),binding: AuctionFormBinding()
+    ),
+
+    GetPage(
+      name: Routes().addEWasteForm,
+      page: (() => const EWasteForm()
+      ),binding: EWasteFormBinding()
     ),
   ];
 }

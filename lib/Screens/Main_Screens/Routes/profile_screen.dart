@@ -87,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         MenuIcons(
           bgColor: AppColors().secRed,
           func: () {
-            Get.toNamed(Routes().addTradeForm, arguments: "a");
+            Get.toNamed(Routes().addAuctionForm);
           },
           icon: UniconsLine.podium,
           innerText: "Auction",
@@ -95,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         MenuIcons(
           bgColor: AppColors().primaryPurple,
           func: () {
-            Get.toNamed(Routes().addTradeForm, arguments: "e");
+            Get.toNamed(Routes().addEWasteForm);
           },
           icon: UniconsLine.hdd,
           innerText: "E-Waste",
