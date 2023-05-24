@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/placeholder_widget.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/home_controller.dart';
+import '../../../Models/trade_form_model.dart';
 import '../../../Routes/routes.dart';
 import '../../../Themes/spacing.dart';
 import '../../../Utils/admob_ids.dart';
@@ -546,30 +547,68 @@ class FeaturedProducts extends StatelessWidget {
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.only(top: Spacing().sm),
-          child: Column(
-            children: [
-              SizedBox(
-                width: size.width,
-                height: 260,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    MainShimmerContainer(
-                        data: data, controller: controller, size: size),
-                    MainShimmerContainer(
-                        data: data, controller: controller, size: size),
-                  ],
-                ),
-              ),
-              LongShimmerContainer(
-                controller: controller,
-                data: data,
-                size: size,
-              )
-            ],
+        Obx(
+          () => Padding(
+            padding: EdgeInsets.only(top: Spacing().sm),
+            child: controller.isRefreshing.value ||
+                    data.data == null ||
+                    data.data!.docs.length.toString().isEmpty
+                ? Column(
+                    children: [
+                      SizedBox(
+                        width: size.width,
+                        height: 260,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            MainShimmerContainer(
+                              data: data,
+                              controller: controller,
+                              size: size,
+                            ),
+                            MainShimmerContainer(
+                              data: data,
+                              controller: controller,
+                              size: size,
+                            ),
+                          ],
+                        ),
+                      ),
+                      LongShimmerContainer(
+                        controller: controller,
+                        data: data,
+                        size: size,
+                      )
+                    ],
+                  )
+                : Column(
+                    children: [
+                      SizedBox(
+                        width: size.width,
+                        height: data.data!.docs.length < 3 ? 260 : 500,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              width: size.width,
+                              height: 260,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: data.data!.docs.length > 2 ? 2 : 1,
+                                itemBuilder: (context, index) {
+                                  return DataWidgetRow(
+                                      size: size, data: data, index: index);
+                                },
+                              ),
+                            ),
+                            data.data!.docs.length < 3
+                                ? Container()
+                                : DataWidgetLength(size: size, data: data),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         )
       ],
@@ -591,71 +630,6 @@ class NewArrivals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: Spacing().lg),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "New Arrivals",
-                style:
-                    context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 30.0),
-                  child: Text(
-                    "See All",
-                    style: context.textTheme.bodySmall!
-                        .copyWith(color: AppColors().primaryBlue),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: Spacing().sm),
-          child: SizedBox(
-            width: size.width,
-            height: 260,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                MainShimmerContainer(
-                    data: data, controller: controller, size: size),
-                MainShimmerContainer(
-                    data: data, controller: controller, size: size),
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class TopRatedProducts extends StatelessWidget {
-  const TopRatedProducts({
-    super.key,
-    required this.data,
-    required this.controller,
-    required this.size,
-  });
-  final HomeController controller;
-  final Size size;
-  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: Spacing().lg),
-      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -665,7 +639,7 @@ class TopRatedProducts extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Top Rated Products",
+                  "New Arrivals",
                   style: context.textTheme.bodyMedium!
                       .copyWith(fontFamily: "bold"),
                 ),
@@ -683,34 +657,170 @@ class TopRatedProducts extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: Spacing().sm),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: size.width,
-                  height: 260,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      MainShimmerContainer(
-                          data: data, controller: controller, size: size),
-                      MainShimmerContainer(
-                          data: data, controller: controller, size: size),
-                    ],
+          Obx(() => Padding(
+                padding: EdgeInsets.only(top: Spacing().sm),
+                child: controller.isRefreshing.value ||
+                        data.data == null ||
+                        data.data!.docs.length.toString().isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.only(top: Spacing().sm),
+                        child: SizedBox(
+                          width: size.width,
+                          height: 260,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              MainShimmerContainer(
+                                data: data,
+                                controller: controller,
+                                size: size,
+                              ),
+                              MainShimmerContainer(
+                                data: data,
+                                controller: controller,
+                                size: size,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Column(
+                        children: [
+                          SizedBox(
+                            width: size.width,
+                            height: 260,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: size.width,
+                                  height: 260,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        data.data!.docs.length > 2 ? 2 : 1,
+                                    itemBuilder: (context, index) {
+                                      return DataWidgetRow(
+                                          size: size, data: data, index: index);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+              ))
+        ]);
+  }
+}
+
+class TopRatedProducts extends StatelessWidget {
+  const TopRatedProducts({
+    super.key,
+    required this.data,
+    required this.controller,
+    required this.size,
+  });
+  final HomeController controller;
+  final Size size;
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: Spacing().lg),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Top Rated Products",
+                style:
+                    context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
+              ),
+              InkWell(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 30.0),
+                  child: Text(
+                    "See All",
+                    style: context.textTheme.bodySmall!
+                        .copyWith(color: AppColors().primaryBlue),
                   ),
                 ),
-                LongShimmerContainer(
-                  controller: controller,
-                  data: data,
-                  size: size,
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+            ],
+          ),
+        ),
+        Obx(() => Padding(
+            padding: EdgeInsets.only(top: Spacing().sm),
+            child: controller.isRefreshing.value ||
+                    data.data == null ||
+                    data.data!.docs.length.toString().isEmpty
+                ? Padding(
+                    padding: EdgeInsets.only(top: Spacing().sm),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: size.width,
+                          height: 260,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              MainShimmerContainer(
+                                data: data,
+                                controller: controller,
+                                size: size,
+                              ),
+                              MainShimmerContainer(
+                                data: data,
+                                controller: controller,
+                                size: size,
+                              ),
+                            ],
+                          ),
+                        ),
+                        LongShimmerContainer(
+                          controller: controller,
+                          data: data,
+                          size: size,
+                        )
+                      ],
+                    ),
+                  )
+                : Column(
+                    children: [
+                      SizedBox(
+                        width: size.width,
+                        height: data.data!.docs.length < 3 ? 260 : 500,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              width: size.width,
+                              height: 260,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: data.data!.docs.length > 2 ? 2 : 1,
+                                itemBuilder: (context, index) {
+                                  return DataWidgetRow(
+                                      size: size, data: data, index: index);
+                                },
+                              ),
+                            ),
+                            data.data!.docs.length < 3
+                                ? Container()
+                                : DataWidgetLength(size: size, data: data),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ))),
+      ],
     );
   }
 }
@@ -824,8 +934,7 @@ class MainShimmerContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Obx(
-                () => Shimmer(
+              Obx(() => Shimmer(
                   gradient: LinearGradient(colors: [
                     AppColors().secHalfGrey,
                     AppColors().secSoftGrey
@@ -837,9 +946,7 @@ class MainShimmerContainer extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: AppColors().secSoftGrey,
                         borderRadius: BorderRadius.circular(10)),
-                  ),
-                ),
-              ),
+                  ))),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Obx(
@@ -875,6 +982,162 @@ class MainShimmerContainer extends StatelessWidget {
                   ),
                 ),
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DataWidgetLength extends StatelessWidget {
+  const DataWidgetLength({
+    super.key,
+    required this.size,
+    required this.data,
+  });
+
+  final Size size;
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 25.0),
+      child: Container(
+        width: size.width * 0.9,
+        height: 171,
+        decoration: BoxDecoration(
+            color: AppColors().secDarkGrey,
+            borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        data.data!.docs[3][TradeFormModel().img],
+                        width: size.width * 0.35,
+                        height: 136,
+                      )),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          width: size.width * 0.4,
+                          height: 20,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Text(
+                              data.data!.docs[3][TradeFormModel().title],
+                              overflow: TextOverflow.fade,
+                              style: context.textTheme.bodySmall!
+                                  .copyWith(fontFamily: "bold"))),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: Container(
+                            width: size.width * 0.4,
+                            height: 20,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Trading With : ",
+                                  overflow: TextOverflow.fade,
+                                  style: context.textTheme.bodySmall,
+                                ),
+                                Text(
+                                    data.data!.docs[3]
+                                        [TradeFormModel().tradeWith],
+                                    overflow: TextOverflow.fade,
+                                    style: context.textTheme.bodySmall),
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DataWidgetRow extends StatelessWidget {
+  const DataWidgetRow({
+    super.key,
+    required this.size,
+    required this.data,
+    required this.index,
+  });
+
+  final Size size;
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: AppColors().secDarkGrey,
+            borderRadius: BorderRadius.circular(10)),
+        width: size.width * 0.38,
+        height: 242,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    data.data!.docs[index][TradeFormModel().img],
+                    width: size.width * 0.35,
+                    height: 136,
+                  )),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: Container(
+                  width: size.width * 0.38,
+                  height: 20,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  child: Text(data.data!.docs[index][TradeFormModel().title],
+                      overflow: TextOverflow.fade,
+                      style: context.textTheme.bodySmall!
+                          .copyWith(fontFamily: "bold")),
+                ),
+              ),
+              Container(
+                width: size.width * 0.38,
+                height: 40,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Trading With :",
+                        overflow: TextOverflow.fade,
+                        style: context.textTheme.bodySmall),
+                    Text(data.data!.docs[index][TradeFormModel().tradeWith],
+                        style: context.textTheme.bodySmall),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
