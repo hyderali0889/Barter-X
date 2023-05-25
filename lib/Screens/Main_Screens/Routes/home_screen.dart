@@ -1,11 +1,14 @@
-import 'package:barter_x/Themes/main_colors.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:unicons/unicons.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+import 'package:barter_x/Themes/main_colors.dart';
+
 import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/placeholder_widget.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/home_controller.dart';
@@ -14,6 +17,7 @@ import '../../../Routes/routes.dart';
 import '../../../Themes/spacing.dart';
 import '../../../Utils/admob_ids.dart';
 import '../../../Utils/firebase_function.dart';
+import '../../../Utils/random_number_generator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -321,6 +325,7 @@ class MainView extends StatelessWidget {
       AppColors().secGreen,
       AppColors().secHalfGrey
     ];
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,7 +355,7 @@ class MainView extends StatelessWidget {
                   data: data,
                   controller: controller,
                 ),
-                TopRatedProducts(
+                SpecialProducts(
                   size: size,
                   data: data,
                   controller: controller,
@@ -512,17 +517,59 @@ class CategoryArea extends StatelessWidget {
 
 class FeaturedProducts extends StatelessWidget {
   const FeaturedProducts({
-    super.key,
-    required this.data,
+    Key? key,
     required this.controller,
     required this.size,
-  });
+    required this.data,
+  }) : super(key: key);
   final HomeController controller;
   final Size size;
   final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
 
   @override
   Widget build(BuildContext context) {
+    Set<int> randomNumbers = data.data == null
+        ? {}
+        : generateRandomNumbers(
+            data.data!.docs.length - 1, 0, data.data!.docs.length - 1);
+
+    void loadInterAd() {
+      InterstitialAd.load(
+          adUnitId: AdmobIds().interId,
+          request: const AdRequest(),
+          adLoadCallback: InterstitialAdLoadCallback(
+            // Called when an ad is successfully received.
+            onAdLoaded: (ad) {
+              ad.fullScreenContentCallback = FullScreenContentCallback(
+                  // Called when the ad showed the full screen content.
+                  onAdShowedFullScreenContent: (ad) {},
+                  // Called when an impression occurs on the ad.
+                  onAdImpression: (ad) {},
+                  // Called when the ad failed to show full screen content.
+                  onAdFailedToShowFullScreenContent: (ad, err) {
+                    Get.toNamed(Routes().tradeFeature, arguments: data);
+                    // Dispose the ad here to free resources.
+                    ad.dispose();
+                  },
+                  // Called when the ad dismissed full screen content.
+                  onAdDismissedFullScreenContent: (ad) {
+                    Get.toNamed(Routes().tradeFeature, arguments: data);
+                    // Dispose the ad here to free resources.
+                    ad.dispose();
+                  },
+                  // Called when a click is recorded for an ad.
+                  onAdClicked: (ad) {});
+              // Keep a reference to the ad so you can show it later.
+
+              ad.show();
+            },
+            // Called when an ad request failed.
+            onAdFailedToLoad: (LoadAdError error) {
+              Get.toNamed(Routes().tradeFeature, arguments: data);
+            },
+          ));
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -535,7 +582,9 @@ class FeaturedProducts extends StatelessWidget {
               style: context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                loadInterAd();
+              },
               child: Padding(
                 padding: const EdgeInsets.only(right: 30.0),
                 child: Text(
@@ -596,14 +645,23 @@ class FeaturedProducts extends StatelessWidget {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.data!.docs.length > 2 ? 2 : 1,
                                 itemBuilder: (context, index) {
-                                  return DataWidgetRow(
-                                      size: size, data: data, index: index);
+                                  return InkWell(
+                                    child: DataWidgetRow(
+                                        size: size,
+                                        data: data,
+                                        index: randomNumbers.elementAt(index)),
+                                  );
                                 },
                               ),
                             ),
                             data.data!.docs.length < 3
                                 ? Container()
-                                : DataWidgetLength(size: size, data: data),
+                                : InkWell(
+                                    child: DataWidgetLength(
+                                        size: size,
+                                        data: data,
+                                        rand: randomNumbers),
+                                  ),
                           ],
                         ),
                       ),
@@ -629,6 +687,43 @@ class NewArrivals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void loadInterAd() {
+      InterstitialAd.load(
+          adUnitId: AdmobIds().interId,
+          request: const AdRequest(),
+          adLoadCallback: InterstitialAdLoadCallback(
+            // Called when an ad is successfully received.
+            onAdLoaded: (ad) {
+              ad.fullScreenContentCallback = FullScreenContentCallback(
+                  // Called when the ad showed the full screen content.
+                  onAdShowedFullScreenContent: (ad) {},
+                  // Called when an impression occurs on the ad.
+                  onAdImpression: (ad) {},
+                  // Called when the ad failed to show full screen content.
+                  onAdFailedToShowFullScreenContent: (ad, err) {
+                    Get.toNamed(Routes().tradeArrivals, arguments: data);
+                    // Dispose the ad here to free resources.
+                    ad.dispose();
+                  },
+                  // Called when the ad dismissed full screen content.
+                  onAdDismissedFullScreenContent: (ad) {
+                    Get.toNamed(Routes().tradeArrivals, arguments: data);
+                    // Dispose the ad here to free resources.
+                    ad.dispose();
+                  },
+                  // Called when a click is recorded for an ad.
+                  onAdClicked: (ad) {});
+              // Keep a reference to the ad so you can show it later.
+
+              ad.show();
+            },
+            // Called when an ad request failed.
+            onAdFailedToLoad: (LoadAdError error) {
+              Get.toNamed(Routes().tradeArrivals, arguments: data);
+            },
+          ));
+    }
+
     return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -644,7 +739,9 @@ class NewArrivals extends StatelessWidget {
                       .copyWith(fontFamily: "bold"),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    loadInterAd();
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 30.0),
                     child: Text(
@@ -701,7 +798,10 @@ class NewArrivals extends StatelessWidget {
                                         data.data!.docs.length > 2 ? 2 : 1,
                                     itemBuilder: (context, index) {
                                       return DataWidgetRow(
-                                          size: size, data: data, index: index);
+                                          size: size,
+                                          data: data,
+                                          index: (data.data!.docs.length - 1) -
+                                              index);
                                     },
                                   ),
                                 ),
@@ -715,8 +815,8 @@ class NewArrivals extends StatelessWidget {
   }
 }
 
-class TopRatedProducts extends StatelessWidget {
-  const TopRatedProducts({
+class SpecialProducts extends StatelessWidget {
+  const SpecialProducts({
     super.key,
     required this.data,
     required this.controller,
@@ -728,6 +828,48 @@ class TopRatedProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Set<int> randomNumbers = data.data == null
+        ? {}
+        : generateRandomNumbers(
+            data.data!.docs.length - 1, 0, data.data!.docs.length - 1);
+
+    void loadInterAd() {
+      InterstitialAd.load(
+          adUnitId: AdmobIds().interId,
+          request: const AdRequest(),
+          adLoadCallback: InterstitialAdLoadCallback(
+            // Called when an ad is successfully received.
+            onAdLoaded: (ad) {
+              ad.fullScreenContentCallback = FullScreenContentCallback(
+                  // Called when the ad showed the full screen content.
+                  onAdShowedFullScreenContent: (ad) {},
+                  // Called when an impression occurs on the ad.
+                  onAdImpression: (ad) {},
+                  // Called when the ad failed to show full screen content.
+                  onAdFailedToShowFullScreenContent: (ad, err) {
+                    Get.toNamed(Routes().tradeSpecials, arguments: data);
+                    // Dispose the ad here to free resources.
+                    ad.dispose();
+                  },
+                  // Called when the ad dismissed full screen content.
+                  onAdDismissedFullScreenContent: (ad) {
+                    Get.toNamed(Routes().tradeSpecials, arguments: data);
+                    // Dispose the ad here to free resources.
+                    ad.dispose();
+                  },
+                  // Called when a click is recorded for an ad.
+                  onAdClicked: (ad) {});
+              // Keep a reference to the ad so you can show it later.
+
+              ad.show();
+            },
+            // Called when an ad request failed.
+            onAdFailedToLoad: (LoadAdError error) {
+              Get.toNamed(Routes().tradeSpecials, arguments: data);
+            },
+          ));
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -738,12 +880,14 @@ class TopRatedProducts extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Top Rated Products",
+                "Special Offers",
                 style:
                     context.textTheme.bodyMedium!.copyWith(fontFamily: "bold"),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  loadInterAd();
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 30.0),
                   child: Text(
@@ -808,13 +952,18 @@ class TopRatedProducts extends StatelessWidget {
                                 itemCount: data.data!.docs.length > 2 ? 2 : 1,
                                 itemBuilder: (context, index) {
                                   return DataWidgetRow(
-                                      size: size, data: data, index: index);
+                                      size: size,
+                                      data: data,
+                                      index: randomNumbers.elementAt(index));
                                 },
                               ),
                             ),
                             data.data!.docs.length < 3
                                 ? Container()
-                                : DataWidgetLength(size: size, data: data),
+                                : DataWidgetLength(
+                                    size: size,
+                                    data: data,
+                                    rand: randomNumbers),
                           ],
                         ),
                       ),
@@ -995,10 +1144,12 @@ class DataWidgetLength extends StatelessWidget {
     super.key,
     required this.size,
     required this.data,
+    required this.rand,
   });
 
   final Size size;
   final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
+  final Set rand;
 
   @override
   Widget build(BuildContext context) {
@@ -1021,7 +1172,8 @@ class DataWidgetLength extends StatelessWidget {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.network(
-                        data.data!.docs[3][TradeFormModel().img],
+                        data.data!.docs[rand.elementAt(3)]
+                            [TradeFormModel().img],
                         width: size.width * 0.35,
                         height: 136,
                       )),
@@ -1035,7 +1187,8 @@ class DataWidgetLength extends StatelessWidget {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10)),
                           child: Text(
-                              data.data!.docs[3][TradeFormModel().title],
+                              data.data!.docs[rand.elementAt(3)]
+                                  [TradeFormModel().title],
                               overflow: TextOverflow.fade,
                               style: context.textTheme.bodySmall!
                                   .copyWith(fontFamily: "bold"))),
@@ -1054,7 +1207,7 @@ class DataWidgetLength extends StatelessWidget {
                                   style: context.textTheme.bodySmall,
                                 ),
                                 Text(
-                                    data.data!.docs[3]
+                                    data.data!.docs[rand.elementAt(3)]
                                         [TradeFormModel().tradeWith],
                                     overflow: TextOverflow.fade,
                                     style: context.textTheme.bodySmall),

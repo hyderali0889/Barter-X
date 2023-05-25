@@ -3,6 +3,9 @@ import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:barter_x/Screens/Auth_Screens/reset_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/register_screen.dart';
 import 'package:barter_x/Screens/Main_Screens/Forms/auction_form.dart';
+import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_arrivals.dart';
+import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_featured.dart';
+import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_specials.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
@@ -98,5 +101,13 @@ class AppRouter {
       page: (() => const EWasteForm()
       ),binding: EWasteFormBinding()
     ),
+
+ // Sub Trade Routes
+    GetPage(name: Routes().tradeFeature, page: () => const TradeFeatures()),
+    GetPage(name: Routes().tradeArrivals, page: () => const TradeArrivals()),
+    GetPage(name: Routes().tradeSpecials, page: () => const TradeSpecials()),
+
+
+    //ENd of Routes
   ];
 }

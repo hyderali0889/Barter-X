@@ -3,7 +3,7 @@ class Routes {
   // final String homeScreen = "/home";
   // final String auctionScreen = "/auctionScreen";
   // final String eWasteScreen = "/eWasteScreen";
- // final String notificationScreen = "/notificationScreen";
+  // final String notificationScreen = "/notificationScreen";
   // final String profileScreen = "/profileScreen";
   //Forms
   final String addTradeForm = "/addTrade";
@@ -21,4 +21,9 @@ class Routes {
   //Navigation Screens
   final String routeCheck = "/routeCheck";
   final String navigationScreen = "/navigationScreen";
+
+  //Trade Sub Screens
+  final String tradeFeature = "/tradeFeatures";
+  final String tradeArrivals = "/tradeArrivals";
+  final String tradeSpecials = "/tradeSpecials";
 }
