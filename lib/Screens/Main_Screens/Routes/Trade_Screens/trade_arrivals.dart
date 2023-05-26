@@ -1,11 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:barter_x/Utils/load_ads.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../../Components/top_row.dart';
-import '../../../../Models/trade_form_model.dart';
-import '../../../../Themes/main_colors.dart';
+import '../../../../Components/trade_page_components.dart';
 
 class TradeArrivals extends StatefulWidget {
   const TradeArrivals({super.key});
@@ -15,6 +14,12 @@ class TradeArrivals extends StatefulWidget {
 }
 
 class _TradeArrivalsState extends State<TradeArrivals> {
+  @override
+  void initState() {
+    super.initState();
+    AdClass().loadAd();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,7 +45,7 @@ class _TradeArrivalsState extends State<TradeArrivals> {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 50,
-                      mainAxisExtent: 300),
+                      mainAxisExtent: 340),
                   scrollDirection: Axis.vertical,
                   itemCount: Get.arguments.data!.docs.length - 1,
                   itemBuilder: (context, index) {
@@ -57,79 +62,6 @@ class _TradeArrivalsState extends State<TradeArrivals> {
           ],
         ),
       )),
-    );
-  }
-}
-
-class DataWidgetRow extends StatelessWidget {
-  const DataWidgetRow({
-    super.key,
-    required this.size,
-    required this.data,
-    required this.index,
-  });
-
-  final Size size;
-  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> data;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Container(
-        decoration: BoxDecoration(
-            color: AppColors().secDarkGrey,
-            borderRadius: BorderRadius.circular(10)),
-        width: size.width * 0.38,
-        height: 200,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    data.data!.docs[index][TradeFormModel().img],
-                    width: size.width * 0.35,
-                    height: 136,
-                  )),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Container(
-                  width: size.width * 0.38,
-                  height: 20,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                  child: Text(data.data!.docs[index][TradeFormModel().title],
-                      overflow: TextOverflow.fade,
-                      style: context.textTheme.bodySmall!
-                          .copyWith(fontFamily: "bold")),
-                ),
-              ),
-              Container(
-                width: size.width * 0.38,
-                height: 80,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("Trading With :",
-                        overflow: TextOverflow.fade,
-                        style: context.textTheme.bodySmall),
-                    Text(data.data!.docs[index][TradeFormModel().tradeWith],
-                        style: context.textTheme.bodySmall),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

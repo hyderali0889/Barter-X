@@ -1,3 +1,5 @@
+import 'package:barter_x/Bindings/Main_Bindings/Routes_Bindings/category_details_bindings.dart';
+import 'package:barter_x/Bindings/Main_Bindings/Routes_Bindings/product_details_binding.dart';
 import 'package:barter_x/Screens/Auth_Screens/otp_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:barter_x/Screens/Auth_Screens/reset_screen.dart';
@@ -6,6 +8,8 @@ import 'package:barter_x/Screens/Main_Screens/Forms/auction_form.dart';
 import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_arrivals.dart';
 import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_featured.dart';
 import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_specials.dart';
+import 'package:barter_x/Screens/Main_Screens/Routes/categories_detail_screen.dart';
+import 'package:barter_x/Screens/Main_Screens/Routes/product_details_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
@@ -107,6 +111,9 @@ class AppRouter {
     GetPage(name: Routes().tradeArrivals, page: () => const TradeArrivals()),
     GetPage(name: Routes().tradeSpecials, page: () => const TradeSpecials()),
 
+ // Details Screens
+   GetPage(name: Routes().categoryDetails, page: ()=> (const CategoryDetailScreen()) , binding: CategoryDetailsBindings() ),
+   GetPage(name: Routes().productDetails, page: ()=> (const ProductDetailScreen()) , binding: ProductDetailsBindings() )
 
     //ENd of Routes
   ];

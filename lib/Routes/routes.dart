@@ -26,4 +26,8 @@ class Routes {
   final String tradeFeature = "/tradeFeatures";
   final String tradeArrivals = "/tradeArrivals";
   final String tradeSpecials = "/tradeSpecials";
+
+  // Detail Screens
+  final String categoryDetails = "/categoryDetails";
+  final String productDetails = "/productDetails";
 }
