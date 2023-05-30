@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:unicons/unicons.dart';
 
-import '../../../Components/bottom_app_bar.dart';
 import '../../../Controllers/Main_Controllers/Route_Controllers/product_details_controller.dart';
-import '../../../Utils/admob_ids.dart';
-import '../../../Utils/load_ads.dart';
+import '../../../Utils/Ads/admob_ids.dart';
+import '../../../Utils/Ads/load_ads.dart';
+import '../../../Utils/Widgets/show_modal_sheet.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key});
@@ -46,13 +45,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void closeBottomBar() {
-      controller.changeErrorStatus(false);
-    }
 
-    void tryAgainBottomBar() {
-      controller.changeErrorStatus(false);
-    }
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -62,72 +55,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           RefreshIndicator(
             onRefresh: () async {
               try {
-                controller.changeErrorStatus(false);
                 await Future.delayed(const Duration(seconds: 2));
               } on PlatformException catch (e) {
-                controller.changeErrorMessage(e.message.toString());
-                controller.changeErrorStatus(true);
+                      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
               }
             },
-            child: Obx(
-              () => Opacity(
-                opacity: controller.errorOcurred.value ? 0.6 : 1,
-                child: Stack(
-                  children: [
-                    ListView(),
-                    SizedBox(
-                      width: size.width,
-                      height: size.height,
-                      child: Column(
-                        children: [
-                          TopRow(
-                            text: "Product Details",
-                            icon: UniconsLine.shopping_cart_alt,
-                            firstFunc: () {},
-                          ),
-                        ],
-                      ),
+            child:
+               Stack(
+                children: [
+                  ListView(),
+                  SizedBox(
+                    width: size.width,
+                    height: size.height,
+                    child: const Column(
+                      children: [
+                        TopRow(
+                          text: "Product Details",
+
+                        ),
+                      ],
                     ),
-                    _bannerAd != null
-                        ? Align(
-                            alignment: Alignment.bottomCenter,
-                            child: SafeArea(
-                              child: SizedBox(
-                                width: _bannerAd!.size.width.toDouble(),
-                                height: _bannerAd!.size.height.toDouble(),
-                                child: AdWidget(ad: _bannerAd!),
-                              ),
+                  ),
+                  _bannerAd != null
+                      ? Align(
+                          alignment: Alignment.bottomCenter,
+                          child: SafeArea(
+                            child: SizedBox(
+                              width: _bannerAd!.size.width.toDouble(),
+                              height: _bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: _bannerAd!),
                             ),
-                          )
-                        : Container(
-                            alignment: Alignment.center,
-                            width: size.width,
-                            height: 60,
-                            child: Obx(() => Text(
-                                !controller.isAdError.value
-                                    ? " Loading Ad ... "
-                                    : "Error While Loading Ad",
-                                style: context.textTheme.bodySmall)))
-                  ],
-                ),
+                          ),
+                        )
+                      : Container(
+                          alignment: Alignment.center,
+                          width: size.width,
+                          height: 60,
+                          child: Obx(() => Text(
+                              !controller.isAdError.value
+                                  ? " Loading Ad ... "
+                                  : "Error While Loading Ad",
+                              style: context.textTheme.bodySmall)))
+                ],
               ),
-            ),
+
           ),
-          Obx(
-            () => BottomBar(
-              controller: controller,
-              size: size,
-              errorTitle: "An Error Occurred",
-              errorMsg: controller.errorMsg.value,
-              closeFunction: closeBottomBar,
-              tryAgainFunction: tryAgainBottomBar,
-              buttonWidget: Text(
-                "Try Again",
-                style: context.textTheme.displayMedium,
-              ),
-            ),
-          )
-        ],
+                 ],
       )),
     );
   }

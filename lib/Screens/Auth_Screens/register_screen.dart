@@ -1,13 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../Components/bottom_app_bar.dart';
 import '../../Components/input_field.dart';
 import '../../Components/main_button.dart';
 import '../../Controllers/Auth_Controllers/register_controller.dart';
 import '../../Routes/routes.dart';
 import '../../Themes/spacing.dart';
 import 'package:unicons/unicons.dart';
+
+import '../../Utils/Firebase_Functions/auth_functions.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -32,14 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    void closeBottomBar() {
-      controller.changeErrorStatus(false);
-    }
-
-    void tryAgainBottomBar() {
-      controller.changeErrorStatus(false);
-    }
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -47,38 +39,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Stack(
-          children: [
-            Obx(
-              () => Opacity(
-                opacity: controller.errorOcurred.value ? 0.6 : 1,
-                child: SizedBox(
-                  width: size.width,
-                  height: size.height,
-                  child: MainView(
-                      size: size,
-                      emailController: emailController,
-                      passwordController: passwordController,
-                      controller: controller),
-                ),
+        child: SizedBox(
+         width: size.width,
+         height: size.height,
+         child: MainView(
+             size: size,
+             emailController: emailController,
+             passwordController: passwordController,
+             controller: controller),
               ),
-            ),
-            Obx(
-              () => BottomBar(
-                controller: controller,
-                size: size,
-                errorTitle: "Register Error",
-                errorMsg: controller.errorMsg.value,
-                closeFunction: closeBottomBar,
-                tryAgainFunction: tryAgainBottomBar,
-                buttonWidget: Text(
-                  "Try Again",
-                  style: context.textTheme.displayMedium,
-                ),
-              ),
-            ),
-          ],
-        ),
       )),
     );
   }
@@ -106,45 +75,6 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
-    void registerUser() async {
-      FocusScope.of(context).unfocus();
-      widget.controller.changeErrorStatus(false);
-
-      try {
-        if (widget.emailController.text.isEmpty ||
-            widget.passwordController.text.isEmpty) {
-          widget.controller.changeErrorStatus(true);
-          widget.controller.startLoading(false);
-
-          widget.controller.changeErrorMessage(
-              "An Error Occurred, Email and Password Fields cannot be left blank.");
-          return;
-        }
-        widget.controller.startLoading(true);
-
-        FirebaseAuth authInstance = FirebaseAuth.instance;
-        await authInstance
-            .createUserWithEmailAndPassword(
-                email: widget.emailController.text.trim(),
-                password: widget.passwordController.text.trim())
-            .timeout(const Duration(seconds: 15));
-
-        if (authInstance.currentUser == null) {
-          widget.controller.startLoading(false);
-          return;
-        }
-        await authInstance.currentUser!.sendEmailVerification();
-        widget.controller.startLoading(false);
-
-        Get.offAllNamed(Routes().emailVerificationScreen);
-      } on FirebaseAuthException catch (e) {
-        widget.controller.startLoading(false);
-
-        widget.controller.changeErrorStatus(true);
-        widget.controller.changeErrorMessage("An Error Occurred, ${e.message}");
-      }
-    }
-
     return Padding(
       padding: EdgeInsets.all(Spacing().sm),
       child: Column(
@@ -220,11 +150,16 @@ class _MainViewState extends State<MainView> {
               ),
               Obx(
                 () => MainButton(
-                  size: widget.size,
-                  mainController: widget.controller.isLoading.value,
-                  buttonText: "Sign Up",
-                  actionFunction: registerUser,
-                ),
+                    size: widget.size,
+                    mainController: widget.controller.isLoading.value,
+                    buttonText: "Sign Up",
+                    actionFunction: () {
+                      FirebaseAuthFunctions().registerUser(
+                          context,
+                          widget.controller,
+                          widget.emailController,
+                          widget.passwordController);
+                    }),
               ),
             ],
           ),

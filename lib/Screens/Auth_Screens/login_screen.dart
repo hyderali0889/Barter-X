@@ -1,8 +1,7 @@
 import 'package:barter_x/Controllers/Auth_Controllers/login_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:barter_x/Utils/Firebase_Functions/auth_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../Components/bottom_app_bar.dart';
 import '../../Components/input_field.dart';
 import '../../Components/main_button.dart';
 import '../../Routes/routes.dart';
@@ -31,13 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    void closeBottomBar() {
-      controller.changeErrorStatus(false);
-    }
 
-    void tryAgainBottomBar() {
-      controller.changeErrorStatus(false);
-    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -46,38 +39,17 @@ class _LoginScreenState extends State<LoginScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Stack(
-          children: [
-            Obx(
-              () => Opacity(
-                opacity: controller.errorOcurred.value ? 0.6 : 1,
-                child: SizedBox(
-                  width: size.width,
-                  height: size.height,
-                  child: MainView(
-                      size: size,
-                      emailController: emailController,
-                      passwordController: passwordController,
-                      controller: controller),
-                ),
-              ),
-            ),
-            Obx(
-              () => BottomBar(
-                controller: controller,
+        child:
+           SizedBox(
+            width: size.width,
+            height: size.height,
+            child: MainView(
                 size: size,
-                errorTitle: "Login Error",
-                errorMsg: controller.errorMsg.value,
-                closeFunction: closeBottomBar,
-                tryAgainFunction: tryAgainBottomBar,
-                buttonWidget: Text(
-                  "Try Again",
-                  style: context.textTheme.displayMedium,
-                ),
-              ),
-            ),
-          ],
-        ),
+                emailController: emailController,
+                passwordController: passwordController,
+                controller: controller),
+          ),
+
       )),
     );
   }
@@ -99,35 +71,6 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void login() async {
-      FocusScope.of(context).unfocus();
-      controller.changeErrorStatus(false);
-
-      try {
-        if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-          controller.changeErrorStatus(true);
-          controller.changeErrorMessage(
-              "An Error Occurred, Email and Password Fields cannot be left blank.");
-          return;
-        }
-        controller.startLoading(true);
-        FirebaseAuth authInstance = FirebaseAuth.instance;
-
-        await authInstance
-            .signInWithEmailAndPassword(
-                email: emailController.text.trim(),
-                password: passwordController.text.trim())
-            .timeout(const Duration(seconds: 15));
-        controller.startLoading(false);
-
-        Get.offAllNamed(Routes().routeCheck);
-      } on FirebaseAuthException catch (e) {
-        controller.startLoading(false);
-        controller.changeErrorStatus(true);
-        controller.changeErrorMessage("An Error Occurred, ${e.message}");
-      }
-    }
-
     return Padding(
       padding: EdgeInsets.all(Spacing().sm),
       child: Column(
@@ -195,12 +138,14 @@ class MainView extends StatelessWidget {
                 ),
               ),
               Obx(
-                () => MainButton(
-                  size: size,
-                  mainController: controller.isLoading.value,
-                  buttonText: "Sign In",
-                  actionFunction: login,
-                ),
+()=> MainButton(
+                    size: size,
+                    mainController: controller.isLoading.value,
+                    buttonText: "Sign In",
+                    actionFunction: () {
+                      FirebaseAuthFunctions()
+                          .login(emailController, passwordController, context , controller);
+                    }),
               ),
             ],
           ),

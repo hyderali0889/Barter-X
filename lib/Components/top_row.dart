@@ -10,14 +10,10 @@ class TopRow extends StatelessWidget {
   const TopRow({
     super.key,
     required this.text,
-    required this.icon,
-    required this.firstFunc,
+    
   });
 
   final String text;
-  final IconData icon;
-
-  final VoidCallback firstFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +37,7 @@ class TopRow extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
-            child: InkWell(onTap: firstFunc, child: Icon(icon)),
+            child: InkWell(onTap: (){}, child: const Icon(UniconsLine.shopping_cart)),
           ),
         ],
       ),

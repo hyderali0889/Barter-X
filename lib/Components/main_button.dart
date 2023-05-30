@@ -26,28 +26,27 @@ class MainButton extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: EdgeInsets.only(top: Spacing().md),
-          child:  InkWell(
-              onTap: mainController ? null : actionFunction,
-              child: Container(
-                alignment: Alignment.center,
-                width: size.width * 0.8,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: mainController
-                        ? AppColors().secHalfGrey
-                        : AppColors().primaryBlue,
-                    borderRadius: BorderRadius.circular(10)),
-                child: mainController
-                    ? Lottie.asset("assets/jsons/atom-loader.json")
-                    : Text(
-                        buttonText,
-                        style: context.textTheme.displayMedium,
-                      ),
-              ),
+          child: InkWell(
+            onTap: mainController ? null : actionFunction,
+            child: Container(
+              alignment: Alignment.center,
+              width: size.width * 0.8,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: mainController
+                      ? AppColors().secHalfGrey
+                      : AppColors().primaryBlue,
+                  borderRadius: BorderRadius.circular(10)),
+              child: mainController
+                  ? Lottie.asset("assets/jsons/atom-loader.json")
+                  : Text(
+                      buttonText,
+                      style: context.textTheme.displayMedium,
+                    ),
             ),
           ),
         ),
-     
+      ),
     );
   }
 }

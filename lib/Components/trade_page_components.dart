@@ -11,7 +11,7 @@ import '../Models/trade_form_model.dart';
 import '../Routes/routes.dart';
 import '../Themes/main_colors.dart';
 import '../Themes/spacing.dart';
-import '../Utils/random_number_generator.dart';
+import '../Utils/Generators/random_number_generator.dart';
 
 class FutureWidget extends StatelessWidget {
   const FutureWidget(

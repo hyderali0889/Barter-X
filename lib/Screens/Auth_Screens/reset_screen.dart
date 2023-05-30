@@ -1,13 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../Components/bottom_app_bar.dart';
 import '../../Components/input_field.dart';
 import '../../Components/main_button.dart';
 import '../../Controllers/Auth_Controllers/reset_controller.dart';
 import '../../Routes/routes.dart';
 import '../../Themes/spacing.dart';
 import 'package:unicons/unicons.dart';
+
+import '../../Utils/Firebase_Functions/auth_functions.dart';
 
 class ResetScreen extends StatefulWidget {
   const ResetScreen({super.key});
@@ -30,13 +30,7 @@ class _ResetScreenState extends State<ResetScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    void closeBottomBar() {
-      controller.changeErrorStatus(false);
-    }
 
-    void tryAgainBottomBar() {
-      controller.changeErrorStatus(false);
-    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -45,38 +39,17 @@ class _ResetScreenState extends State<ResetScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Stack(
-          children: [
-            Obx(
-              () => Opacity(
-                opacity: controller.errorOcurred.value ? 0.6 : 1,
-                child: SizedBox(
-                  width: size.width,
-                  height: size.height,
-                  child: MainView(
-                    size: size,
-                    emailController: emailController,
-                    controller: controller,
-                  ),
-                ),
-              ),
+        child: 
+           SizedBox(
+            width: size.width,
+            height: size.height,
+            child: MainView(
+              size: size,
+              emailController: emailController,
+              controller: controller,
             ),
-            Obx(
-              () => BottomBar(
-                controller: controller,
-                size: size,
-                errorTitle: "Reset Password Error",
-                errorMsg: controller.errorMsg.value,
-                closeFunction: closeBottomBar,
-                tryAgainFunction: tryAgainBottomBar,
-                buttonWidget: Text(
-                  "Try Again",
-                  style: context.textTheme.displayMedium,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+
       )),
     );
   }
@@ -96,37 +69,6 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void resetPassword() async {
-      try {
-        FocusScope.of(context).unfocus();
-
-        controller.startLoading(false);
-        controller.changeErrorStatus(false);
-
-        if (emailController.text.isEmpty) {
-          controller.changeErrorStatus(true);
-
-          controller.changeErrorMessage(
-              "An Error Occurred, Email Field cannot be left blank.");
-          controller.startLoading(false);
-
-          return;
-        }
-
-        controller.startLoading(true);
-
-        await FirebaseAuth.instance
-            .sendPasswordResetEmail(email: emailController.text.trim())
-            .timeout(const Duration(seconds: 15));
-
-        controller.startLoading(false);
-      } on FirebaseAuthException catch (e) {
-        controller.changeErrorStatus(true);
-        controller.startLoading(false);
-
-        controller.changeErrorMessage("An Error Occurred, ${e.message}");
-      }
-    }
 
     return Padding(
       padding: EdgeInsets.all(Spacing().sm),
@@ -193,7 +135,7 @@ class MainView extends StatelessWidget {
                   mainController: controller.isLoading.value,
                   buttonText: "Reset Password",
                   actionFunction: () {
-                    resetPassword();
+                    FirebaseAuthFunctions().resetPassword(context,controller,emailController);
                   },
                 ),
               ),

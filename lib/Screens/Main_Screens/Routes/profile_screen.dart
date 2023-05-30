@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
 
-import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/top_row_no_back.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -12,7 +11,7 @@ import '../../../Controllers/Main_Controllers/Route_Controllers/profile_controll
 import '../../../Routes/routes.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
-import '../../../Utils/admob_ids.dart';
+import '../../../Utils/Ads/admob_ids.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -51,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         .get();
 
     if (data.exists) {
-      controller.setUserPoints(data.data()!["Points"]);
+      controller.setUserPoints(data.data()!["Points"].toString());
     }
   }
 
@@ -65,13 +64,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    void closeBottomBar() {
-      controller.changeErrorStatus(false);
-    }
-
-    void tryAgainBottomBar() {
-      controller.changeErrorStatus(false);
-    }
 
     Row addNewRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,143 +149,117 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       body: SafeArea(
-          child: Stack(
-        children: [
-          SizedBox(
-            width: size.width,
-            height: size.height,
-            child: Column(
-              children: [
-                TopRowNoBack(
-                  text: "Profile",
-                  icon: UniconsLine.shopping_cart_alt,
-                  firstFunc: () {},
-                ),
-                Expanded(
-                    child: Column(children: [
-                  SizedBox(
-                    width: size.width,
-                    height: size.height * 0.8,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: Spacing().xs),
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: size.width,
-                            height: size.height * 0.275,
-                            color: AppColors().primaryPurple,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+          child: SizedBox(
+        width: size.width,
+        height: size.height,
+        child: Column(
+          children: [
+            const TopRowNoBack(
+              text: "Profile",
+            ),
+            Expanded(
+                child: Column(children: [
+              SizedBox(
+                width: size.width,
+                height: size.height * 0.8,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: Spacing().xs),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: size.width,
+                        height: size.height * 0.275,
+                        color: AppColors().primaryPurple,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        width: 150,
-                                        height: 150,
-                                        child: CircleAvatar(
-                                          backgroundImage: AssetImage(
-                                              "assets/icons/img.jpg"),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 10.0),
-                                        child: Text(
-                                          "Welcome ${userName[0]}",
-                                          style: context.textTheme.bodyMedium!
-                                              .copyWith(
-                                                  color:
-                                                      AppColors().primaryWhite,
-                                                  fontFamily: "bold"),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        color: AppColors().labelOffRed,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                  const SizedBox(
                                     width: 150,
-                                    height: 50,
+                                    height: 150,
+                                    child: CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage("assets/icons/img.jpg"),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
                                     child: Text(
-                                      "Points : ${controller.userPoints.value != "" ? controller.userPoints.value : "Loading"}",
+                                      "Welcome ${userName[0]}",
                                       style: context.textTheme.bodyMedium!
-                                          .copyWith(fontFamily: "bold"),
+                                          .copyWith(
+                                              color: AppColors().primaryWhite,
+                                              fontFamily: "bold"),
                                     ),
                                   )
                                 ],
                               ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView(
-                            children: [
-                              MainView(
-                                title: "Add a New",
-                                row: addNewRow,
-                              ),
-                              MainView(
-                                title: "See All of Your",
-                                row: seeAllRows,
-                              ),
-                              MainView(
-                                title: "Other Settings",
-                                row: otherSettings,
-                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: AppColors().labelOffRed,
+                                    borderRadius: BorderRadius.circular(15)),
+                                width: 150,
+                                height: 50,
+                                child: Text(
+                                  "Points : ${controller.userPoints.value != "" ? controller.userPoints.value : "Loading"}",
+                                  style: context.textTheme.bodyMedium!
+                                      .copyWith(fontFamily: "bold"),
+                                ),
+                              )
                             ],
                           ),
-                        )
-                      ],
+                        ),
+                      ),
                     ),
-                  ),
-                  _bannerAd != null
-                      ? Align(
-                          alignment: Alignment.bottomCenter,
-                          child: SafeArea(
-                            child: SizedBox(
-                              width: _bannerAd!.size.width.toDouble(),
-                              height: _bannerAd!.size.height.toDouble(),
-                              child: AdWidget(ad: _bannerAd!),
-                            ),
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          MainView(
+                            title: "Add a New",
+                            row: addNewRow,
                           ),
-                        )
-                      : Container(
-                          alignment: Alignment.center,
-                          width: size.width,
-                          height: 60,
-                          child: Obx(() => Text(!controller.isAdError.value
-                              ? " Loading Ad ... "
-                              : "Error While Loading Ad")))
-                ]))
-              ],
-            ),
-          ),
-          Obx(
-            () => BottomBar(
-              controller: controller,
-              size: size,
-              errorTitle: "An Error Occurred",
-              errorMsg: controller.errorMsg.value,
-              closeFunction: closeBottomBar,
-              tryAgainFunction: tryAgainBottomBar,
-              buttonWidget: Text(
-                "Try Again",
-                style: context.textTheme.displayMedium,
+                          MainView(
+                            title: "See All of Your",
+                            row: seeAllRows,
+                          ),
+                          MainView(
+                            title: "Other Settings",
+                            row: otherSettings,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+              _bannerAd != null
+                  ? Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SafeArea(
+                        child: SizedBox(
+                          width: _bannerAd!.size.width.toDouble(),
+                          height: _bannerAd!.size.height.toDouble(),
+                          child: AdWidget(ad: _bannerAd!),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      alignment: Alignment.center,
+                      width: size.width,
+                      height: 60,
+                      child: Obx(() => Text(!controller.isAdError.value
+                          ? " Loading Ad ... "
+                          : "Error While Loading Ad")))
+            ]))
+          ],
+        ),
       )),
     );
   }

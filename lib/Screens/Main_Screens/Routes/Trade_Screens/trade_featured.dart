@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../../../Components/top_row.dart';
 import '../../../../Components/trade_page_components.dart';
-import '../../../../Utils/load_ads.dart';
-import '../../../../Utils/random_number_generator.dart';
+import '../../../../Utils//Ads/load_ads.dart';
+import '../../../../Utils/Generators/random_number_generator.dart';
 
 class TradeFeatures extends StatefulWidget {
   const TradeFeatures({super.key});
@@ -35,10 +34,9 @@ class _TradeFeaturesState extends State<TradeFeatures> {
         height: size.height,
         child: Column(
           children: [
-            TopRow(
+            const TopRow(
               text: "Features",
-              icon: UniconsLine.shopping_cart_alt,
-              firstFunc: () {},
+
             ),
             SizedBox(
               width: size.width,

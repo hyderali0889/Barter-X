@@ -1,40 +1,29 @@
 import 'package:get/get.dart';
 
-class EmailController extends GetxController{
-   RxBool isLoading1 = false.obs;
-   RxBool isLoading2 = false.obs;
-   RxBool isLoading3 = false.obs;
+class EmailController extends GetxController {
+  RxBool isLoading1 = false.obs;
+  RxBool isLoading2 = false.obs;
+  RxBool isLoading3 = false.obs;
   Rx<Duration> myDuration = const Duration(seconds: 30).obs;
   RxBool isTimerRunning = false.obs;
 
-  startTimer(bool val){
+  startTimer(bool val) {
     isTimerRunning.value = val;
-   }
-
-   changeDuration(Duration newDuration){
-    myDuration.value = newDuration;
-      
-   }
-
-RxString errorMsg =
-      "We Encountered an error trying to log into your account. Please Check your Network Connection and try again."
-          .obs;
-
-  changeErrorMessage(String errormsg) {
-    errorMsg.value = errormsg;
   }
 
-  RxBool errorOcurred = false.obs;
+  changeDuration(Duration newDuration) {
+    myDuration.value = newDuration;
+  }
+
   void startLoading1(bool loading) {
     isLoading1.value = loading;
   }
+
   void startLoading2(bool loading) {
     isLoading2.value = loading;
   }
+
   void startLoading3(bool loading) {
     isLoading3.value = loading;
   }
-   void changeErrorStatus(bool errorStatus) {
-    errorOcurred.value = errorStatus;
-  }
- }
+}

@@ -1,7 +1,6 @@
-import 'package:barter_x/Utils/load_ads.dart';
+import 'package:barter_x/Utils/Ads/load_ads.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../../../Components/top_row.dart';
 import '../../../../Components/trade_page_components.dart';
@@ -31,10 +30,9 @@ class _TradeArrivalsState extends State<TradeArrivals> {
         height: size.height,
         child: Column(
           children: [
-            TopRow(
+            const TopRow(
               text: "New Arrivals",
-              icon: UniconsLine.shopping_cart_alt,
-              firstFunc: () {},
+
             ),
             SizedBox(
               width: size.width,

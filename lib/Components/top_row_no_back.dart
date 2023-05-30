@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:unicons/unicons.dart';
 
 import '../Themes/main_colors.dart';
 import '../Themes/spacing.dart';
 
 class TopRowNoBack extends StatelessWidget {
-  const TopRowNoBack({super.key, required this.text, required this.icon, required this.firstFunc});
+  const TopRowNoBack({super.key, required this.text});
 
   final String text;
-  final IconData icon;
 
-  final VoidCallback firstFunc;
 
 
   @override
@@ -32,7 +31,7 @@ class TopRowNoBack extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
-            child: InkWell(onTap: firstFunc, child:  Icon(icon)),
+            child: InkWell(onTap: (){}, child: const Icon(UniconsLine.shopping_cart)),
           ),
         ],
       ),

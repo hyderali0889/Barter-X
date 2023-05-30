@@ -1,23 +1,19 @@
 import 'dart:io';
 
 import 'package:barter_x/Components/main_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:barter_x/Utils/Firebase_Functions/add_data_to_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:unicons/unicons.dart';
-import '../../../Components/bottom_app_bar.dart';
 import '../../../Components/form_text_field.dart';
 import '../../../Components/top_row.dart';
 import '../../../Controllers/Main_Controllers/Form_Controllers/ewaste_form_controller.dart';
-import '../../../Models/trade_form_model.dart';
-import '../../../Routes/routes.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
-import '../../../Utils/random_alpha_generator.dart';
+import '../../../Utils/Widgets/show_modal_sheet.dart';
 
 class EWasteForm extends StatefulWidget {
   const EWasteForm({super.key});
@@ -150,16 +146,6 @@ class _EWasteFormState extends State<EWasteForm> {
     "Ziarat",
   ];
 
-
-
-  void closeBottomBar() {
-    controller.changeErrorStatus(false);
-  }
-
-  void tryAgainBottomBar() {
-    controller.changeErrorStatus(false);
-  }
-
   TextEditingController titleController = TextEditingController();
   TextEditingController tradeWithController = TextEditingController();
   TextEditingController desController = TextEditingController();
@@ -179,141 +165,77 @@ class _EWasteFormState extends State<EWasteForm> {
     super.dispose();
   }
 
-  void addToFirebase() async {
-    try {
-      String randomId = RandomGenerator().generateRandomString(10);
-
-
-
-      FirebaseStorage storage = FirebaseStorage.instance;
-      FirebaseAuth auth = FirebaseAuth.instance;
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-
-      if (tradeWithController.text.isEmpty ||
-          controller.image.value == null ||
-          titleController.text.isEmpty ||
-          controller.selectedDistrict.value == "" ||
-          desController.text.isEmpty) {
-        controller.errorOcurred(true);
-        controller.errorMsg(
-            "NO Image Selected or any field is empty. Please fill all the fields and try again.");
-        return;
-      }
-      controller.startLoading(true);
-      String path = "file/${DateTime.now()}";
-      File file = File(controller.image.value!.path);
-
-      UploadTask fileurl = storage.ref().child(path).putFile(file);
-
-      final snapshot = await fileurl.whenComplete(() {});
-      final downloadUrl = await snapshot.ref.getDownloadURL();
-
-      firestore
-          .collection("E-Waste")
-          .doc(DateTime.now().toString())
-          .set({
-        TradeFormModel().title: titleController.text.trim(),
-        TradeFormModel().tradeWith:
-             tradeWithController.text.trim(),
-        TradeFormModel().userId: auth.currentUser!.uid,
-        TradeFormModel().productId: randomId,
-        TradeFormModel().isActive: true,
-        TradeFormModel().img: downloadUrl,
-        TradeFormModel().des: desController.text.trim(),
-
-        TradeFormModel().email: auth.currentUser!.email,
-        TradeFormModel().phone: auth.currentUser!.phoneNumber,
-        TradeFormModel().district: controller.selectedDistrict.value,
-        TradeFormModel().cat: "E-Waste"
-
-      });
-      controller.startLoading(false);
-      Get.offAllNamed(Routes().navigationScreen, arguments: 0);
-    } on PlatformException catch (e) {
-      controller.startLoading(false);
-
-      controller.errorOcurred(true);
-      controller.errorMsg("An Error Occured ${e.message}");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: Stack(
-        children: [
-          Obx(
-            () => Opacity(
-              opacity: controller.errorOcurred.value ? 0.6 : 1,
-              child: InkWell(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: SizedBox(
-                  width: size.width,
-                  height: size.height,
-                  child: Column(
-                    children: [
-                      TopRow(
-                        text: "Add Trade",
-                        firstFunc: () {},
-                        icon: UniconsLine.bell,
-                      ),
-                      Expanded(
-                        child: ListView(
-                          children: [
-                            TheForm(
-                              titleController: titleController,
-                              tradeWithController: tradeWithController,
-                              desController: desController,
-                              userEmailController: userEmailController,
-                              userPhoneController: userPhoneController,
-                              allDistricts: allDistricts,
+        child: InkWell(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SizedBox(
+            width: size.width,
+            height: size.height,
+            child: Column(
+              children: [
+                const TopRow(
+                  text: "Add Trade",
 
-                              controller: controller,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: Spacing().sm),
-                              child: MainButton(
-                                size: size,
-                                buttonText: Get.arguments == null
-                                    ? "Add Trade"
-                                    : Get.arguments == "a"
-                                        ? "Start the Auction"
-                                        : "Add E-Waste Product",
-                                actionFunction: addToFirebase,
-                                mainController: controller.isLoading.value,
-                              ),
-                            )
-                          ],
+                ),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      TheForm(
+                        titleController: titleController,
+                        tradeWithController: tradeWithController,
+                        desController: desController,
+                        userEmailController: userEmailController,
+                        userPhoneController: userPhoneController,
+                        allDistricts: allDistricts,
+                        controller: controller,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: Spacing().sm),
+                        child: Obx(
+                          () => MainButton(
+                            size: size,
+                            buttonText: Get.arguments == null
+                                ? "Add Trade"
+                                : Get.arguments == "a"
+                                    ? "Start the Auction"
+                                    : "Add E-Waste Product",
+                            actionFunction: () {
+                              try {
+                                String path = "file/${DateTime.now()}";
+                                File file = File(controller.image.value!.path);
+
+                                AddDataToFirestore().addEWasteToFirebase(
+                                    context,
+                                    controller,
+                                    path,
+                                    file,
+                                    titleController,
+                                    tradeWithController,
+                                    desController);
+                              } catch (e) {
+                                ReturnWidgets().returnBottomSheet(context,
+                                    "An Error Occurred. Please Fill All Fields and Try Again.");
+                              }
+                            },
+                            mainController: controller.isLoading.value,
+                          ),
                         ),
                       )
                     ],
                   ),
-                ),
-              ),
+                )
+              ],
             ),
           ),
-          Obx(
-            () => BottomBar(
-              controller: controller,
-              size: size,
-              errorTitle: "An Error Occurred",
-              errorMsg: controller.errorMsg.value,
-              closeFunction: closeBottomBar,
-              tryAgainFunction: tryAgainBottomBar,
-              buttonWidget: Text(
-                "Try Again",
-                style: context.textTheme.displayMedium,
-              ),
-            ),
-          )
-        ],
-      )),
+        ),
+      ),
     );
   }
 }
@@ -326,9 +248,8 @@ class TheForm extends StatelessWidget {
     required this.userEmailController,
     required this.userPhoneController,
     required this.allDistricts,
-
-
-    required this.tradeWithController, required this.controller,
+    required this.tradeWithController,
+    required this.controller,
   });
   final TextEditingController titleController;
   final TextEditingController desController;
@@ -343,15 +264,13 @@ class TheForm extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     Future<void> selectImage(ImageSource source) async {
       try {
-        controller.errorOcurred(false);
         controller.startLoading(true);
 
         XFile? imagePath = await ImagePicker().pickImage(source: source);
         controller.startLoading(false);
 
         if (imagePath == null) {
-          controller.errorOcurred(true);
-          controller.errorMsg("NO Image Selected");
+          ReturnWidgets().returnBottomSheet(context, "NO Image Selected");
           return;
         }
 
@@ -361,8 +280,7 @@ class TheForm extends StatelessWidget {
 
         Get.back();
       } on PlatformException catch (e) {
-        controller.errorOcurred(true);
-        controller.errorMsg("An Error Occured ${e.message}");
+        ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
       }
     }
 
@@ -423,7 +341,7 @@ class TheForm extends StatelessWidget {
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children:  [
+                                      children: [
                                         Icon(UniconsLine.camera),
                                         Text('Camera'),
                                       ],
@@ -435,29 +353,30 @@ class TheForm extends StatelessWidget {
                       );
                     });
               },
-              child: Container(
-                width: 120,
-                decoration: BoxDecoration(
-                    color: AppColors().secSoftGrey,
-                    borderRadius: BorderRadius.circular(20)),
-                height: 120,
-                child: controller.image.value == null
-
-                    ? const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(UniconsLine.image),
-                          Text('Add Image'),
-                        ],
-                      )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.file(
-                          File(controller.image.value!.path),
-                          fit: BoxFit.cover,
+              child: Obx(
+                () => Container(
+                  width: 120,
+                  decoration: BoxDecoration(
+                      color: AppColors().secSoftGrey,
+                      borderRadius: BorderRadius.circular(20)),
+                  height: 120,
+                  child: controller.image.value == null
+                      ? const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(UniconsLine.image),
+                            Text('Add Image'),
+                          ],
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.file(
+                            File(controller.image.value!.path),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
+                ),
               )),
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
@@ -473,17 +392,17 @@ class TheForm extends StatelessWidget {
               controller: titleController,
             ),
           ),
-         TextFieldForForm(
-                  heading: "Trade with",
-                  opacity: 1.0,
-                  readOnly: false,
-                  maxLines: 1,
-                  width: size.width * 0.9,
-                  height: 115,
-                  maxLength: 64,
-                  hintText: "Enter the title of the desired trade",
-                  controller: tradeWithController,
-                ),
+          TextFieldForForm(
+            heading: "Trade with",
+            opacity: 1.0,
+            readOnly: false,
+            maxLines: 1,
+            width: size.width * 0.9,
+            height: 115,
+            maxLength: 64,
+            hintText: "Enter the title of the desired trade",
+            controller: tradeWithController,
+          ),
           TextFieldForForm(
             heading: "Enter Description",
             opacity: 1.0,
@@ -584,20 +503,17 @@ class TheForm extends StatelessWidget {
                           border: Border.all(color: AppColors().primaryBlack),
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child:  Text(
-                                "E-Waste",
-                                style: context.textTheme.bodySmall,
-                              )
-
-                      ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "E-Waste",
+                            style: context.textTheme.bodySmall,
+                          )),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );

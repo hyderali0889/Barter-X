@@ -1,5 +1,5 @@
-import 'package:barter_x/Utils/admob_ids.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import './admob_ids.dart';
 
 class AdClass {
   void loadAd() {
@@ -31,9 +31,7 @@ class AdClass {
             ad.show();
           },
           // Called when an ad request failed.
-          onAdFailedToLoad: (LoadAdError error) {
-
-          },
+          onAdFailedToLoad: (LoadAdError error) {},
         ));
   }
 }
