@@ -30,7 +30,7 @@ class _TradingHistoryScreenState extends State<TradingHistoryScreen> {
             buttonText: "Go Home",
             isLoading: false,
             buttonFunc: () {
-                  Get.offAllNamed(Routes().navigationScreen, arguments: 0);
+                  Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
 
             },
           )),

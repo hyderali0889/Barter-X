@@ -4,15 +4,14 @@ import 'package:barter_x/Components/main_button.dart';
 import 'package:barter_x/Utils/Firebase_Functions/add_data_to_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:unicons/unicons.dart';
 import '../../../Components/form_text_field.dart';
 import '../../../Components/top_row.dart';
 import '../../../Controllers/Main_Controllers/Form_Controllers/ewaste_form_controller.dart';
 import '../../../Themes/main_colors.dart';
 import '../../../Themes/spacing.dart';
+import '../../../Utils/Widgets/form_bottom_sheet.dart';
 import '../../../Utils/Widgets/show_modal_sheet.dart';
 
 class EWasteForm extends StatefulWidget {
@@ -182,7 +181,6 @@ class _EWasteFormState extends State<EWasteForm> {
               children: [
                 const TopRow(
                   text: "Add Trade",
-
                 ),
                 Expanded(
                   child: ListView(
@@ -262,27 +260,6 @@ class TheForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Future<void> selectImage(ImageSource source) async {
-      try {
-        controller.startLoading(true);
-
-        XFile? imagePath = await ImagePicker().pickImage(source: source);
-        controller.startLoading(false);
-
-        if (imagePath == null) {
-          ReturnWidgets().returnBottomSheet(context, "NO Image Selected");
-          return;
-        }
-
-        File imgFile = File(imagePath.path);
-
-        controller.addImage(imgFile);
-
-        Get.back();
-      } on PlatformException catch (e) {
-        ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
-      }
-    }
 
     return Padding(
       padding: EdgeInsets.only(
@@ -293,65 +270,13 @@ class TheForm extends StatelessWidget {
         children: [
           InkWell(
               onTap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return SizedBox(
-                        height: 200,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  selectImage(ImageSource.gallery);
-                                },
-                                child: Container(
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                        color: AppColors().secSoftGrey,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    height: 120,
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(UniconsLine.image),
-                                        Text('Gallery'),
-                                      ],
-                                    )),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  selectImage(ImageSource.camera);
-                                },
-                                child: Container(
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                        color: AppColors().secSoftGrey,
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    height: 120,
-                                    child: const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(UniconsLine.camera),
-                                        Text('Camera'),
-                                      ],
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    });
+                try {
+                  FormModelBottomSheet()
+                      .showFormModelBottomSheet(context, controller);
+                } catch (e) {
+                  ReturnWidgets()
+                      .returnBottomSheet(context, "An Error Occurred $e");
+                }
               },
               child: Obx(
                 () => Container(

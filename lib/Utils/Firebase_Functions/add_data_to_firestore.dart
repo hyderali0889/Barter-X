@@ -59,7 +59,7 @@ class AddDataToFirestore{
         TradeFormModel().cat: controller.selectedCat.value
       });
       controller.startLoading(false);
-      Get.offAllNamed(Routes().navigationScreen, arguments: 0);
+      Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {
       controller.startLoading(false);
 
@@ -116,7 +116,7 @@ void addEWasteToFirebase(context,controller , path ,file , TextEditingController
 
       });
       controller.startLoading(false);
-      Get.offAllNamed(Routes().navigationScreen, arguments: 0);
+      Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {
       controller.startLoading(false);
 
@@ -166,7 +166,7 @@ void addEWasteToFirebase(context,controller , path ,file , TextEditingController
         TradeFormModel().cat: controller.selectedCat.value
       });
       controller.startLoading(false);
-      Get.offAllNamed(Routes().navigationScreen, arguments: 0);
+      Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {
       controller.startLoading(false);
 

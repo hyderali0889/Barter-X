@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../../Components/top_row.dart';
 import '../../../../Components/trade_page_components.dart';
+import '../../../../Routes/routes.dart';
 
 class TradeArrivals extends StatefulWidget {
   const TradeArrivals({super.key});
@@ -32,7 +33,6 @@ class _TradeArrivalsState extends State<TradeArrivals> {
           children: [
             const TopRow(
               text: "New Arrivals",
-
             ),
             SizedBox(
               width: size.width,
@@ -48,6 +48,9 @@ class _TradeArrivalsState extends State<TradeArrivals> {
                   itemCount: Get.arguments.data!.docs.length - 1,
                   itemBuilder: (context, index) {
                     return InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes().productDetails);
+                      },
                       child: DataWidgetRow(
                           size: size,
                           data: Get.arguments,

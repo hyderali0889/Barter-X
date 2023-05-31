@@ -74,29 +74,39 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                           text: Get.arguments[0],
 
                         ),
+
+                         Expanded(child: Column(
+                    children: [
+                      SizedBox(
+                          width: size.width,
+               height: size.height * 0.8,
+                       )
+                    ],
+                    )),
+                   _bannerAd != null
+                 ? Align(
+                     alignment: Alignment.bottomCenter,
+                     child: SafeArea(
+                       child: SizedBox(
+                         width: _bannerAd!.size.width.toDouble(),
+                         height: _bannerAd!.size.height.toDouble(),
+                         child: AdWidget(ad: _bannerAd!),
+                       ),
+                     ),
+                   )
+                 : Container(
+                     alignment: Alignment.center,
+                     width: size.width,
+                     height: 60,
+                     child: Obx(() => Text(
+                         !controller.isAdError.value
+                             ? " Loading Ad ... "
+                             : "Error While Loading Ad",
+                         style: context.textTheme.bodySmall)))
                       ],
                     ),
                   ),
-                  _bannerAd != null
-                      ? Align(
-                          alignment: Alignment.bottomCenter,
-                          child: SafeArea(
-                            child: SizedBox(
-                              width: _bannerAd!.size.width.toDouble(),
-                              height: _bannerAd!.size.height.toDouble(),
-                              child: AdWidget(ad: _bannerAd!),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          alignment: Alignment.center,
-                          width: size.width,
-                          height: 60,
-                          child: Obx(() => Text(
-                              !controller.isAdError.value
-                                  ? " Loading Ad ... "
-                                  : "Error While Loading Ad",
-                              style: context.textTheme.bodySmall)))
+
                 ],
               ),
 

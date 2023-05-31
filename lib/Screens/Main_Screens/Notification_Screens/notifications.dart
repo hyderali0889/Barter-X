@@ -29,7 +29,7 @@ class _SubNotificationScreenState extends State<SubNotificationScreen> {
             buttonText: "Go Home",
             isLoading: false,
             buttonFunc: () {
-                    Get.offAllNamed(Routes().navigationScreen, arguments: 0);
+                    Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
 
             },
           )),

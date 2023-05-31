@@ -24,9 +24,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
     super.initState();
 
     if (Get.arguments != null) {
-      controller.changePage(Get.arguments);
-    } else {
-      return;
+
+      controller.changePage(Get.arguments[0]);
     }
   }
 

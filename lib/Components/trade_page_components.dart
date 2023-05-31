@@ -337,6 +337,11 @@ class FeaturedProducts extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
+                if ((data.connectionState == ConnectionState.active ||
+                        data.connectionState == ConnectionState.done) &&
+                    data.data == null) {
+                  return;
+                }
                 Get.toNamed(Routes().tradeFeature, arguments: data);
               },
               child: Padding(
@@ -459,6 +464,11 @@ class NewArrivals extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
+                    if ((data.connectionState == ConnectionState.active ||
+                            data.connectionState == ConnectionState.done) &&
+                        data.data == null) {
+                      return;
+                    }
                     Get.toNamed(Routes().tradeArrivals, arguments: data);
                   },
                   child: Padding(
@@ -559,6 +569,11 @@ class SpecialProducts extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
+                  if ((data.connectionState == ConnectionState.active ||
+                          data.connectionState == ConnectionState.done) &&
+                      data.data == null) {
+                    return;
+                  }
                   Get.toNamed(Routes().tradeSpecials, arguments: data);
                 },
                 child: Padding(
@@ -831,6 +846,11 @@ class DataWidgetRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: InkWell(
         onTap: () {
+          if ((data.connectionState == ConnectionState.active ||
+                  data.connectionState == ConnectionState.done) &&
+              data.data == null) {
+            return;
+          }
           Get.toNamed(Routes().productDetails, arguments: data);
         },
         child: Container(
@@ -915,13 +935,18 @@ class DataWidgetLength extends StatelessWidget {
       padding: const EdgeInsets.only(top: 25.0),
       child: InkWell(
         onTap: () {
+          if ((data.connectionState == ConnectionState.active ||
+                  data.connectionState == ConnectionState.done) &&
+              data.data == null) {
+            return;
+          }
           Get.toNamed(Routes().productDetails, arguments: data);
         },
         child: Container(
           width: size.width * 0.9,
           height: size.height * 0.2,
           decoration: BoxDecoration(
-              color: AppColors().secSoftGrey,
+              color: AppColors().secGreen,
               borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -939,7 +964,7 @@ class DataWidgetLength extends StatelessWidget {
                         }),
                         imageUrl: data.data!.docs[rand.elementAt(3)]
                             [TradeFormModel().img],
-                        width: size.width * 0.35,
+                        width: size.width * 0.4,
                         height: 136,
                       ),
                     ),

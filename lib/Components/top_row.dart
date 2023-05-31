@@ -1,3 +1,4 @@
+import 'package:barter_x/Routes/routes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -10,7 +11,6 @@ class TopRow extends StatelessWidget {
   const TopRow({
     super.key,
     required this.text,
-    
   });
 
   final String text;
@@ -37,7 +37,11 @@ class TopRow extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
-            child: InkWell(onTap: (){}, child: const Icon(UniconsLine.shopping_cart)),
+            child: InkWell(
+                onTap: () {
+                  Get.offAllNamed(Routes().navigationScreen, arguments: [3, 1]);
+                },
+                child: const Icon(UniconsLine.shopping_cart)),
           ),
         ],
       ),

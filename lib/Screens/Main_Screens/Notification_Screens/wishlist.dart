@@ -29,7 +29,7 @@ class _WishlistState extends State<Wishlist> {
             buttonText: "Go Home",
             isLoading: false,
             buttonFunc: () {
-                    Get.offAllNamed(Routes().navigationScreen, arguments: 0);
+                    Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
 
             },
           )),

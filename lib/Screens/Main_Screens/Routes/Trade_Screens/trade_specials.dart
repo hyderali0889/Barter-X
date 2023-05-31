@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 
 import '../../../../Components/top_row.dart';
 import '../../../../Components/trade_page_components.dart';
+import '../../../../Routes/routes.dart';
 import '../../../../Utils/Ads/load_ads.dart';
 import '../../../../Utils/Generators/random_number_generator.dart';
-
 
 class TradeSpecials extends StatefulWidget {
   const TradeSpecials({super.key});
@@ -37,7 +37,6 @@ class _TradeSpecialsState extends State<TradeSpecials> {
           children: [
             const TopRow(
               text: "Specials",
-
             ),
             SizedBox(
               width: size.width,
@@ -53,6 +52,9 @@ class _TradeSpecialsState extends State<TradeSpecials> {
                   itemCount: Get.arguments.data!.docs.length - 1,
                   itemBuilder: (context, index) {
                     return InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes().productDetails);
+                      },
                       child: DataWidgetRow(
                           size: size,
                           data: Get.arguments,
