@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../../Components/auction_page_components.dart';
 import '../../../../Components/top_row.dart';
-import '../../../../Components/trade_page_components.dart';
 import '../../../../Routes/routes.dart';
 import '../../../../Utils/Ads/load_ads.dart';
 import '../../../../Utils/Generators/random_number_generator.dart';
 
-class TradeSpecials extends StatefulWidget {
-  const TradeSpecials({super.key});
+class AuctionSpecials extends StatefulWidget {
+  const AuctionSpecials({super.key});
 
   @override
-  State<TradeSpecials> createState() => _TradeSpecialsState();
+  State<AuctionSpecials> createState() => _AuctionSpecialsState();
 }
 
-class _TradeSpecialsState extends State<TradeSpecials> {
+class _AuctionSpecialsState extends State<AuctionSpecials> {
   @override
   void initState() {
     super.initState();
@@ -55,7 +54,7 @@ class _TradeSpecialsState extends State<TradeSpecials> {
                       onTap: () {
                         Get.toNamed(Routes().productDetails);
                       },
-                      child: DataWidgetRow(
+                      child: AuctionDataWidgetRow(
                           size: size,
                           data: Get.arguments,
                           index: randomNumbers.elementAt(index)),

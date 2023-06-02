@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../Components/top_row.dart';
 import '../../../../Components/trade_page_components.dart';
 import '../../../../Routes/routes.dart';
-import '../../../../Utils//Ads/load_ads.dart';
+import '../../../../Utils/Ads/load_ads.dart';
 import '../../../../Utils/Generators/random_number_generator.dart';
 
-class TradeFeatures extends StatefulWidget {
-  const TradeFeatures({super.key});
+class TradeSpecials extends StatefulWidget {
+  const TradeSpecials({super.key});
 
   @override
-  State<TradeFeatures> createState() => _TradeFeaturesState();
+  State<TradeSpecials> createState() => _TradeSpecialsState();
 }
 
-class _TradeFeaturesState extends State<TradeFeatures> {
-
+class _TradeSpecialsState extends State<TradeSpecials> {
   @override
   void initState() {
     super.initState();
     AdClass().loadAd();
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -36,8 +35,7 @@ class _TradeFeaturesState extends State<TradeFeatures> {
         child: Column(
           children: [
             const TopRow(
-              text: "Features",
-
+              text: "Specials",
             ),
             SizedBox(
               width: size.width,
@@ -53,7 +51,7 @@ class _TradeFeaturesState extends State<TradeFeatures> {
                   itemCount: Get.arguments.data!.docs.length - 1,
                   itemBuilder: (context, index) {
                     return InkWell(
-                       onTap: () {
+                      onTap: () {
                         Get.toNamed(Routes().productDetails);
                       },
                       child: DataWidgetRow(

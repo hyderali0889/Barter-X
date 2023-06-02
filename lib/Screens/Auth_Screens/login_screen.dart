@@ -116,6 +116,8 @@ class MainView extends StatelessWidget {
               InputField(
                 maxLenght: 64,
                 size: size,
+                func:(e){},
+                keyboardType: TextInputType.emailAddress,
                 isEmailField: true,
                 controller: emailController,
                 title: "Email Address",
@@ -130,6 +132,11 @@ class MainView extends StatelessWidget {
                   size: size,
                   isEmailField: false,
                   controller: passwordController,
+                  func:(e){
+                      FirebaseAuthFunctions()
+                          .login(emailController, passwordController, context , controller);
+                   },
+                keyboardType: TextInputType.emailAddress,
                   title: "Password",
                   hintText: "Please Enter your Password",
                   obsecureText: controller.obsecureText.value,

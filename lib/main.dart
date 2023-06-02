@@ -6,15 +6,19 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
+import 'Helpers/object_box_helper.dart';
 import 'Routes/app_routes.dart';
 import 'Screens/Other_Screens/splash_screen.dart';
 import 'Themes/app_theme.dart';
 import 'Themes/main_colors.dart';
 
+late ObjectBox objectBox;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MobileAds.instance.initialize(  );
   await Firebase.initializeApp();
+  objectBox = await ObjectBox.create();
   runApp(const MyApp());
 }
 

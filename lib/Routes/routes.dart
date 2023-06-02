@@ -26,8 +26,15 @@ class Routes {
   final String tradeFeature = "/tradeFeatures";
   final String tradeArrivals = "/tradeArrivals";
   final String tradeSpecials = "/tradeSpecials";
+  //Auction Sub Screens
+  final String auctionTradeFeature = "/auctionTradeFeatures";
+  final String auctionTradeArrivals = "/auctionTradeArrivals";
+  final String auctionTradeSpecials = "/auctionTradeSpecials";
 
-  // Detail Screens
+  // Trade Detail Screens
   final String categoryDetails = "/categoryDetails";
   final String productDetails = "/productDetails";
+  // Auction Detail Screens
+  final String auctionCategoryDetails = "/auctionCategoryDetails";
+  final String auctionProductDetails = "/auctionProductDetails";
 }

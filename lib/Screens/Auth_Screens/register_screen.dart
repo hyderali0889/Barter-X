@@ -126,6 +126,10 @@ class _MainViewState extends State<MainView> {
               ),
               InputField(
                 maxLenght: 64,
+                 func:(e){
+
+                           },
+                keyboardType: TextInputType.emailAddress,
                 size: widget.size,
                 isEmailField: true,
                 controller: widget.emailController,
@@ -140,6 +144,14 @@ class _MainViewState extends State<MainView> {
                   maxLenght: 64,
                   size: widget.size,
                   isEmailField: false,
+                   func:(e){
+                              FirebaseAuthFunctions().registerUser(
+                          context,
+                          widget.controller,
+                          widget.emailController,
+                          widget.passwordController);
+                           },
+                keyboardType: TextInputType.emailAddress,
                   controller: widget.passwordController,
                   title: "Password",
                   hintText: "Please Enter your Password",

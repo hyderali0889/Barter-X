@@ -105,6 +105,11 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         InputField(
                           maxLenght: 10,
                           size: size,
+                          func:(e){
+                              FirebaseAuthFunctions().signInWithPhone(
+                              context, controller, phoneController);
+                           },
+                keyboardType: TextInputType.emailAddress,
                           isEmailField: true,
                           controller: phoneController,
                           title: "Phone Number",
@@ -133,7 +138,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         },
                       ),
                     ),
-                    
+
                        MainButton(
                         size: size,
                         mainController: false,

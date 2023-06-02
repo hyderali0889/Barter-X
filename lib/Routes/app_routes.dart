@@ -1,15 +1,17 @@
-import 'package:barter_x/Bindings/Main_Bindings/Routes_Bindings/category_details_bindings.dart';
-import 'package:barter_x/Bindings/Main_Bindings/Routes_Bindings/product_details_binding.dart';
+import 'package:barter_x/Bindings/Main_Bindings/Trade_and_EWaste_Bindings/category_details_bindings.dart';
+import 'package:barter_x/Bindings/Main_Bindings/Trade_and_EWaste_Bindings/product_details_binding.dart';
+import 'package:barter_x/Bindings/Main_Bindings/Auction_Bindings/auction_category_details_bindings.dart';
+import 'package:barter_x/Bindings/Main_Bindings/Auction_Bindings/auction_product_details_binding.dart';
 import 'package:barter_x/Screens/Auth_Screens/otp_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:barter_x/Screens/Auth_Screens/reset_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/register_screen.dart';
 import 'package:barter_x/Screens/Main_Screens/Forms/auction_form.dart';
-import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_arrivals.dart';
-import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_featured.dart';
-import 'package:barter_x/Screens/Main_Screens/Routes/Trade_Screens/trade_specials.dart';
-import 'package:barter_x/Screens/Main_Screens/Routes/categories_detail_screen.dart';
-import 'package:barter_x/Screens/Main_Screens/Routes/product_details_screen.dart';
+import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Screens/trade_arrivals.dart';
+import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Screens/trade_featured.dart';
+import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Screens/trade_specials.dart';
+import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/categories_detail_screen.dart';
+import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/product_details_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
@@ -25,6 +27,11 @@ import '../Bindings/Main_Bindings/Form_Bindings/auction_form_bindings.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/ewaste_form_bindings.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/trade_form_bindings.dart';
 import '../Bindings/Main_Bindings/Navigation_bindings/navigation_binding.dart';
+import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_arrivals.dart';
+import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_featured.dart';
+import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_specials.dart';
+import '../Screens/Main_Screens/Auction_SubPages/auction_categories_detail_screen.dart';
+import '../Screens/Main_Screens/Auction_SubPages/auction_product_details_screen.dart';
 import '../Screens/Main_Screens/Forms/e_waste_form.dart';
 import '../Screens/Main_Screens/Forms/trade_form.dart';
 import './routes.dart';
@@ -110,11 +117,19 @@ class AppRouter {
     GetPage(name: Routes().tradeFeature, page: () => const TradeFeatures()),
     GetPage(name: Routes().tradeArrivals, page: () => const TradeArrivals()),
     GetPage(name: Routes().tradeSpecials, page: () => const TradeSpecials()),
+ // Auction Sub Trade Routes
+    GetPage(name: Routes().auctionTradeFeature, page: () => const AuctionFeatures()),
+    GetPage(name: Routes().auctionTradeArrivals, page: () => const AuctionArrivals()),
+    GetPage(name: Routes().auctionTradeSpecials, page: () => const AuctionSpecials()),
 
- // Details Screens
+ // Trade Details Screens
    GetPage(name: Routes().categoryDetails, page: ()=> (const CategoryDetailScreen()) , binding: CategoryDetailsBindings() ),
-   GetPage(name: Routes().productDetails, page: ()=> (const ProductDetailScreen()) , binding: ProductDetailsBindings() )
+   GetPage(name: Routes().productDetails, page: ()=> (const ProductDetailScreen()) , binding: ProductDetailsBindings() ),
+ // Auction Details Screens
+   GetPage(name: Routes().auctionCategoryDetails, page: ()=> (const AuctionCategoryDetailScreen()) , binding: AuctionCategoryDetailsBindings()  ) ,
+   GetPage(name: Routes().auctionProductDetails, page: ()=> (const AuctionProductDetailScreen()) , binding: AuctionProductDetailsBindings() )
 
     //ENd of Routes
   ];
 }
+

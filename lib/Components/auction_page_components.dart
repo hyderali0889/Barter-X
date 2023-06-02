@@ -6,15 +6,14 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:unicons/unicons.dart';
-
 import '../Models/trade_form_model.dart';
 import '../Routes/routes.dart';
 import '../Themes/main_colors.dart';
 import '../Themes/spacing.dart';
 import '../Utils/Generators/random_number_generator.dart';
 
-class FutureWidget extends StatelessWidget {
-  const FutureWidget(
+class AuctionFutureWidget extends StatelessWidget {
+  const AuctionFutureWidget(
       {super.key,
       required this.controller,
       required this.size,
@@ -40,20 +39,20 @@ class FutureWidget extends StatelessWidget {
                   child: Center(
                     child: PlaceHolderWidget(
                       size: size,
-                      image: "A6",
+                      image: "A7",
                       mainText:
-                          "Barter Screen is where you enlist a product to be traded with a specific object. ",
-                      buttonText: "Start a Trade",
+                          "Auction Screen is where you enlist a product and wait for others to bid on your product.",
+                      buttonText: "Start an Auction",
                       isLoading: false,
                       buttonFunc: () {
-                        Get.toNamed(Routes().addTradeForm);
+                        Get.toNamed(Routes().addAuctionForm);
                       },
                     ),
                   ),
                 );
               }
 
-              return MainView(
+              return AuctionMainView(
                 controller: controller,
                 data: data,
                 size: size,
@@ -65,8 +64,8 @@ class FutureWidget extends StatelessWidget {
   }
 }
 
-class MainView extends StatelessWidget {
-  const MainView({
+class AuctionMainView extends StatelessWidget {
+  const AuctionMainView({
     super.key,
     required this.size,
     required this.editingController,
@@ -82,6 +81,7 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> categories = [
       "Books",
+      "EWaste",
       "Furniture",
       "Glass-Items",
       "Clothing",
@@ -92,6 +92,7 @@ class MainView extends StatelessWidget {
     ];
     List<IconData> icons = [
       UniconsLine.book,
+      UniconsLine.hdd,
       UniconsLine.table,
       UniconsLine.glass_martini,
       UniconsLine.water,
@@ -102,6 +103,7 @@ class MainView extends StatelessWidget {
     ];
     List<Color> colours = [
       AppColors().labelOffRed,
+      AppColors().labelOffBlue,
       AppColors().primaryYellow,
       AppColors().secRed,
       AppColors().primaryPurple,
@@ -111,43 +113,46 @@ class MainView extends StatelessWidget {
       AppColors().secHalfGrey
     ];
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SearchBar(size: size, editingController: editingController),
-        ImageArea(
-          size: size,
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: Spacing().sm),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CategoryArea(
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AuctionSearchBar(size: size, editingController: editingController),
+          AuctionImageArea(
+            size: size,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: Spacing().sm),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AuctionCategoryArea(
+                      size: size,
+                      categories: categories,
+                      colours: colours,
+                      icons: icons),
+                  AuctionFeaturedProducts(
                     size: size,
-                    categories: categories,
-                    colours: colours,
-                    icons: icons),
-                FeaturedProducts(
-                  size: size,
-                  data: data,
-                  controller: controller,
-                ),
-                NewArrivals(
-                  size: size,
-                  data: data,
-                  controller: controller,
-                ),
-                SpecialProducts(
-                  size: size,
-                  data: data,
-                  controller: controller,
-                ),
-              ]),
-        ),
-      ],
+                    data: data,
+                    controller: controller,
+                  ),
+                  AuctionNewArrivals(
+                    size: size,
+                    data: data,
+                    controller: controller,
+                  ),
+                  AuctionSpecialProducts(
+                    size: size,
+                    data: data,
+                    controller: controller,
+                  ),
+                ]),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -162,8 +167,8 @@ class MainView extends StatelessWidget {
 
 */
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({
+class AuctionSearchBar extends StatelessWidget {
+  const AuctionSearchBar({
     super.key,
     required this.size,
     required this.editingController,
@@ -203,8 +208,8 @@ class SearchBar extends StatelessWidget {
   }
 }
 
-class ImageArea extends StatelessWidget {
-  const ImageArea({
+class AuctionImageArea extends StatelessWidget {
+  const AuctionImageArea({
     super.key,
     required this.size,
   });
@@ -227,7 +232,7 @@ class ImageArea extends StatelessWidget {
                     right: index == 2 ? size.width * 0.05 : size.width * 0.13),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.asset("assets/cards/Barter$index.png"),
+                  child: Image.asset("assets/cards/Auction$index.png"),
                 ),
               );
             }),
@@ -236,8 +241,8 @@ class ImageArea extends StatelessWidget {
   }
 }
 
-class CategoryArea extends StatelessWidget {
-  const CategoryArea({
+class AuctionCategoryArea extends StatelessWidget {
+  const AuctionCategoryArea({
     super.key,
     required this.size,
     required this.categories,
@@ -271,7 +276,7 @@ class CategoryArea extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      Get.toNamed(Routes().categoryDetails,
+                      Get.toNamed(Routes().auctionCategoryDetails,
                           arguments: [categories[index]]);
                     },
                     child: Column(
@@ -306,8 +311,8 @@ class CategoryArea extends StatelessWidget {
   }
 }
 
-class FeaturedProducts extends StatelessWidget {
-  const FeaturedProducts({
+class AuctionFeaturedProducts extends StatelessWidget {
+  const AuctionFeaturedProducts({
     Key? key,
     required this.controller,
     required this.size,
@@ -342,7 +347,7 @@ class FeaturedProducts extends StatelessWidget {
                     data.data == null) {
                   return;
                 }
-                Get.toNamed(Routes().tradeFeature, arguments: data);
+                Get.toNamed(Routes().auctionTradeFeature, arguments: data);
               },
               child: Padding(
                 padding: const EdgeInsets.only(right: 30.0),
@@ -370,12 +375,12 @@ class FeaturedProducts extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            MainShimmerContainer(
+                            AuctionMainShimmerContainer(
                               data: data,
                               controller: controller,
                               size: size,
                             ),
-                            MainShimmerContainer(
+                            AuctionMainShimmerContainer(
                               data: data,
                               controller: controller,
                               size: size,
@@ -383,7 +388,7 @@ class FeaturedProducts extends StatelessWidget {
                           ],
                         ),
                       ),
-                      LongShimmerContainer(
+                      AuctionLongShimmerContainer(
                         controller: controller,
                         data: data,
                         size: size,
@@ -406,7 +411,7 @@ class FeaturedProducts extends StatelessWidget {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.data!.docs.length > 2 ? 2 : 1,
                                 itemBuilder: (context, index) {
-                                  return DataWidgetRow(
+                                  return AuctionDataWidgetRow(
                                       size: size,
                                       data: data,
                                       index: randomNumbers.elementAt(index));
@@ -415,7 +420,7 @@ class FeaturedProducts extends StatelessWidget {
                             ),
                             data.data!.docs.length < 3
                                 ? Container()
-                                : DataWidgetLength(
+                                : AuctionDataWidgetLength(
                                     size: size,
                                     data: data,
                                     rand: randomNumbers),
@@ -431,8 +436,8 @@ class FeaturedProducts extends StatelessWidget {
   }
 }
 
-class NewArrivals extends StatelessWidget {
-  const NewArrivals({
+class AuctionNewArrivals extends StatelessWidget {
+  const AuctionNewArrivals({
     super.key,
     required this.data,
     required this.controller,
@@ -465,7 +470,7 @@ class NewArrivals extends StatelessWidget {
                         data.data == null) {
                       return;
                     }
-                    Get.toNamed(Routes().tradeArrivals, arguments: data);
+                    Get.toNamed(Routes().auctionTradeArrivals, arguments: data);
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 30.0),
@@ -493,12 +498,12 @@ class NewArrivals extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              MainShimmerContainer(
+                              AuctionMainShimmerContainer(
                                 data: data,
                                 controller: controller,
                                 size: size,
                               ),
-                              MainShimmerContainer(
+                              AuctionMainShimmerContainer(
                                 data: data,
                                 controller: controller,
                                 size: size,
@@ -516,7 +521,7 @@ class NewArrivals extends StatelessWidget {
                               scrollDirection: Axis.horizontal,
                               itemCount: data.data!.docs.length > 2 ? 2 : 1,
                               itemBuilder: (context, index) {
-                                return DataWidgetRow(
+                                return AuctionDataWidgetRow(
                                     size: size,
                                     data: data,
                                     index:
@@ -531,8 +536,8 @@ class NewArrivals extends StatelessWidget {
   }
 }
 
-class SpecialProducts extends StatelessWidget {
-  const SpecialProducts({
+class AuctionSpecialProducts extends StatelessWidget {
+  const AuctionSpecialProducts({
     super.key,
     required this.data,
     required this.controller,
@@ -570,7 +575,7 @@ class SpecialProducts extends StatelessWidget {
                       data.data == null) {
                     return;
                   }
-                  Get.toNamed(Routes().tradeSpecials, arguments: data);
+                  Get.toNamed(Routes().auctionTradeSpecials, arguments: data);
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 30.0),
@@ -600,12 +605,12 @@ class SpecialProducts extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              MainShimmerContainer(
+                              AuctionMainShimmerContainer(
                                 data: data,
                                 controller: controller,
                                 size: size,
                               ),
-                              MainShimmerContainer(
+                              AuctionMainShimmerContainer(
                                 data: data,
                                 controller: controller,
                                 size: size,
@@ -613,7 +618,7 @@ class SpecialProducts extends StatelessWidget {
                             ],
                           ),
                         ),
-                        LongShimmerContainer(
+                        AuctionLongShimmerContainer(
                           controller: controller,
                           data: data,
                           size: size,
@@ -637,7 +642,7 @@ class SpecialProducts extends StatelessWidget {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.data!.docs.length > 2 ? 2 : 1,
                                 itemBuilder: (context, index) {
-                                  return DataWidgetRow(
+                                  return AuctionDataWidgetRow(
                                       size: size,
                                       data: data,
                                       index: randomNumbers.elementAt(index));
@@ -646,7 +651,7 @@ class SpecialProducts extends StatelessWidget {
                             ),
                             data.data!.docs.length < 3
                                 ? Container()
-                                : DataWidgetLength(
+                                : AuctionDataWidgetLength(
                                     size: size,
                                     data: data,
                                     rand: randomNumbers),
@@ -670,8 +675,8 @@ class SpecialProducts extends StatelessWidget {
 
 */
 
-class LongShimmerContainer extends StatelessWidget {
-  const LongShimmerContainer({
+class AuctionLongShimmerContainer extends StatelessWidget {
+  const AuctionLongShimmerContainer({
     super.key,
     required this.controller,
     required this.data,
@@ -741,8 +746,8 @@ class LongShimmerContainer extends StatelessWidget {
   }
 }
 
-class MainShimmerContainer extends StatelessWidget {
-  const MainShimmerContainer({
+class AuctionMainShimmerContainer extends StatelessWidget {
+  const AuctionMainShimmerContainer({
     super.key,
     required this.data,
     required this.controller,
@@ -824,8 +829,8 @@ class MainShimmerContainer extends StatelessWidget {
   }
 }
 
-class DataWidgetRow extends StatelessWidget {
-  const DataWidgetRow({
+class AuctionDataWidgetRow extends StatelessWidget {
+  const AuctionDataWidgetRow({
     super.key,
     required this.size,
     required this.data,
@@ -847,9 +852,7 @@ class DataWidgetRow extends StatelessWidget {
               data.data == null) {
             return;
           }
-       
-          Get.toNamed(Routes().productDetails,
-              arguments: data.data!.docs[index]);
+          Get.toNamed(Routes().auctionProductDetails, arguments: data.data!.docs[index]);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -901,7 +904,9 @@ class DataWidgetRow extends StatelessWidget {
                       Text("Trading With :",
                           overflow: TextOverflow.fade,
                           style: context.textTheme.bodySmall),
-                      Text(data.data!.docs[index][TradeFormModel().tradeWith],
+                      Text(
+                          data.data!.docs[index][TradeFormModel().date]
+                              .toString(),
                           style: context.textTheme.bodySmall),
                     ],
                   ),
@@ -915,8 +920,8 @@ class DataWidgetRow extends StatelessWidget {
   }
 }
 
-class DataWidgetLength extends StatelessWidget {
-  const DataWidgetLength({
+class AuctionDataWidgetLength extends StatelessWidget {
+  const AuctionDataWidgetLength({
     super.key,
     required this.size,
     required this.data,
@@ -938,8 +943,7 @@ class DataWidgetLength extends StatelessWidget {
               data.data == null) {
             return;
           }
-          Get.toNamed(Routes().productDetails,
-              arguments: data.data!.docs[rand.elementAt(3)]);
+          Get.toNamed(Routes().auctionProductDetails, arguments: data.data!.docs[rand.elementAt(3)]);
         },
         child: Container(
           width: size.width * 0.9,
@@ -963,18 +967,18 @@ class DataWidgetLength extends StatelessWidget {
                         }),
                         imageUrl: data.data!.docs[rand.elementAt(3)]
                             [TradeFormModel().img],
-                        width: size.width * 0.4,
+                        width: size.width * 0.3,
                         height: 136,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
+                      padding: const EdgeInsets.only(top: 15.0, left: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                              width: size.width * 0.4,
+                              width: size.width * 0.6,
                               height: 60,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10)),
@@ -985,7 +989,7 @@ class DataWidgetLength extends StatelessWidget {
                                   style: context.textTheme.bodySmall!
                                       .copyWith(fontFamily: "bold"))),
                           Container(
-                              width: size.width * 0.4,
+                              width: size.width * 0.6,
                               height: 40,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10)),
@@ -997,8 +1001,11 @@ class DataWidgetLength extends StatelessWidget {
                                     style: context.textTheme.bodySmall,
                                   ),
                                   Text(
-                                      data.data!.docs[rand.elementAt(3)]
-                                          [TradeFormModel().tradeWith],
+                                      data
+                                          .data!
+                                          .docs[rand.elementAt(3)]
+                                              [TradeFormModel().date]
+                                          .toString(),
                                       overflow: TextOverflow.fade,
                                       style: context.textTheme.bodySmall),
                                 ],

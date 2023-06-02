@@ -3,8 +3,10 @@ import 'package:barter_x/Components/trade_page_components.dart' as trade;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:unicons/unicons.dart';
 
 import '../Routes/routes.dart';
+import '../Themes/main_colors.dart';
 import '../Themes/spacing.dart';
 
 class EWasteFutureWidget extends StatelessWidget {
@@ -79,7 +81,7 @@ class EWasteMainView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          trade.SearchBar(size: size, editingController: editingController),
+          SearchBar(size: size, editingController: editingController),
           EWasteImageArea(
             size: size,
           ),
@@ -111,6 +113,48 @@ class EWasteMainView extends StatelessWidget {
     );
   }
 }
+
+class SearchBar extends StatelessWidget {
+  const SearchBar({
+    super.key,
+    required this.size,
+    required this.editingController,
+  });
+
+  final Size size;
+  final TextEditingController editingController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: AppColors().secSoftGrey,
+          borderRadius: BorderRadius.circular(20)),
+      height: size.height * 0.06,
+      width: size.width * 0.9,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20.0),
+        child: TextFormField(
+          controller: editingController,
+          textAlign: TextAlign.left,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+              suffixIcon: const Icon(
+                UniconsLine.search,
+                size: 14,
+              ),
+              hintText: "Search Product Name",
+              hintStyle: context.textTheme.bodySmall!
+                  .copyWith(color: AppColors().secHalfGrey),
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none),
+        ),
+      ),
+    );
+  }
+}
+
 
 class EWasteImageArea extends StatelessWidget {
   const EWasteImageArea({

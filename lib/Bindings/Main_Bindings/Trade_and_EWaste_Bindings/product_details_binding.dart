@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../../Controllers/Main_Controllers/Route_Controllers/product_details_controller.dart';
+import '../../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/product_details_controller.dart';
 
 class ProductDetailsBindings extends Bindings {
   @override

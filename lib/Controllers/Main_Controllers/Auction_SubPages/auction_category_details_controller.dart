@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-class AuctionController extends GetxController {
+class AuctionCategoryDetailsController extends GetxController {
   RxBool isAdError = false.obs;
 
   void changeAdError(bool value) {
     isAdError.value = value;
   }
 
-
-  RxBool isRefreshing = false.obs;
+   RxBool isRefreshing = false.obs;
 
   void refreshData(bool value) {
     isRefreshing.value = value;

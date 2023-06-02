@@ -128,6 +128,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                       children: [
                                         InputFieldArea(
                                             controller: otpController1,
+                                            func: (e) {},
                                             functionToCall: (String val) {
                                               if (val.length == 1) {
                                                 focusNode2.requestFocus();
@@ -137,6 +138,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                             size: size),
                                         InputFieldArea(
                                             controller: otpController2,
+                                            func: (e) {},
                                             functionToCall: (String val) {
                                               if (val.length == 1) {
                                                 focusNode3.requestFocus();
@@ -148,6 +150,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                             size: size),
                                         InputFieldArea(
                                             controller: otpController3,
+                                            func: (e) {},
                                             functionToCall: (String val) {
                                               if (val.length == 1) {
                                                 focusNode4.requestFocus();
@@ -163,6 +166,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                       children: [
                                         InputFieldArea(
                                             controller: otpController4,
+                                            func: (e) {},
                                             functionToCall: (String val) {
                                               if (val.length == 1) {
                                                 focusNode5.requestFocus();
@@ -174,6 +178,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                             size: size),
                                         InputFieldArea(
                                             controller: otpController5,
+                                            func: (e) {},
                                             functionToCall: (String val) {
                                               if (val.length == 1) {
                                                 focusNode6.requestFocus();
@@ -185,6 +190,12 @@ class _OTPScreenState extends State<OTPScreen> {
                                             size: size),
                                         InputFieldArea(
                                             controller: otpController6,
+                                            func: (e) {
+                                              FirebaseAuthFunctions().checkOTP(
+                                                  context,
+                                                  otpController,
+                                                  controller);
+                                            },
                                             functionToCall: (String val) {
                                               if (val.length != 1) {
                                                 focusNode5.requestFocus();
@@ -248,11 +259,13 @@ class InputFieldArea extends StatelessWidget {
     required this.size,
     required this.focusNode,
     required this.functionToCall,
+    required this.func,
   });
   final TextEditingController controller;
   final Size size;
   final FocusNode focusNode;
   final Function(String)? functionToCall;
+  final Function(String)? func;
 
   @override
   Widget build(BuildContext context) {
@@ -263,6 +276,7 @@ class InputFieldArea extends StatelessWidget {
         height: 75,
         child: TextFormField(
           keyboardType: TextInputType.number,
+          onFieldSubmitted: func,
           focusNode: focusNode,
           onChanged: functionToCall,
           maxLength: 1,

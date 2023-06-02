@@ -16,7 +16,7 @@ class InputField extends StatefulWidget {
       required this.isEmailField,
       this.mainController,
       required this.width,
-      required this.maxLenght});
+      required this.maxLenght, required this.func, required this.keyboardType});
 
   final Size size;
   final TextEditingController controller;
@@ -27,6 +27,8 @@ class InputField extends StatefulWidget {
   final dynamic mainController;
   final double width;
  final int maxLenght;
+ final Function(String) func;
+ final TextInputType keyboardType;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -51,9 +53,10 @@ class _InputFieldState extends State<InputField> {
               width: widget.width,
               height: 75,
               child: TextFormField(
-                keyboardType: widget.isEmailField? TextInputType.emailAddress : TextInputType.visiblePassword,
+                keyboardType: widget.keyboardType,
                 maxLength: widget.maxLenght,
                 style: context.textTheme.bodyMedium,
+                onFieldSubmitted:widget.func ,
                 obscureText: widget.obsecureText,
                 controller: widget.controller,
                 decoration: InputDecoration(

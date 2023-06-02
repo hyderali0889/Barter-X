@@ -39,7 +39,7 @@ class _ResetScreenState extends State<ResetScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: 
+        child:
            SizedBox(
             width: size.width,
             height: size.height,
@@ -126,6 +126,11 @@ class MainView extends StatelessWidget {
                 title: "Email Address",
                 hintText: "Please Enter Email Address",
                 obsecureText: false,
+                   func:(e){
+                    FirebaseAuthFunctions().resetPassword(context,controller,emailController);
+
+                           },
+                keyboardType: TextInputType.emailAddress,
                 mainController: controller,
                 width: size.width * 0.85,
               ),
