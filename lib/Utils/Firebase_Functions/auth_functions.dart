@@ -239,5 +239,6 @@ class FirebaseAuthFunctions {
     }
   }
 
+
   // End of Function
 }

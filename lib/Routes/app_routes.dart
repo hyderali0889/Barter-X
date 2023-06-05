@@ -12,6 +12,7 @@ import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Sc
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Screens/trade_specials.dart';
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/categories_detail_screen.dart';
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/product_details_screen.dart';
+import 'package:barter_x/Screens/Other_Screens/confirmation_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
@@ -127,8 +128,9 @@ class AppRouter {
    GetPage(name: Routes().productDetails, page: ()=> (const ProductDetailScreen()) , binding: ProductDetailsBindings() ),
  // Auction Details Screens
    GetPage(name: Routes().auctionCategoryDetails, page: ()=> (const AuctionCategoryDetailScreen()) , binding: AuctionCategoryDetailsBindings()  ) ,
-   GetPage(name: Routes().auctionProductDetails, page: ()=> (const AuctionProductDetailScreen()) , binding: AuctionProductDetailsBindings() )
+   GetPage(name: Routes().auctionProductDetails, page: ()=> (const AuctionProductDetailScreen()) , binding: AuctionProductDetailsBindings() ),
 
+GetPage(name: Routes().confirmationScreen, page: () => const ConfirmationScreen()),
     //ENd of Routes
   ];
 }

@@ -16,6 +16,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'Models/alerts.dart';
 import 'Models/history.dart';
+import 'Models/is_trade_active.dart';
 import 'Models/wishlist.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -87,6 +88,30 @@ final _entities = <ModelEntity>[
             flags: 0)
       ],
       relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(4, 2630773087187223940),
+      name: 'ActiveTradeModel',
+      lastPropertyId: const IdUid(3, 9072985614268647155),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 538406362511150529),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 8882382837284486161),
+            name: 'productId',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 9072985614268647155),
+            name: 'productCategory',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
 ];
 
@@ -110,7 +135,7 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(3, 5195633494914985286),
+      lastEntityId: const IdUid(4, 2630773087187223940),
       lastIndexId: const IdUid(0, 0),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
@@ -211,6 +236,37 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGet(buffer, rootOffset, 8, ''));
 
           return object;
+        }),
+    ActiveTradeModel: EntityDefinition<ActiveTradeModel>(
+        model: _entities[3],
+        toOneRelations: (ActiveTradeModel object) => [],
+        toManyRelations: (ActiveTradeModel object) => {},
+        getId: (ActiveTradeModel object) => object.id,
+        setId: (ActiveTradeModel object, int id) {
+          object.id = id;
+        },
+        objectToFB: (ActiveTradeModel object, fb.Builder fbb) {
+          final productIdOffset = fbb.writeString(object.productId);
+          final productCategoryOffset = fbb.writeString(object.productCategory);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, productIdOffset);
+          fbb.addOffset(2, productCategoryOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = ActiveTradeModel(
+              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+              productId: const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 6, ''),
+              productCategory: const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, ''));
+
+          return object;
         })
   };
 
@@ -256,4 +312,19 @@ class WishlistModel_ {
   /// see [WishlistModel.productCategory]
   static final productCategory =
       QueryStringProperty<WishlistModel>(_entities[2].properties[2]);
+}
+
+/// [ActiveTradeModel] entity fields to define ObjectBox queries.
+class ActiveTradeModel_ {
+  /// see [ActiveTradeModel.id]
+  static final id =
+      QueryIntegerProperty<ActiveTradeModel>(_entities[3].properties[0]);
+
+  /// see [ActiveTradeModel.productId]
+  static final productId =
+      QueryStringProperty<ActiveTradeModel>(_entities[3].properties[1]);
+
+  /// see [ActiveTradeModel.productCategory]
+  static final productCategory =
+      QueryStringProperty<ActiveTradeModel>(_entities[3].properties[2]);
 }

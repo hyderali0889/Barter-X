@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void getFirestoreData() async {
     try {
       controller.refreshData(true);
-      FirebaseFunctions().getFirebaseTradeData(context ,controller);
+      FirebaseFunctions().getFirebaseTradeData(context, controller);
       await Future.delayed(const Duration(seconds: 2));
       controller.refreshData(false);
     } on PlatformException catch (e) {
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onRefresh: () async {
                 try {
                   controller.refreshData(true);
-                  FirebaseFunctions().getFirebaseTradeData(context,controller);
+                  FirebaseFunctions().getFirebaseTradeData(context, controller);
                   await Future.delayed(const Duration(seconds: 2));
                   controller.refreshData(false);
                 } on PlatformException catch (e) {
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               arguments: [3, 1]);
                                         },
                                         child: const Icon(
-                                          UniconsLine.shopping_cart_alt,
+                                          UniconsLine.heart_alt,
                                         )),
                                   )
                                 ],

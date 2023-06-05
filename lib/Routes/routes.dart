@@ -37,4 +37,6 @@ class Routes {
   // Auction Detail Screens
   final String auctionCategoryDetails = "/auctionCategoryDetails";
   final String auctionProductDetails = "/auctionProductDetails";
+
+  final String confirmationScreen = "/confirmationScreen";
 }

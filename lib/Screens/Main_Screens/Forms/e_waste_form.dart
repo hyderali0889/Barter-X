@@ -199,11 +199,7 @@ class _EWasteFormState extends State<EWasteForm> {
                         child: Obx(
                           () => MainButton(
                             size: size,
-                            buttonText: Get.arguments == null
-                                ? "Add Trade"
-                                : Get.arguments == "a"
-                                    ? "Start the Auction"
-                                    : "Add E-Waste Product",
+                            buttonText:  "Add E-Waste Product",
                             actionFunction: () {
                               try {
                                 String path = "file/${DateTime.now()}";

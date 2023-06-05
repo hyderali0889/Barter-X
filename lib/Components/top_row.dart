@@ -41,7 +41,7 @@ class TopRow extends StatelessWidget {
                 onTap: () {
                   Get.offAllNamed(Routes().navigationScreen, arguments: [3, 1]);
                 },
-                child: const Icon(UniconsLine.shopping_cart)),
+                child: const Icon(UniconsLine.heart_alt)),
           ),
         ],
       ),

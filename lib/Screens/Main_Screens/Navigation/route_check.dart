@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import '../../../Models/is_trade_active.dart';
 import '../../../Routes/routes.dart';
 import '../../../Themes/spacing.dart';
+import '../../../main.dart';
+import '../../../objectbox.g.dart';
 
 class RouteCheck extends StatefulWidget {
   const RouteCheck({super.key});
@@ -13,6 +16,7 @@ class RouteCheck extends StatefulWidget {
 }
 
 class _RouteCheckState extends State<RouteCheck> {
+  Box<ActiveTradeModel> isTradeActive = objectBox.store.box<ActiveTradeModel>();
   @override
   void initState() {
     super.initState();
@@ -27,6 +31,8 @@ class _RouteCheckState extends State<RouteCheck> {
         Get.offAllNamed(Routes().emailVerificationScreen);
       } else if (FirebaseAuth.instance.currentUser!.phoneNumber == null) {
         Get.offAllNamed(Routes().phoneAuthScreen);
+      } else if (isTradeActive.get(1)!= null) {
+        Get.offAllNamed(Routes().confirmationScreen);
       } else {
         Get.offAllNamed(Routes().navigationScreen);
       }

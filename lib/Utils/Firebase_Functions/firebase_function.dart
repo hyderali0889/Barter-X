@@ -1,4 +1,5 @@
 import 'package:barter_x/Controllers/Main_Controllers/Route_Controllers/home_controller.dart';
+import 'package:barter_x/Controllers/Main_Controllers/Trade_and_EWaste_SubPages/product_details_controller.dart';
 import 'package:barter_x/Models/trade_form_model.dart';
 import 'package:barter_x/Utils/Widgets/show_modal_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,11 +21,15 @@ class FirebaseFunctions {
     }
   }
 
-   void getFirebaseTradeDatabyCategory(context, CategoryDetailsController controller , String category) {
+  void getFirebaseTradeDatabyCategory(
+      context, CategoryDetailsController controller, String category) {
     try {
       controller.refreshData(true);
-      Future<QuerySnapshot<Map<String, dynamic>>> data =
-          FirebaseFirestore.instance.collection("Trade").where(TradeFormModel().cat, isEqualTo: category).get();
+      Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
+          .instance
+          .collection("Trade")
+          .where(TradeFormModel().cat, isEqualTo: category)
+          .get();
 
       controller.addTradeData(data);
     } catch (e) {
@@ -40,8 +45,7 @@ class FirebaseFunctions {
 
       controller.addTradeData(data);
     } catch (e) {
-            ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
-
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
 
@@ -56,4 +60,21 @@ class FirebaseFunctions {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
+
+  getUserPoints(context, ProductDetailsController controller, userID) async {
+    try {
+      controller.setUserPoints("");
+
+      DocumentSnapshot<Map<String, dynamic>> points = await FirebaseFirestore
+          .instance
+          .collection("Users")
+          .doc(userID)
+          .get();
+      controller.setUserPoints(points["Points"].toString());
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  // End Of Function
 }
