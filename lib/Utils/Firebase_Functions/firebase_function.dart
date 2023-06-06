@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/auction_controller.dart';
 import '../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/category_details_controller.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/ewaste_controller.dart';
+import '../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/confimation_controller.dart';
 
 class FirebaseFunctions {
   void getFirebaseTradeData(context, HomeController controller) {
@@ -71,6 +72,89 @@ class FirebaseFunctions {
           .doc(userID)
           .get();
       controller.setUserPoints(points["Points"].toString());
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  getSingleProduct(
+      context, productCat, productId, ConfirmationController controller) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+          .instance
+          .collection(productCat)
+          .where(TradeFormModel().productId, isEqualTo: productId)
+          .get();
+
+      controller.addData(data);
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+   rateUser(double points, userId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> point = await FirebaseFirestore
+          .instance
+          .collection("Users")
+          .doc(userId)
+          .get();
+      double mainPoints = (double.parse(point["Points"]) + points) / 2;
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userId)
+          .update({"Points": mainPoints.toString()});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  addActiveTrade(context, userId, tradeId, tradeCat) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userId)
+          .update({"ActiveTradeId": tradeId, "ActiveTradeCat": tradeCat});
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  removeActiveTrade(context, userId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userId)
+          .update({"ActiveTradeId": null, "ActiveTradeCat": null});
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  Future getActiveTrades(context, userId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+          .instance
+          .collection("Users")
+          .doc(userId)
+          .get();
+      return data;
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  Future deleteADocument(context, prodId, prodCat) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+          .instance
+          .collection(prodCat)
+          .where(TradeFormModel().productId, isEqualTo: prodId)
+          .get();
+
+      for (var dat in data.docs) {
+        await dat.reference.delete();
+      }
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }

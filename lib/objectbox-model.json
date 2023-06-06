@@ -24,7 +24,7 @@
     },
     {
       "id": "2:5554440791448569413",
-      "lastPropertyId": "3:5300410434736649829",
+      "lastPropertyId": "4:9022923524199148929",
       "name": "HistoryModel",
       "properties": [
         {
@@ -34,13 +34,8 @@
           "flags": 1
         },
         {
-          "id": "2:4984334277308907384",
-          "name": "productId",
-          "type": 9
-        },
-        {
-          "id": "3:5300410434736649829",
-          "name": "productCategory",
+          "id": "4:9022923524199148929",
+          "name": "title",
           "type": 9
         }
       ],
@@ -69,30 +64,6 @@
         }
       ],
       "relations": []
-    },
-    {
-      "id": "4:2630773087187223940",
-      "lastPropertyId": "3:9072985614268647155",
-      "name": "ActiveTradeModel",
-      "properties": [
-        {
-          "id": "1:538406362511150529",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:8882382837284486161",
-          "name": "productId",
-          "type": 9
-        },
-        {
-          "id": "3:9072985614268647155",
-          "name": "productCategory",
-          "type": 9
-        }
-      ],
-      "relations": []
     }
   ],
   "lastEntityId": "4:2630773087187223940",
@@ -101,9 +72,17 @@
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    2630773087187223940
+  ],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    4984334277308907384,
+    5300410434736649829,
+    538406362511150529,
+    8882382837284486161,
+    9072985614268647155
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

@@ -10,7 +10,6 @@ import 'package:unicons/unicons.dart';
 import '../../../Components/new_product_button.dart';
 import '../../../Components/show_product_details_dialog.dart';
 import '../../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/product_details_controller.dart';
-import '../../../Models/is_trade_active.dart';
 import '../../../Models/wishlist.dart';
 import '../../../Routes/routes.dart';
 import '../../../Themes/main_colors.dart';
@@ -60,10 +59,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     Box<WishlistModel> wishlist = objectBox.store.box<WishlistModel>();
-    Box<ActiveTradeModel> isTradeActive =
-        objectBox.store.box<ActiveTradeModel>();
+
     String category =
         Get.arguments[TradeFormModel().cat] == "E-Waste" ? "EWaste" : "Trade";
+    String id = Get.arguments[TradeFormModel().productId];
     controller.changeWishlist(false);
     controller.addProductId(Get.arguments[TradeFormModel().productId]);
 
@@ -72,19 +71,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         controller.changeWishlist(true);
       }
     }
-    void startTrade() {
-      if (isTradeActive.count() == 0) {
-        ActiveTradeModel model = ActiveTradeModel(
-            productId:  controller.productId.value,
-            productCategory: category);
-        isTradeActive.put(model);
-      } else {
-        ActiveTradeModel model = ActiveTradeModel(
-            id: 1,
-            productId: controller.productId.value,
-            productCategory: category);
-        isTradeActive.put(model);
-      }
+    void startTrade() async {
+      controller.startLoading(true);
+      await FirebaseFunctions().addActiveTrade(
+          context, FirebaseAuth.instance.currentUser!.uid, id, category);
+      Get.offAllNamed(Routes().confirmationScreen);
+      controller.startLoading(false);
     }
 
     void addToWishlist() {
@@ -325,21 +317,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                             : AppColors()
                                                                 .secRed),
                                               ),
-                                              ProductButton().newProductButton(
-                                                  context.textTheme,
-                                                  size,
-                                                  "Start Trade",
-                                                  UniconsLine.podium, () {
-                                                ProductDetailsDialog()
-                                                    .showADialog(
-                                                        context,
-                                                        context.textTheme,
-                                                        size, () {
-                                                  startTrade();
-                                                  Get.offAllNamed(Routes()
-                                                      .confirmationScreen);
-                                                });
-                                              }, AppColors().primaryBlue),
+                                            ProductButton().newProductButton(
+                                                    context.textTheme,
+                                                    size,
+                                                    "Start Trade",
+                                                    UniconsLine.podium, () {
+
+                                                  ProductDetailsDialog()
+                                                      .showADialog(
+                                                          context,
+                                                          context.textTheme,
+                                                          size, () {
+                                                    startTrade();
+                                                  }, controller.isLoading.value);
+                                                }, AppColors().primaryBlue),
+
                                             ],
                                           ),
                                         )

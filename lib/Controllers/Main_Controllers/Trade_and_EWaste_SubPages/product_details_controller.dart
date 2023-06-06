@@ -5,6 +5,11 @@ class ProductDetailsController extends GetxController {
   RxString userPoints = "".obs;
   RxBool isProductinWishlist = false.obs;
   RxString productId = "".obs;
+ RxBool isLoading = false.obs;
+
+  void startLoading(bool val) {
+    isLoading.value = val;
+  }
 
   void changeWishlist(bool val) {
     isProductinWishlist.value = val;

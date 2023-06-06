@@ -39,4 +39,5 @@ class Routes {
   final String auctionProductDetails = "/auctionProductDetails";
 
   final String confirmationScreen = "/confirmationScreen";
+  final String ratingsScreen = "/ratingsScreen";
 }

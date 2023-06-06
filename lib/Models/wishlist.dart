@@ -3,7 +3,7 @@ import 'package:objectbox/objectbox.dart';
 @Entity()
 class WishlistModel{
 
- int id ;
+  int id ;
   String productId;
   String productCategory;
 

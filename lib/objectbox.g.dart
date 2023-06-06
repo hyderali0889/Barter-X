@@ -16,7 +16,6 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'Models/alerts.dart';
 import 'Models/history.dart';
-import 'Models/is_trade_active.dart';
 import 'Models/wishlist.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -44,7 +43,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(2, 5554440791448569413),
       name: 'HistoryModel',
-      lastPropertyId: const IdUid(3, 5300410434736649829),
+      lastPropertyId: const IdUid(4, 9022923524199148929),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -53,13 +52,8 @@ final _entities = <ModelEntity>[
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 4984334277308907384),
-            name: 'productId',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 5300410434736649829),
-            name: 'productCategory',
+            id: const IdUid(4, 9022923524199148929),
+            name: 'title',
             type: 9,
             flags: 0)
       ],
@@ -83,30 +77,6 @@ final _entities = <ModelEntity>[
             flags: 0),
         ModelProperty(
             id: const IdUid(3, 9077593207092530684),
-            name: 'productCategory',
-            type: 9,
-            flags: 0)
-      ],
-      relations: <ModelRelation>[],
-      backlinks: <ModelBacklink>[]),
-  ModelEntity(
-      id: const IdUid(4, 2630773087187223940),
-      name: 'ActiveTradeModel',
-      lastPropertyId: const IdUid(3, 9072985614268647155),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 538406362511150529),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 8882382837284486161),
-            name: 'productId',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 9072985614268647155),
             name: 'productCategory',
             type: 9,
             flags: 0)
@@ -139,9 +109,15 @@ ModelDefinition getObjectBoxModel() {
       lastIndexId: const IdUid(0, 0),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
-      retiredEntityUids: const [],
+      retiredEntityUids: const [2630773087187223940],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [
+        4984334277308907384,
+        5300410434736649829,
+        538406362511150529,
+        8882382837284486161,
+        9072985614268647155
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -184,12 +160,10 @@ ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (HistoryModel object, fb.Builder fbb) {
-          final productIdOffset = fbb.writeString(object.productId);
-          final productCategoryOffset = fbb.writeString(object.productCategory);
-          fbb.startTable(4);
+          final titleOffset = fbb.writeString(object.title);
+          fbb.startTable(5);
           fbb.addInt64(0, object.id);
-          fbb.addOffset(1, productIdOffset);
-          fbb.addOffset(2, productCategoryOffset);
+          fbb.addOffset(3, titleOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -199,10 +173,8 @@ ModelDefinition getObjectBoxModel() {
 
           final object = HistoryModel(
               id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
-              productId: const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 6, ''),
-              productCategory: const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 8, ''));
+              title: const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 10, ''));
 
           return object;
         }),
@@ -236,37 +208,6 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGet(buffer, rootOffset, 8, ''));
 
           return object;
-        }),
-    ActiveTradeModel: EntityDefinition<ActiveTradeModel>(
-        model: _entities[3],
-        toOneRelations: (ActiveTradeModel object) => [],
-        toManyRelations: (ActiveTradeModel object) => {},
-        getId: (ActiveTradeModel object) => object.id,
-        setId: (ActiveTradeModel object, int id) {
-          object.id = id;
-        },
-        objectToFB: (ActiveTradeModel object, fb.Builder fbb) {
-          final productIdOffset = fbb.writeString(object.productId);
-          final productCategoryOffset = fbb.writeString(object.productCategory);
-          fbb.startTable(4);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, productIdOffset);
-          fbb.addOffset(2, productCategoryOffset);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-
-          final object = ActiveTradeModel(
-              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
-              productId: const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 6, ''),
-              productCategory: const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 8, ''));
-
-          return object;
         })
   };
 
@@ -290,13 +231,9 @@ class HistoryModel_ {
   static final id =
       QueryIntegerProperty<HistoryModel>(_entities[1].properties[0]);
 
-  /// see [HistoryModel.productId]
-  static final productId =
+  /// see [HistoryModel.title]
+  static final title =
       QueryStringProperty<HistoryModel>(_entities[1].properties[1]);
-
-  /// see [HistoryModel.productCategory]
-  static final productCategory =
-      QueryStringProperty<HistoryModel>(_entities[1].properties[2]);
 }
 
 /// [WishlistModel] entity fields to define ObjectBox queries.
@@ -312,19 +249,4 @@ class WishlistModel_ {
   /// see [WishlistModel.productCategory]
   static final productCategory =
       QueryStringProperty<WishlistModel>(_entities[2].properties[2]);
-}
-
-/// [ActiveTradeModel] entity fields to define ObjectBox queries.
-class ActiveTradeModel_ {
-  /// see [ActiveTradeModel.id]
-  static final id =
-      QueryIntegerProperty<ActiveTradeModel>(_entities[3].properties[0]);
-
-  /// see [ActiveTradeModel.productId]
-  static final productId =
-      QueryStringProperty<ActiveTradeModel>(_entities[3].properties[1]);
-
-  /// see [ActiveTradeModel.productCategory]
-  static final productCategory =
-      QueryStringProperty<ActiveTradeModel>(_entities[3].properties[2]);
 }

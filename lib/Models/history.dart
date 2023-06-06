@@ -4,9 +4,8 @@ import 'package:objectbox/objectbox.dart';
 class HistoryModel{
 
  int id ;
-  String productId;
-  String productCategory;
+  String title;
 
-  HistoryModel({this.id = 0 ,required this.productId,required this.productCategory});
+  HistoryModel({this.id = 0 ,required this.title});
 
  }

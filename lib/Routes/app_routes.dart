@@ -1,4 +1,5 @@
 import 'package:barter_x/Bindings/Main_Bindings/Trade_and_EWaste_Bindings/category_details_bindings.dart';
+import 'package:barter_x/Bindings/Main_Bindings/Trade_and_EWaste_Bindings/confirmation_bindings.dart';
 import 'package:barter_x/Bindings/Main_Bindings/Trade_and_EWaste_Bindings/product_details_binding.dart';
 import 'package:barter_x/Bindings/Main_Bindings/Auction_Bindings/auction_category_details_bindings.dart';
 import 'package:barter_x/Bindings/Main_Bindings/Auction_Bindings/auction_product_details_binding.dart';
@@ -13,6 +14,7 @@ import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Sc
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/categories_detail_screen.dart';
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/product_details_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/confirmation_screen.dart';
+import 'package:barter_x/Screens/Other_Screens/ratings_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/login_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/email_verification.dart';
@@ -28,6 +30,7 @@ import '../Bindings/Main_Bindings/Form_Bindings/auction_form_bindings.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/ewaste_form_bindings.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/trade_form_bindings.dart';
 import '../Bindings/Main_Bindings/Navigation_bindings/navigation_binding.dart';
+import '../Bindings/Main_Bindings/Trade_and_EWaste_Bindings/ratings_bindings.dart';
 import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_arrivals.dart';
 import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_featured.dart';
 import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_specials.dart';
@@ -130,7 +133,8 @@ class AppRouter {
    GetPage(name: Routes().auctionCategoryDetails, page: ()=> (const AuctionCategoryDetailScreen()) , binding: AuctionCategoryDetailsBindings()  ) ,
    GetPage(name: Routes().auctionProductDetails, page: ()=> (const AuctionProductDetailScreen()) , binding: AuctionProductDetailsBindings() ),
 
-GetPage(name: Routes().confirmationScreen, page: () => const ConfirmationScreen()),
+GetPage(name: Routes().confirmationScreen, page: () => const ConfirmationScreen() , binding: ConfirmationBindings()),
+GetPage(name: Routes().ratingsScreen, page: () => const RatingsScreen() , binding: RatingsBindings()),
     //ENd of Routes
   ];
 }
