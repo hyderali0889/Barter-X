@@ -45,7 +45,7 @@ class _AuctionArrivalsState extends State<AuctionArrivals> {
                       mainAxisSpacing: 50,
                       mainAxisExtent: 340),
                   scrollDirection: Axis.vertical,
-                  itemCount: Get.arguments.data!.docs.length - 1,
+                  itemCount: Get.arguments.data!.docs.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {

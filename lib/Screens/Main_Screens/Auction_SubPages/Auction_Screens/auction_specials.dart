@@ -24,7 +24,7 @@ class _AuctionSpecialsState extends State<AuctionSpecials> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     Set<int> randomNumbers = generateRandomNumbers(
-        Get.arguments.data!.docs.length - 1,
+        Get.arguments.data!.docs.length ,
         0,
         Get.arguments.data!.docs.length - 1);
     return Scaffold(
@@ -48,7 +48,7 @@ class _AuctionSpecialsState extends State<AuctionSpecials> {
                       mainAxisSpacing: 50,
                       mainAxisExtent: 340),
                   scrollDirection: Axis.vertical,
-                  itemCount: Get.arguments.data!.docs.length - 1,
+                  itemCount: Get.arguments.data!.docs.length ,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {

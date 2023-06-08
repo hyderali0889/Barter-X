@@ -13,7 +13,7 @@ class ProductDetailsDialog {
           return Dialog(
             child: SizedBox(
               width: size.width * 0.7,
-              height: 500,
+              height: size.height * 0.6,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(children: [

@@ -868,7 +868,10 @@ class AuctionDataWidgetRow extends StatelessWidget {
       FirebaseFunctions().markAsinActive(
           context, data.data!.docs[index][TradeFormModel().productId]);
     }
-
+    if (showingDate.inDays < -6) {
+      FirebaseFunctions().deleteADocument(context,
+          data.data!.docs[index][TradeFormModel().productId], "Auction");
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: InkWell(
@@ -980,6 +983,13 @@ class AuctionDataWidgetLength extends StatelessWidget {
       FirebaseFunctions().markAsinActive(context,
           data.data!.docs[rand.elementAt(3)][TradeFormModel().productId]);
     }
+    if (showingDate.inDays < -6) {
+      FirebaseFunctions().deleteADocument(
+          context,
+          data.data!.docs[rand.elementAt(3)][TradeFormModel().productId],
+          "Auction");
+    }
+
     return Padding(
       padding: const EdgeInsets.only(top: 25.0),
       child: InkWell(

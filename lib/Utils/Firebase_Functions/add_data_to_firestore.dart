@@ -57,7 +57,7 @@ class AddDataToFirestore{
         TradeFormModel().phone: auth.currentUser!.phoneNumber,
         TradeFormModel().district: controller.selectedDistrict.value,
         TradeFormModel().cat: controller.selectedCat.value
-      });
+      }).timeout(const Duration(seconds: 30));
       controller.startLoading(false);
       Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {
@@ -114,7 +114,7 @@ void addEWasteToFirebase(context,controller , path ,file , TextEditingController
         TradeFormModel().district: controller.selectedDistrict.value,
         TradeFormModel().cat: "E-Waste"
 
-      });
+      }).timeout(const Duration(seconds: 30));
       controller.startLoading(false);
       Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {
@@ -164,7 +164,7 @@ void addEWasteToFirebase(context,controller , path ,file , TextEditingController
         TradeFormModel().phone: auth.currentUser!.phoneNumber,
         TradeFormModel().district: controller.selectedDistrict.value,
         TradeFormModel().cat: controller.selectedCat.value
-      });
+      }).timeout(const Duration(seconds: 30));
       controller.startLoading(false);
       Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {

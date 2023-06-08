@@ -28,7 +28,7 @@ class FirebaseAuthFunctions {
           .signInWithEmailAndPassword(
               email: emailController.text.trim(),
               password: passwordController.text.trim())
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 30));
 
       if (FirebaseAuth.instance.currentUser!.phoneNumber == null) {
         await FirebaseAuth.instance.currentUser!.delete();
@@ -70,7 +70,7 @@ class FirebaseAuthFunctions {
     try {
       startTimer();
 
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      await FirebaseAuth.instance.currentUser!.sendEmailVerification().timeout(const Duration(seconds: 30));
     } on FirebaseAuthException catch (e) {
       stopTimer();
       controller.startTimer(false);
@@ -86,7 +86,7 @@ class FirebaseAuthFunctions {
 
       await FirebaseAuth.instance.currentUser!
           .delete()
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 30));
       controller.startLoading2(false);
 
       Get.offAllNamed(Routes().loginScreen);
@@ -120,7 +120,7 @@ class FirebaseAuthFunctions {
         "userId": FirebaseAuth.instance.currentUser!.uid.toString(),
         "Points": 0,
         "Ratings": 0
-      });
+      }).timeout(const Duration(seconds: 30));
     } on FirebaseAuthException catch (e) {
       controller.startLoading1(false);
 
@@ -192,13 +192,13 @@ class FirebaseAuthFunctions {
           .createUserWithEmailAndPassword(
               email: emailController.text.trim(),
               password: passwordController.text.trim())
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 30));
 
       if (authInstance.currentUser == null) {
         controller.startLoading(false);
         return;
       }
-      await authInstance.currentUser!.sendEmailVerification();
+      await authInstance.currentUser!.sendEmailVerification().timeout(const Duration(seconds: 30));
       controller.startLoading(false);
 
       Get.offAllNamed(Routes().emailVerificationScreen);
@@ -229,7 +229,7 @@ class FirebaseAuthFunctions {
 
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim())
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 30));
 
       controller.startLoading(false);
     } on FirebaseAuthException catch (e) {

@@ -180,7 +180,7 @@ class _EWasteFormState extends State<EWasteForm> {
             child: Column(
               children: [
                 const TopRow(
-                  text: "Add Trade",
+                  text: "Add E-Waste",
                 ),
                 Expanded(
                   child: ListView(
@@ -199,7 +199,7 @@ class _EWasteFormState extends State<EWasteForm> {
                         child: Obx(
                           () => MainButton(
                             size: size,
-                            buttonText:  "Add E-Waste Product",
+                            buttonText: "Add E-Waste Product",
                             actionFunction: () {
                               try {
                                 String path = "file/${DateTime.now()}";
@@ -307,7 +307,7 @@ class TheForm extends StatelessWidget {
               readOnly: false,
               maxLines: 1,
               width: size.width * 0.9,
-              height: 115,
+              height: size.height * 0.14,
               maxLength: 64,
               hintText: "Enter Title",
               controller: titleController,
@@ -319,7 +319,7 @@ class TheForm extends StatelessWidget {
             readOnly: false,
             maxLines: 1,
             width: size.width * 0.9,
-            height: 115,
+            height: size.height * 0.14,
             maxLength: 64,
             hintText: "Enter the title of the desired trade",
             controller: tradeWithController,
@@ -330,7 +330,7 @@ class TheForm extends StatelessWidget {
             readOnly: false,
             maxLines: 5,
             width: size.width * 0.9,
-            height: 210,
+            height: size.height * 0.27,
             maxLength: 150,
             hintText: "Enter Description",
             controller: desController,
@@ -341,7 +341,7 @@ class TheForm extends StatelessWidget {
             readOnly: true,
             maxLines: 1,
             width: size.width * 0.9,
-            height: 115,
+            height: size.height * 0.14,
             maxLength: 62,
             hintText: "",
             controller: userEmailController,
@@ -352,7 +352,7 @@ class TheForm extends StatelessWidget {
             readOnly: true,
             maxLines: 1,
             width: size.width * 0.9,
-            height: 115,
+            height: size.height * 0.14,
             maxLength: 25,
             hintText: "",
             controller: userPhoneController,

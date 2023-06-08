@@ -123,8 +123,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         MenuIcons(
           bgColor: AppColors().secRed,
           func: () {},
-          icon: UniconsLine.user,
-          innerText: "Profile",
+          icon: UniconsLine.bitcoin_alt,
+          innerText: "Your Bids",
         ),
         MenuIcons(
           bgColor: AppColors().secHalfGrey,

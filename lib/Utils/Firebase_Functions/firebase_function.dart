@@ -3,7 +3,7 @@ import 'package:barter_x/Controllers/Main_Controllers/Trade_and_EWaste_SubPages/
 import 'package:barter_x/Models/trade_form_model.dart';
 import 'package:barter_x/Utils/Widgets/show_modal_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import '../../Controllers/Main_Controllers/Auction_SubPages/auction_category_details_controller.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/auction_controller.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/notification_controller.dart';
@@ -15,8 +15,11 @@ class FirebaseFunctions {
   void getFirebaseTradeData(context, HomeController controller) {
     try {
       controller.refreshData(true);
-      Future<QuerySnapshot<Map<String, dynamic>>> data =
-          FirebaseFirestore.instance.collection("Trade").get();
+      Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
+          .instance
+          .collection("Trade")
+          .get()
+          .timeout(const Duration(seconds: 30));
 
       controller.addTradeData(data);
     } catch (e) {
@@ -32,7 +35,8 @@ class FirebaseFunctions {
           .instance
           .collection("Trade")
           .where(TradeFormModel().cat, isEqualTo: category)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 30));
 
       controller.addTradeData(data);
     } catch (e) {
@@ -43,8 +47,11 @@ class FirebaseFunctions {
   void getFirebaseEWasteData(context, EWasteController controller) {
     try {
       controller.refreshData(true);
-      Future<QuerySnapshot<Map<String, dynamic>>> data =
-          FirebaseFirestore.instance.collection("EWaste").get();
+      Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
+          .instance
+          .collection("EWaste")
+          .get()
+          .timeout(const Duration(seconds: 30));
 
       controller.addTradeData(data);
     } catch (e) {
@@ -55,8 +62,11 @@ class FirebaseFunctions {
   void getFirebaseAuctionData(context, AuctionController controller) {
     try {
       controller.refreshData(true);
-      Future<QuerySnapshot<Map<String, dynamic>>> data =
-          FirebaseFirestore.instance.collection("Auction").get();
+      Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
+          .instance
+          .collection("Auction")
+          .get()
+          .timeout(const Duration(seconds: 30));
 
       controller.addTradeData(data);
     } catch (e) {
@@ -64,7 +74,7 @@ class FirebaseFunctions {
     }
   }
 
-   void getFirebaseAuctionDatabyCategory(
+  void getFirebaseAuctionDatabyCategory(
       context, AuctionCategoryDetailsController controller, String category) {
     try {
       controller.refreshData(true);
@@ -72,7 +82,8 @@ class FirebaseFunctions {
           .instance
           .collection("Auction")
           .where(TradeFormModel().cat, isEqualTo: category)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 30));
 
       controller.addTradeData(data);
     } catch (e) {
@@ -88,7 +99,8 @@ class FirebaseFunctions {
           .instance
           .collection("Users")
           .doc(userID)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 30));
       controller.setUserPoints(points["Points"].toString());
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
@@ -102,7 +114,8 @@ class FirebaseFunctions {
           .instance
           .collection(productCat)
           .where(TradeFormModel().productId, isEqualTo: productId)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 30));
 
       controller.addData(data);
     } catch (e) {
@@ -121,7 +134,8 @@ class FirebaseFunctions {
       await FirebaseFirestore.instance
           .collection("Users")
           .doc(userId)
-          .update({"Points": mainPoints.toString()});
+          .update({"Points": mainPoints.toString()}).timeout(
+              const Duration(seconds: 30));
     } catch (e) {
       print(e);
     }
@@ -129,10 +143,10 @@ class FirebaseFunctions {
 
   addActiveTrade(context, userId, tradeId, tradeCat) async {
     try {
-      await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(userId)
-          .update({"ActiveTradeId": tradeId, "ActiveTradeCat": tradeCat});
+      await FirebaseFirestore.instance.collection("Users").doc(userId).update({
+        "ActiveTradeId": tradeId,
+        "ActiveTradeCat": tradeCat
+      }).timeout(const Duration(seconds: 30));
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
@@ -143,7 +157,8 @@ class FirebaseFunctions {
       await FirebaseFirestore.instance
           .collection("Users")
           .doc(userId)
-          .update({"ActiveTradeId": null, "ActiveTradeCat": null});
+          .update({"ActiveTradeId": null, "ActiveTradeCat": null}).timeout(
+              const Duration(seconds: 30));
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
@@ -155,7 +170,8 @@ class FirebaseFunctions {
           .instance
           .collection("Users")
           .doc(userId)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 30));
       return data;
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
@@ -168,10 +184,13 @@ class FirebaseFunctions {
           .instance
           .collection(prodCat)
           .where(TradeFormModel().productId, isEqualTo: prodId)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 30));
 
       for (var dat in data.docs) {
         await dat.reference.delete();
+       await FirebaseStorage.instance
+            .refFromURL(dat[TradeFormModel().img]).delete();
       }
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
@@ -185,7 +204,8 @@ class FirebaseFunctions {
           .instance
           .collection(prodCat)
           .where(TradeFormModel().productId, isEqualTo: prodId)
-          .get();
+          .get()
+          .timeout(const Duration(seconds: 30));
 
       controller.addToData(data);
     } catch (e) {
