@@ -126,35 +126,42 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: AppColors().secSoftGrey,
-          borderRadius: BorderRadius.circular(20)),
-      height: size.height * 0.06,
-      width: size.width * 0.9,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20.0),
-        child: TextFormField(
-          controller: editingController,
-          textAlign: TextAlign.left,
-          textAlignVertical: TextAlignVertical.center,
-          decoration: InputDecoration(
-              suffixIcon: const Icon(
-                UniconsLine.search,
-                size: 14,
-              ),
-              hintText: "Search Product Name",
-              hintStyle: context.textTheme.bodySmall!
-                  .copyWith(color: AppColors().secHalfGrey),
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none),
+    return InkWell(
+      onTap: () {
+        Get.toNamed(Routes().searchScreen, arguments: "EWaste");
+      },
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: AppColors().secSoftGrey,
+            borderRadius: BorderRadius.circular(20)),
+        height: size.height * 0.06,
+        width: size.width * 0.9,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20.0),
+          child: TextFormField(
+            onTap: () {
+              Get.toNamed(Routes().searchScreen, arguments: "EWaste");
+            },
+            controller: editingController,
+            textAlign: TextAlign.left,
+            textAlignVertical: TextAlignVertical.center,
+            decoration: InputDecoration(
+                suffixIcon: const Icon(
+                  UniconsLine.search,
+                  size: 14,
+                ),
+                hintText: "Search Product Name",
+                hintStyle: context.textTheme.bodySmall!
+                    .copyWith(color: AppColors().secHalfGrey),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none),
+          ),
         ),
       ),
     );
   }
 }
-
 
 class EWasteImageArea extends StatelessWidget {
   const EWasteImageArea({

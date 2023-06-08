@@ -147,7 +147,7 @@ class _AuctionFormState extends State<AuctionForm> {
 
   List<String> categories = [
     "Select Category",
-    "E-Waste",
+    "EWaste",
     "Books",
     "Furniture",
     "Glass-Items",

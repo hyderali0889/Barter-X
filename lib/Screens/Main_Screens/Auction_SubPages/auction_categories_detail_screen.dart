@@ -11,25 +11,29 @@ import '../../../Controllers/Main_Controllers/Auction_SubPages/auction_category_
 import '../../../Routes/routes.dart';
 import '../../../Utils/Ads/admob_ids.dart';
 import '../../../Utils/Ads/load_ads.dart';
+import '../../../Utils/Firebase_Functions/firebase_function.dart';
 import '../../../Utils/Widgets/show_modal_sheet.dart';
 
 class AuctionCategoryDetailScreen extends StatefulWidget {
   const AuctionCategoryDetailScreen({super.key});
 
   @override
-  State<AuctionCategoryDetailScreen> createState() => _AuctionCategoryDetailScreenState();
+  State<AuctionCategoryDetailScreen> createState() =>
+      _AuctionCategoryDetailScreenState();
 }
 
-class _AuctionCategoryDetailScreenState extends State<AuctionCategoryDetailScreen> {
-  AuctionCategoryDetailsController controller = Get.find<AuctionCategoryDetailsController>();
+class _AuctionCategoryDetailScreenState
+    extends State<AuctionCategoryDetailScreen> {
+  AuctionCategoryDetailsController controller =
+      Get.find<AuctionCategoryDetailsController>();
 
   @override
   void initState() {
     super.initState();
     loadAd();
     AdClass().loadAd();
-    // FirebaseFunctions()
-    //     .getFirebaseTradeDatabyCategory(context, controller, Get.arguments[0]);
+    FirebaseFunctions().getFirebaseAuctionDatabyCategory(
+        context, controller, Get.arguments[0]);
   }
 
   BannerAd? _bannerAd;
@@ -59,8 +63,8 @@ class _AuctionCategoryDetailScreenState extends State<AuctionCategoryDetailScree
           RefreshIndicator(
             onRefresh: () async {
               try {
-                // FirebaseFunctions().getFirebaseTradeDatabyCategory(
-                //     context, controller, Get.arguments[0]);
+                FirebaseFunctions().getFirebaseAuctionDatabyCategory(
+                    context, controller, Get.arguments[0]);
                 await Future.delayed(const Duration(seconds: 2));
               } on PlatformException catch (e) {
                 ReturnWidgets()
@@ -112,7 +116,7 @@ class _AuctionCategoryDetailScreenState extends State<AuctionCategoryDetailScree
                                           mainAxisSpacing: 50,
                                           mainAxisExtent: 340),
                                   scrollDirection: Axis.vertical,
-                                  itemCount: data.data!.docs.length - 1,
+                                  itemCount: data.data!.docs.length,
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {

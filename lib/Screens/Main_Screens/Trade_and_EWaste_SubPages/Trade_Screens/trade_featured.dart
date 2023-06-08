@@ -15,19 +15,17 @@ class TradeFeatures extends StatefulWidget {
 }
 
 class _TradeFeaturesState extends State<TradeFeatures> {
-
   @override
   void initState() {
     super.initState();
     AdClass().loadAd();
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     Set<int> randomNumbers = generateRandomNumbers(
-        Get.arguments.data!.docs.length - 1,
-        0,
-        Get.arguments.data!.docs.length - 1);
+        Get.arguments.data!.docs.length, 0, Get.arguments.data!.docs.length -1);
     return Scaffold(
       body: SafeArea(
           child: SizedBox(
@@ -37,7 +35,6 @@ class _TradeFeaturesState extends State<TradeFeatures> {
           children: [
             const TopRow(
               text: "Features",
-
             ),
             SizedBox(
               width: size.width,
@@ -50,16 +47,18 @@ class _TradeFeaturesState extends State<TradeFeatures> {
                       mainAxisSpacing: 50,
                       mainAxisExtent: 340),
                   scrollDirection: Axis.vertical,
-                  itemCount: Get.arguments.data!.docs.length - 1,
+                  itemCount: Get.arguments.data!.docs.length,
                   itemBuilder: (context, index) {
                     return InkWell(
-                       onTap: () {
+                      onTap: () {
                         Get.toNamed(Routes().productDetails);
                       },
                       child: DataWidgetRow(
                           size: size,
                           data: Get.arguments,
-                          index: randomNumbers.elementAt(index)),
+                          index: Get.arguments.data!.docs.length > 5
+                              ? randomNumbers.elementAt(index)
+                              : index),
                     );
                   },
                 ),

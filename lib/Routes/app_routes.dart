@@ -30,6 +30,7 @@ import '../Bindings/Main_Bindings/Form_Bindings/auction_form_bindings.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/ewaste_form_bindings.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/trade_form_bindings.dart';
 import '../Bindings/Main_Bindings/Navigation_bindings/navigation_binding.dart';
+import '../Bindings/Main_Bindings/Other_Bindings/search_binding.dart';
 import '../Bindings/Main_Bindings/Trade_and_EWaste_Bindings/ratings_bindings.dart';
 import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_arrivals.dart';
 import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_featured.dart';
@@ -38,6 +39,7 @@ import '../Screens/Main_Screens/Auction_SubPages/auction_categories_detail_scree
 import '../Screens/Main_Screens/Auction_SubPages/auction_product_details_screen.dart';
 import '../Screens/Main_Screens/Forms/e_waste_form.dart';
 import '../Screens/Main_Screens/Forms/trade_form.dart';
+import '../Screens/Other_Screens/search_screen.dart';
 import './routes.dart';
 import 'package:get/get.dart';
 
@@ -135,6 +137,7 @@ class AppRouter {
 
 GetPage(name: Routes().confirmationScreen, page: () => const ConfirmationScreen() , binding: ConfirmationBindings()),
 GetPage(name: Routes().ratingsScreen, page: () => const RatingsScreen() , binding: RatingsBindings()),
+GetPage(name: Routes().searchScreen, page: () => const SearchScreen() , binding: SearchBinding()),
     //ENd of Routes
   ];
 }

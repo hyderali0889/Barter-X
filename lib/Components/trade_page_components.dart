@@ -174,29 +174,38 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: AppColors().secSoftGrey,
-          borderRadius: BorderRadius.circular(20)),
-      height: size.height * 0.06,
-      width: size.width * 0.9,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20.0),
-        child: TextFormField(
-          controller: editingController,
-          textAlign: TextAlign.left,
-          textAlignVertical: TextAlignVertical.center,
-          decoration: InputDecoration(
-              suffixIcon: const Icon(
-                UniconsLine.search,
-                size: 14,
-              ),
-              hintText: "Search Product Name",
-              hintStyle: context.textTheme.bodySmall!
-                  .copyWith(color: AppColors().secHalfGrey),
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none),
+    return InkWell(
+      onTap: () {
+        Get.toNamed(Routes().searchScreen, arguments: "Trade");
+      },
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: AppColors().secSoftGrey,
+            borderRadius: BorderRadius.circular(20)),
+        height: size.height * 0.06,
+        width: size.width * 0.9,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20.0),
+          child: TextFormField(
+            readOnly: true,
+            onTap: () {
+              Get.toNamed(Routes().searchScreen, arguments: "Trade");
+            },
+            controller: editingController,
+            textAlign: TextAlign.left,
+            textAlignVertical: TextAlignVertical.center,
+            decoration: InputDecoration(
+                suffixIcon: const Icon(
+                  UniconsLine.search,
+                  size: 14,
+                ),
+                hintText: "Search Product Name",
+                hintStyle: context.textTheme.bodySmall!
+                    .copyWith(color: AppColors().secHalfGrey),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none),
+          ),
         ),
       ),
     );
@@ -394,7 +403,7 @@ class FeaturedProducts extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: size.width,
-                        height: data.data!.docs.length < 3
+                        height: data.data!.docs.length < 5
                             ? size.height * 0.35
                             : size.height * 0.58,
                         child: Column(
@@ -404,16 +413,18 @@ class FeaturedProducts extends StatelessWidget {
                               height: size.height * 0.35,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: data.data!.docs.length > 2 ? 2 : 1,
+                                itemCount: data.data!.docs.length >= 2 ? 2 : 1,
                                 itemBuilder: (context, index) {
                                   return DataWidgetRow(
                                       size: size,
                                       data: data,
-                                      index: randomNumbers.elementAt(index));
+                                      index: data.data!.docs.length > 5
+                                          ? randomNumbers.elementAt(index)
+                                          : index);
                                 },
                               ),
                             ),
-                            data.data!.docs.length < 3
+                            data.data!.docs.length < 5
                                 ? Container()
                                 : DataWidgetLength(
                                     size: size,
@@ -514,13 +525,14 @@ class NewArrivals extends StatelessWidget {
                             height: size.height * 0.35,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemCount: data.data!.docs.length > 2 ? 2 : 1,
+                              itemCount: data.data!.docs.length >= 2 ? 2 : 1,
                               itemBuilder: (context, index) {
                                 return DataWidgetRow(
                                     size: size,
                                     data: data,
-                                    index:
-                                        (data.data!.docs.length - 1) - index);
+                                    index: data.data!.docs.length > 5
+                                        ? (data.data!.docs.length - 1) - index
+                                        : index);
                               },
                             ),
                           ),
@@ -625,7 +637,7 @@ class SpecialProducts extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: size.width,
-                        height: data.data!.docs.length < 3
+                        height: data.data!.docs.length < 5
                             ? size.height * 0.35
                             : size.height * 0.58,
                         child: Column(
@@ -635,16 +647,18 @@ class SpecialProducts extends StatelessWidget {
                               height: size.height * 0.35,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: data.data!.docs.length > 2 ? 2 : 1,
+                                itemCount: data.data!.docs.length >= 2 ? 2 : 1,
                                 itemBuilder: (context, index) {
                                   return DataWidgetRow(
                                       size: size,
                                       data: data,
-                                      index: randomNumbers.elementAt(index));
+                                      index: data.data!.docs.length > 5
+                                          ? randomNumbers.elementAt(index)
+                                          : index);
                                 },
                               ),
                             ),
-                            data.data!.docs.length < 3
+                            data.data!.docs.length < 5
                                 ? Container()
                                 : DataWidgetLength(
                                     size: size,
@@ -847,7 +861,7 @@ class DataWidgetRow extends StatelessWidget {
               data.data == null) {
             return;
           }
-       
+
           Get.toNamed(Routes().productDetails,
               arguments: data.data!.docs[index]);
         },
@@ -963,12 +977,12 @@ class DataWidgetLength extends StatelessWidget {
                         }),
                         imageUrl: data.data!.docs[rand.elementAt(3)]
                             [TradeFormModel().img],
-                        width: size.width * 0.4,
+                        width: size.width * 0.3,
                         height: 136,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
+                      padding: const EdgeInsets.only(top: 15.0, left: 15),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,

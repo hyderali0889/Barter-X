@@ -4,7 +4,9 @@ import 'package:barter_x/Models/trade_form_model.dart';
 import 'package:barter_x/Utils/Widgets/show_modal_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../Controllers/Main_Controllers/Auction_SubPages/auction_category_details_controller.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/auction_controller.dart';
+import '../../Controllers/Main_Controllers/Route_Controllers/notification_controller.dart';
 import '../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/category_details_controller.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/ewaste_controller.dart';
 import '../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/confimation_controller.dart';
@@ -62,6 +64,22 @@ class FirebaseFunctions {
     }
   }
 
+   void getFirebaseAuctionDatabyCategory(
+      context, AuctionCategoryDetailsController controller, String category) {
+    try {
+      controller.refreshData(true);
+      Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
+          .instance
+          .collection("Auction")
+          .where(TradeFormModel().cat, isEqualTo: category)
+          .get();
+
+      controller.addTradeData(data);
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
   getUserPoints(context, ProductDetailsController controller, userID) async {
     try {
       controller.setUserPoints("");
@@ -92,7 +110,7 @@ class FirebaseFunctions {
     }
   }
 
-   rateUser(double points, userId) async {
+  rateUser(double points, userId) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> point = await FirebaseFirestore
           .instance
@@ -155,6 +173,37 @@ class FirebaseFunctions {
       for (var dat in data.docs) {
         await dat.reference.delete();
       }
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  getWishlistProducts(
+      context, NotificationController controller, prodCat, prodId) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+          .instance
+          .collection(prodCat)
+          .where(TradeFormModel().productId, isEqualTo: prodId)
+          .get();
+
+      controller.addToData(data);
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  markAsinActive(context, prodId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Auction")
+          .where(TradeFormModel().productId, isEqualTo: prodId)
+          .get()
+          .then((value) {
+        for (var ele in value.docs) {
+          ele.reference.update({TradeFormModel().isActive: "False"});
+        }
+      });
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }

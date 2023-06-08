@@ -45,7 +45,7 @@ class _TradeArrivalsState extends State<TradeArrivals> {
                       mainAxisSpacing: 50,
                       mainAxisExtent: 340),
                   scrollDirection: Axis.vertical,
-                  itemCount: Get.arguments.data!.docs.length - 1,
+                  itemCount: Get.arguments.data!.docs.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
@@ -54,7 +54,9 @@ class _TradeArrivalsState extends State<TradeArrivals> {
                       child: DataWidgetRow(
                           size: size,
                           data: Get.arguments,
-                          index: (Get.arguments.data!.docs.length - 1) - index),
+                          index: Get.arguments.data!.docs.length > 5
+                              ? (Get.arguments.data!.docs.length) - index
+                              : index),
                     );
                   },
                 ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/product_details_controller.dart';
 import 'main_button.dart';
 
 class ProductDetailsDialog {
   Future<dynamic> showADialog(
-      context, textTheme, Size size, func, bool isActive) {
+      context, textTheme, Size size, func, ProductDetailsController isActive) {
     return showDialog(
         context: context,
         builder: (context) {
@@ -24,13 +26,14 @@ class ProductDetailsDialog {
                       style: textTheme.bodyMedium!,
                     ),
                   ),
-                 MainButton(
+                  Obx(
+                    () => MainButton(
                       actionFunction: func,
                       buttonText: "Start Trade",
-                      mainController: isActive,
+                      mainController: isActive.isLoading.value,
                       size: size,
                     ),
-
+                  ),
                 ]),
               ),
             ),

@@ -289,51 +289,61 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 20.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Obx(
-                                                () => ProductButton()
-                                                    .newProductButton(
-                                                        context.textTheme,
-                                                        size,
-                                                        controller.isProductinWishlist.value
-                                                            ? "Already Added"
-                                                            : "Add to Wishlist",
-                                                        UniconsLine.heart,
-                                                        controller
-                                                                .isProductinWishlist
-                                                                .value
-                                                            ? null
-                                                            : () {
-                                                                addToWishlist();
-                                                              },
-                                                        controller
-                                                                .isProductinWishlist
-                                                                .value
-                                                            ? AppColors()
-                                                                .secHalfGrey
-                                                            : AppColors()
-                                                                .secRed),
-                                              ),
-                                            ProductButton().newProductButton(
-                                                    context.textTheme,
-                                                    size,
-                                                    "Start Trade",
-                                                    UniconsLine.podium, () {
-
-                                                  ProductDetailsDialog()
-                                                      .showADialog(
-                                                          context,
-                                                          context.textTheme,
-                                                          size, () {
-                                                    startTrade();
-                                                  }, controller.isLoading.value);
-                                                }, AppColors().primaryBlue),
-
-                                            ],
-                                          ),
+                                          child: FirebaseAuth.instance
+                                                      .currentUser!.uid ==
+                                                  Get.arguments[
+                                                      TradeFormModel().userId]
+                                              ? Text(
+                                                  "You cannot bid or Trade on/with your own product",
+                                                  style: context
+                                                      .textTheme.bodyLarge,
+                                                )
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Obx(
+                                                      () => ProductButton()
+                                                          .newProductButton(
+                                                              context.textTheme,
+                                                              size,
+                                                              controller.isProductinWishlist.value
+                                                                  ? "Already Added"
+                                                                  : "Add to Wishlist",
+                                                              UniconsLine.heart,
+                                                              controller
+                                                                      .isProductinWishlist
+                                                                      .value
+                                                                  ? null
+                                                                  : () {
+                                                                      addToWishlist();
+                                                                    },
+                                                              controller
+                                                                      .isProductinWishlist
+                                                                      .value
+                                                                  ? AppColors()
+                                                                      .secHalfGrey
+                                                                  : AppColors()
+                                                                      .secRed),
+                                                    ),
+                                                    ProductButton()
+                                                        .newProductButton(
+                                                            context.textTheme,
+                                                            size,
+                                                            "Start Trade",
+                                                            UniconsLine.podium,
+                                                            () {
+                                                      ProductDetailsDialog()
+                                                          .showADialog(
+                                                              context,
+                                                              context.textTheme,
+                                                              size, () {
+                                                        startTrade();
+                                                      }, controller);
+                                                    }, AppColors().primaryBlue),
+                                                  ],
+                                                ),
                                         )
                                       ],
                                     ),

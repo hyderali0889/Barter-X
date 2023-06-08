@@ -1,4 +1,5 @@
 import 'package:barter_x/Components/placeholder_widget.dart';
+import 'package:barter_x/Utils/Firebase_Functions/firebase_function.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -179,29 +180,38 @@ class AuctionSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: AppColors().secSoftGrey,
-          borderRadius: BorderRadius.circular(20)),
-      height: size.height * 0.06,
-      width: size.width * 0.9,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20.0),
-        child: TextFormField(
-          controller: editingController,
-          textAlign: TextAlign.left,
-          textAlignVertical: TextAlignVertical.center,
-          decoration: InputDecoration(
-              suffixIcon: const Icon(
-                UniconsLine.search,
-                size: 14,
-              ),
-              hintText: "Search Product Name",
-              hintStyle: context.textTheme.bodySmall!
-                  .copyWith(color: AppColors().secHalfGrey),
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none),
+    return InkWell(
+      onTap: () {
+        Get.toNamed(Routes().searchScreen, arguments: "Auction");
+      },
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: AppColors().secSoftGrey,
+            borderRadius: BorderRadius.circular(20)),
+        height: size.height * 0.06,
+        width: size.width * 0.9,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20.0),
+          child: TextFormField(
+            readOnly: true,
+            onTap: () {
+              Get.toNamed(Routes().searchScreen, arguments: "Auction");
+            },
+            controller: editingController,
+            textAlign: TextAlign.left,
+            textAlignVertical: TextAlignVertical.center,
+            decoration: InputDecoration(
+                suffixIcon: const Icon(
+                  UniconsLine.search,
+                  size: 14,
+                ),
+                hintText: "Search Product Name",
+                hintStyle: context.textTheme.bodySmall!
+                    .copyWith(color: AppColors().secHalfGrey),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none),
+          ),
         ),
       ),
     );
@@ -399,7 +409,7 @@ class AuctionFeaturedProducts extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: size.width,
-                        height: data.data!.docs.length < 3
+                        height: data.data!.docs.length < 5
                             ? size.height * 0.35
                             : size.height * 0.58,
                         child: Column(
@@ -409,16 +419,18 @@ class AuctionFeaturedProducts extends StatelessWidget {
                               height: size.height * 0.35,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: data.data!.docs.length > 2 ? 2 : 1,
+                                itemCount: data.data!.docs.length >= 2 ? 2 : 1,
                                 itemBuilder: (context, index) {
                                   return AuctionDataWidgetRow(
                                       size: size,
                                       data: data,
-                                      index: randomNumbers.elementAt(index));
+                                      index: data.data!.docs.length > 2
+                                          ? randomNumbers.elementAt(index)
+                                          : index);
                                 },
                               ),
                             ),
-                            data.data!.docs.length < 3
+                            data.data!.docs.length < 5
                                 ? Container()
                                 : AuctionDataWidgetLength(
                                     size: size,
@@ -519,13 +531,14 @@ class AuctionNewArrivals extends StatelessWidget {
                             height: size.height * 0.35,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemCount: data.data!.docs.length > 2 ? 2 : 1,
+                              itemCount: data.data!.docs.length >= 2 ? 2 : 1,
                               itemBuilder: (context, index) {
                                 return AuctionDataWidgetRow(
                                     size: size,
                                     data: data,
-                                    index:
-                                        (data.data!.docs.length - 1) - index);
+                                    index: data.data!.docs.length > 2
+                                        ? (data.data!.docs.length - 1) - index
+                                        : index);
                               },
                             ),
                           ),
@@ -630,7 +643,7 @@ class AuctionSpecialProducts extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: size.width,
-                        height: data.data!.docs.length < 3
+                        height: data.data!.docs.length < 5
                             ? size.height * 0.35
                             : size.height * 0.58,
                         child: Column(
@@ -640,16 +653,18 @@ class AuctionSpecialProducts extends StatelessWidget {
                               height: size.height * 0.35,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: data.data!.docs.length > 2 ? 2 : 1,
+                                itemCount: data.data!.docs.length >= 2 ? 2 : 1,
                                 itemBuilder: (context, index) {
                                   return AuctionDataWidgetRow(
                                       size: size,
                                       data: data,
-                                      index: randomNumbers.elementAt(index));
+                                      index: data.data!.docs.length > 2
+                                          ? randomNumbers.elementAt(index)
+                                          : index);
                                 },
                               ),
                             ),
-                            data.data!.docs.length < 3
+                            data.data!.docs.length < 5
                                 ? Container()
                                 : AuctionDataWidgetLength(
                                     size: size,
@@ -843,6 +858,17 @@ class AuctionDataWidgetRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date = data.data!.docs[index][TradeFormModel().date].toDate();
+    DateTime date2 = DateTime.now();
+
+    Duration showingDate =
+        date.difference(DateTime(date2.year, date2.month, date2.day));
+
+    if (showingDate.inDays < 0) {
+      FirebaseFunctions().markAsinActive(
+          context, data.data!.docs[index][TradeFormModel().productId]);
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: InkWell(
@@ -852,7 +878,11 @@ class AuctionDataWidgetRow extends StatelessWidget {
               data.data == null) {
             return;
           }
-          Get.toNamed(Routes().auctionProductDetails, arguments: data.data!.docs[index]);
+          if (showingDate.inDays < 0) {
+            return;
+          }
+          Get.toNamed(Routes().auctionProductDetails,
+              arguments: data.data!.docs[index]);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -901,13 +931,18 @@ class AuctionDataWidgetRow extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Trading With :",
+                      Text("Ending in :",
                           overflow: TextOverflow.fade,
                           style: context.textTheme.bodySmall),
-                      Text(
-                          data.data!.docs[index][TradeFormModel().date]
-                              .toString(),
-                          style: context.textTheme.bodySmall),
+                      Row(
+                        children: [
+                          Text(
+                              showingDate.inDays < 0
+                                  ? "Auction Ended"
+                                  : "${showingDate.inDays} Days",
+                              style: context.textTheme.bodySmall),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -934,6 +969,17 @@ class AuctionDataWidgetLength extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date =
+        data.data!.docs[rand.elementAt(3)][TradeFormModel().date].toDate();
+    DateTime date2 = DateTime.now();
+
+    Duration showingDate =
+        date.difference(DateTime(date2.year, date2.month, date2.day));
+
+    if (showingDate.inDays < 0) {
+      FirebaseFunctions().markAsinActive(context,
+          data.data!.docs[rand.elementAt(3)][TradeFormModel().productId]);
+    }
     return Padding(
       padding: const EdgeInsets.only(top: 25.0),
       child: InkWell(
@@ -943,7 +989,11 @@ class AuctionDataWidgetLength extends StatelessWidget {
               data.data == null) {
             return;
           }
-          Get.toNamed(Routes().auctionProductDetails, arguments: data.data!.docs[rand.elementAt(3)]);
+          if (showingDate.inDays < 0) {
+            return;
+          }
+          Get.toNamed(Routes().auctionProductDetails,
+              arguments: data.data!.docs[rand.elementAt(3)]);
         },
         child: Container(
           width: size.width * 0.9,
@@ -978,7 +1028,7 @@ class AuctionDataWidgetLength extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                              width: size.width * 0.6,
+                              width: size.width * 0.4,
                               height: 60,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10)),
@@ -989,23 +1039,21 @@ class AuctionDataWidgetLength extends StatelessWidget {
                                   style: context.textTheme.bodySmall!
                                       .copyWith(fontFamily: "bold"))),
                           Container(
-                              width: size.width * 0.6,
+                              width: size.width * 0.4,
                               height: 40,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10)),
                               child: Row(
                                 children: [
                                   Text(
-                                    "Trading With : ",
+                                    "Ending in : ",
                                     overflow: TextOverflow.fade,
                                     style: context.textTheme.bodySmall,
                                   ),
                                   Text(
-                                      data
-                                          .data!
-                                          .docs[rand.elementAt(3)]
-                                              [TradeFormModel().date]
-                                          .toString(),
+                                      showingDate.inDays < 0
+                                          ? "Auction Ended"
+                                          : "${showingDate.inDays} Days",
                                       overflow: TextOverflow.fade,
                                       style: context.textTheme.bodySmall),
                                 ],

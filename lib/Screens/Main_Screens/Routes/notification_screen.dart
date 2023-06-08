@@ -45,9 +45,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     loadAd();
-    if (Get.arguments != null) {
-      controller.changePill(Get.arguments[1]);
-    }
   }
 
   @override
