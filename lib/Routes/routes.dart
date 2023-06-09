@@ -9,6 +9,7 @@ class Routes {
   final String addTradeForm = "/addTrade";
   final String addAuctionForm = "/addAuction";
   final String addEWasteForm = "/addEWaste";
+  final String addBidForm = "/addBid";
   // Other Screens
   final String splashScreen = "/splash";
   // Auth Screens

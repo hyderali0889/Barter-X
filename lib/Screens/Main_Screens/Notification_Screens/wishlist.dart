@@ -104,6 +104,7 @@ class _WishlistState extends State<Wishlist> {
                                           child: AspectRatio(
                                             aspectRatio: 1,
                                             child: Container(
+                                                height: double.infinity,
                                                 decoration: BoxDecoration(
                                                     color:
                                                         AppColors().secSoftGrey,
@@ -122,8 +123,7 @@ class _WishlistState extends State<Wishlist> {
                                   }
 
                                   if (navController.data[index].docs[0]
-                                          [TradeFormModel().cat] ==
-                                      "Auction") {
+                                      [TradeFormModel().isAuction]) {
                                     return AuctionWidget(
                                         index: index,
                                         navController: navController,
@@ -261,12 +261,30 @@ class AuctionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date =
+        navController.data[index].docs[0][TradeFormModel().date].toDate();
+    DateTime date2 = DateTime.now();
+
+    Duration showingDate =
+        date.difference(DateTime(date2.year, date2.month, date2.day));
+
+    if (showingDate.inDays < 0) {
+      FirebaseFunctions().markAsinActive(context,
+          navController.data[index].docs[0][TradeFormModel().productId]);
+    }
+    if (showingDate.inDays < -6) {
+      FirebaseFunctions().deleteADocument(
+          context,
+          navController.data[index].docs[0][TradeFormModel().productId],
+          "Auction");
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: InkWell(
         onTap: () {
           Get.toNamed(Routes().auctionProductDetails,
-              arguments: navController.data[index].docs[0]);
+              arguments: [navController.data[index].docs[0] , showingDate.inDays] );
         },
         child: Container(
           decoration: BoxDecoration(
@@ -314,17 +332,14 @@ class AuctionWidget extends StatelessWidget {
                   height: 70,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Trading With :",
+                      Text("Ending in :",
                           overflow: TextOverflow.fade,
                           style: context.textTheme.bodySmall),
-                      Text(
-                          navController
-                              .data[index].docs[0][TradeFormModel().date]
-                              .toString(),
+                      Text("${showingDate.inDays} Days",
                           style: context.textTheme.bodySmall),
                     ],
                   ),

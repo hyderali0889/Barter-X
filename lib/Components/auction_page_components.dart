@@ -885,7 +885,7 @@ class AuctionDataWidgetRow extends StatelessWidget {
             return;
           }
           Get.toNamed(Routes().auctionProductDetails,
-              arguments: data.data!.docs[index]);
+              arguments: [data.data!.docs[index] , showingDate.inDays]);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -1003,7 +1003,7 @@ class AuctionDataWidgetLength extends StatelessWidget {
             return;
           }
           Get.toNamed(Routes().auctionProductDetails,
-              arguments: data.data!.docs[rand.elementAt(3)]);
+              arguments: [data.data!.docs[rand.elementAt(3)] , showingDate.inDays]);
         },
         child: Container(
           width: size.width * 0.9,

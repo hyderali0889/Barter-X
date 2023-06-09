@@ -2,6 +2,7 @@ class TradeFormModel {
   final String userId = "UserId";
   final String productId = "ProductId";
   final String title = "Title";
+  final String isAuction = "isAuction";
   final String email = "Email";
   final String phone = "Phone";
   final String date = "endDate";

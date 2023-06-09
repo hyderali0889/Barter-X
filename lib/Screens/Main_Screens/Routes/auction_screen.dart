@@ -91,7 +91,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                     child: Column(children: [
                       SizedBox(
                         width: size.width,
-                        height: size.height * 0.785,
+                        height: size.height * 0.8,
                         child: ListView(children: [
                           AuctionFutureWidget(
                             controller: controller,

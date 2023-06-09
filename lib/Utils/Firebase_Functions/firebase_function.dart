@@ -1,5 +1,4 @@
 import 'package:barter_x/Controllers/Main_Controllers/Route_Controllers/home_controller.dart';
-import 'package:barter_x/Controllers/Main_Controllers/Trade_and_EWaste_SubPages/product_details_controller.dart';
 import 'package:barter_x/Models/trade_form_model.dart';
 import 'package:barter_x/Utils/Widgets/show_modal_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -91,7 +90,7 @@ class FirebaseFunctions {
     }
   }
 
-  getUserPoints(context, ProductDetailsController controller, userID) async {
+  getUserPoints(context, dynamic controller, userID) async {
     try {
       controller.setUserPoints("");
 

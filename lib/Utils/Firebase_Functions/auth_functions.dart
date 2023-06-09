@@ -30,6 +30,15 @@ class FirebaseAuthFunctions {
               password: passwordController.text.trim())
           .timeout(const Duration(seconds: 30));
 
+            if (!FirebaseAuth.instance.currentUser!.emailVerified) {
+        await FirebaseAuth.instance.currentUser!.delete();
+        controller.startLoading(false);
+
+        ReturnWidgets().returnBottomSheet(context,
+            "An Error Occurred. Email not Verified. Please Register again and complete the verification steps.");
+        return;
+      }
+
       if (FirebaseAuth.instance.currentUser!.phoneNumber == null) {
         await FirebaseAuth.instance.currentUser!.delete();
         controller.startLoading(false);

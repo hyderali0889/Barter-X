@@ -355,6 +355,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ))
                   ],
                 )),
+
+
+
                 _bannerAd != null
                     ? Align(
                         alignment: Alignment.bottomCenter,

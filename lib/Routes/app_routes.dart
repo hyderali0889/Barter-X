@@ -27,6 +27,7 @@ import '../Bindings/Auth_Bindings/register_binding.dart';
 import '../Bindings/Auth_Bindings/reset_binding.dart';
 import '../Bindings/Auth_Bindings/email_verification_binding.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/auction_form_bindings.dart';
+import '../Bindings/Main_Bindings/Form_Bindings/bid_form_binding.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/ewaste_form_bindings.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/trade_form_bindings.dart';
 import '../Bindings/Main_Bindings/Navigation_bindings/navigation_binding.dart';
@@ -37,6 +38,7 @@ import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_feature
 import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_specials.dart';
 import '../Screens/Main_Screens/Auction_SubPages/auction_categories_detail_screen.dart';
 import '../Screens/Main_Screens/Auction_SubPages/auction_product_details_screen.dart';
+import '../Screens/Main_Screens/Forms/bid_form.dart';
 import '../Screens/Main_Screens/Forms/e_waste_form.dart';
 import '../Screens/Main_Screens/Forms/trade_form.dart';
 import '../Screens/Other_Screens/search_screen.dart';
@@ -117,6 +119,11 @@ class AppRouter {
       name: Routes().addEWasteForm,
       page: (() => const EWasteForm()
       ),binding: EWasteFormBinding()
+    ),
+    GetPage(
+      name: Routes().addBidForm,
+      page: (() => const BidForm()
+      ),binding: BidFormBinding()
     ),
 
  // Sub Trade Routes

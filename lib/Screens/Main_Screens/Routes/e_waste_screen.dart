@@ -77,53 +77,50 @@ class _EWasteScreenState extends State<EWasteScreen> {
         child: Stack(
           children: [
             ListView(),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: SizedBox(
-                width: size.width,
-                height: size.height,
-                child: Column(
-                  children: [
-                    const TopRowNoBack(
-                      text: "E-Wastes",
-                    ),
-                    Expanded(
-                      child: Column(children: [
-                        SizedBox(
-                          width: size.width,
-                          height: size.height * 0.785,
-                          child: ListView(children: [
-                            EWasteFutureWidget(
-                              controller: controller,
-                              size: size,
-                              searchController: searchController,
-                            ),
-                          ]),
-                        ),
-                        _bannerAd != null
-                            ? Align(
-                                alignment: Alignment.bottomCenter,
-                                child: SafeArea(
-                                  child: SizedBox(
-                                    width: _bannerAd!.size.width.toDouble(),
-                                    height: _bannerAd!.size.height.toDouble(),
-                                    child: AdWidget(ad: _bannerAd!),
-                                  ),
+            SizedBox(
+              width: size.width,
+              height: size.height,
+              child: Column(
+                children: [
+                  const TopRowNoBack(
+                    text: "E-Wastes",
+                  ),
+                  Expanded(
+                    child: Column(children: [
+                      SizedBox(
+                        width: size.width,
+                        height: size.height * 0.8,
+                        child: ListView(children: [
+                          EWasteFutureWidget(
+                            controller: controller,
+                            size: size,
+                            searchController: searchController,
+                          ),
+                        ]),
+                      ),
+                      _bannerAd != null
+                          ? Align(
+                              alignment: Alignment.bottomCenter,
+                              child: SafeArea(
+                                child: SizedBox(
+                                  width: _bannerAd!.size.width.toDouble(),
+                                  height: _bannerAd!.size.height.toDouble(),
+                                  child: AdWidget(ad: _bannerAd!),
                                 ),
-                              )
-                            : Container(
-                                alignment: Alignment.center,
-                                width: size.width,
-                                height: 60,
-                                child: Obx(() => Text(
-                                    !controller.isAdError.value
-                                        ? " Loading Ad ... "
-                                        : "Error While Loading Ad",
-                                    style: context.textTheme.bodySmall)))
-                      ]),
-                    )
-                  ],
-                ),
+                              ),
+                            )
+                          : Container(
+                              alignment: Alignment.bottomCenter,
+                              width: size.width,
+                              height: 60,
+                              child: Obx(() => Text(
+                                  !controller.isAdError.value
+                                      ? " Loading Ad ... "
+                                      : "Error While Loading Ad",
+                                  style: context.textTheme.bodySmall)))
+                    ]),
+                  )
+                ],
               ),
             ),
           ],
