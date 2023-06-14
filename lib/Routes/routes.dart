@@ -12,6 +12,11 @@ class Routes {
   final String addBidForm = "/addBid";
   // Other Screens
   final String splashScreen = "/splash";
+  final String allTrades = "/allTrades";
+  final String allEWastes = "/allEWastes";
+  final String allAuctions = "/allAuctions";
+  final String allBids = "/allBids";
+  final String changePassword = "/changePassword";
   // Auth Screens
   final String loginScreen = "/login";
   final String registerScreen = "/register";

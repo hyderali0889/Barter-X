@@ -38,7 +38,7 @@ class FirebaseAuthFunctions {
           .signInWithEmailAndPassword(
               email: emailController.text.trim(),
               password: passwordController.text.trim())
-          .timeout(const Duration(seconds: 30));
+         ;
 
             if (!FirebaseAuth.instance.currentUser!.emailVerified) {
         await FirebaseAuth.instance.currentUser!.delete();
@@ -135,7 +135,7 @@ class FirebaseAuthFunctions {
 
       await FirebaseAuth.instance.currentUser!
           .delete()
-          .timeout(const Duration(seconds: 30));
+         ;
       controller.startLoading2(false);
 
       Get.offAllNamed(Routes().loginScreen);
@@ -272,7 +272,7 @@ class FirebaseAuthFunctions {
           .createUserWithEmailAndPassword(
               email: emailController.text.trim(),
               password: passwordController.text.trim())
-          .timeout(const Duration(seconds: 30));
+         ;
 
       if (authInstance.currentUser == null) {
         controller.startLoading(false);
@@ -319,7 +319,7 @@ class FirebaseAuthFunctions {
 
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim())
-          .timeout(const Duration(seconds: 30));
+         ;
 
       controller.startLoading(false);
     } on FirebaseAuthException catch (e) {

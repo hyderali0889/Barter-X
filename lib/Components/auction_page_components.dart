@@ -380,7 +380,7 @@ class AuctionFeaturedProducts extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: size.width,
-                        height: size.height * 0.3,
+                        height: 310,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -410,13 +410,13 @@ class AuctionFeaturedProducts extends StatelessWidget {
                       SizedBox(
                         width: size.width,
                         height: data.data!.docs.length < 5
-                            ? size.height * 0.35
+                            ? 290
                             : size.height * 0.58,
                         child: Column(
                           children: [
                             SizedBox(
                               width: size.width,
-                              height: size.height * 0.35,
+                              height: 280,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.data!.docs.length >= 2 ? 2 : 1,
@@ -528,7 +528,7 @@ class AuctionNewArrivals extends StatelessWidget {
                         children: [
                           SizedBox(
                             width: size.width,
-                            height: size.height * 0.35,
+                            height: 280,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: data.data!.docs.length >= 2 ? 2 : 1,
@@ -644,13 +644,13 @@ class AuctionSpecialProducts extends StatelessWidget {
                       SizedBox(
                         width: size.width,
                         height: data.data!.docs.length < 5
-                            ? size.height * 0.35
+                            ? 300
                             : size.height * 0.58,
                         child: Column(
                           children: [
                             SizedBox(
                               width: size.width,
-                              height: size.height * 0.35,
+                              height: 280,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.data!.docs.length >= 2 ? 2 : 1,
@@ -885,14 +885,14 @@ class AuctionDataWidgetRow extends StatelessWidget {
             return;
           }
           Get.toNamed(Routes().auctionProductDetails,
-              arguments: [data.data!.docs[index] , showingDate.inDays]);
+              arguments: [data.data!.docs[index], showingDate.inDays]);
         },
         child: Container(
           decoration: BoxDecoration(
               color: AppColors().secSoftGrey,
               borderRadius: BorderRadius.circular(10)),
           width: size.width * 0.38,
-          height: size.height * 0.4,
+          height: 310,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -916,18 +916,19 @@ class AuctionDataWidgetRow extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Container(
                     width: size.width * 0.38,
-                    height: 50,
+                    height: 20,
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(10)),
                     child: Text(data.data!.docs[index][TradeFormModel().title],
                         overflow: TextOverflow.fade,
+                        maxLines: 1,
                         style: context.textTheme.bodySmall!
                             .copyWith(fontFamily: "bold")),
                   ),
                 ),
                 Container(
                   width: size.width * 0.38,
-                  height: 70,
+                  height: 35,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   child: Column(
@@ -943,6 +944,7 @@ class AuctionDataWidgetRow extends StatelessWidget {
                               showingDate.inDays < 0
                                   ? "Auction Ended"
                                   : "${showingDate.inDays} Days",
+                              maxLines: 1,
                               style: context.textTheme.bodySmall),
                         ],
                       ),
@@ -1002,8 +1004,10 @@ class AuctionDataWidgetLength extends StatelessWidget {
           if (showingDate.inDays < 0) {
             return;
           }
-          Get.toNamed(Routes().auctionProductDetails,
-              arguments: [data.data!.docs[rand.elementAt(3)] , showingDate.inDays]);
+          Get.toNamed(Routes().auctionProductDetails, arguments: [
+            data.data!.docs[rand.elementAt(3)],
+            showingDate.inDays
+          ]);
         },
         child: Container(
           width: size.width * 0.9,

@@ -1,13 +1,13 @@
 import 'dart:io';
-
 import 'package:barter_x/Components/main_button.dart';
+import 'package:barter_x/Utils/Firebase_Functions/add_data_to_firestore.dart';
 import 'package:barter_x/Utils/Widgets/form_bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import "../../../Routes/routes.dart";
 import 'package:get/get.dart';
 import 'package:unicons/unicons.dart';
 import '../../../Components/form_text_field.dart';
-import '../../../Components/top_row.dart';
 import '../../../Controllers/Main_Controllers/Form_Controllers/bid_form_controller.dart';
 import '../../../Models/trade_form_model.dart';
 import '../../../Themes/main_colors.dart';
@@ -25,7 +25,8 @@ class _BidFormState extends State<BidForm> {
   BidFormController controller = Get.find<BidFormController>();
 
   TextEditingController titleController = TextEditingController();
-  TextEditingController bidingOnController = TextEditingController();
+  TextEditingController bidingOnController =
+      TextEditingController(text: Get.arguments[TradeFormModel().productId]);
   TextEditingController desController = TextEditingController();
 
   TextEditingController userEmailController =
@@ -57,9 +58,22 @@ class _BidFormState extends State<BidForm> {
             height: size.height,
             child: Column(
               children: [
-                const TopRow(
-                  text: "Add Bid",
-                ),
+                SizedBox(
+                    height: size.height * 0.05,
+                    width: size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(UniconsLine.arrow_left),
+                          onPressed: () {
+                            Get.offAllNamed(Routes().navigationScreen);
+                          },
+                        ),
+                        Text("Add Bids", style: context.textTheme.bodyMedium),
+                        Container()
+                      ],
+                    )),
                 Expanded(
                   child: ListView(
                     children: [
@@ -81,6 +95,16 @@ class _BidFormState extends State<BidForm> {
                               try {
                                 String path = "file/${DateTime.now()}";
                                 File file = File(controller.image.value!.path);
+                                AddDataToFirestore().addBidToFirestore(
+                                    context,
+                                    controller,
+                                    titleController,
+                                    desController,
+                                    path,
+                                    file,
+                                    Get.arguments[TradeFormModel().productId],
+                                    Get.arguments[TradeFormModel().district],
+                                    Get.arguments[TradeFormModel().cat]);
                               } catch (e) {
                                 ReturnWidgets().returnBottomSheet(context,
                                     "An Error Occurred , Please fill all the Fields and try again");
@@ -169,29 +193,29 @@ class TheForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: TextFieldForForm(
-              heading: "Biding On",
-              opacity: 1.0,
-              readOnly: true,
-              maxLines: 1,
-              width: size.width * 0.9,
-              height: size.height * 0.14,
-              maxLength: 64,
-              hintText: "",
-              controller: bidingOnController,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: TextFieldForForm(
               heading: "Enter Title",
               opacity: 1.0,
               readOnly: false,
               maxLines: 1,
               width: size.width * 0.9,
-              height: size.height * 0.14,
+              height: 120,
               maxLength: 64,
               hintText: "Enter Title",
               controller: titleController,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 0.0),
+            child: TextFieldForForm(
+              heading: "Biding On",
+              opacity: 1.0,
+              readOnly: true,
+              maxLines: 1,
+              width: size.width * 0.9,
+              height: 120,
+              maxLength: 64,
+              hintText: "",
+              controller: bidingOnController,
             ),
           ),
           TextFieldForForm(
@@ -200,7 +224,7 @@ class TheForm extends StatelessWidget {
             readOnly: false,
             maxLines: 5,
             width: size.width * 0.9,
-            height: size.height * 0.27,
+            height: 220,
             maxLength: 150,
             hintText: "Enter Description",
             controller: desController,
@@ -211,7 +235,7 @@ class TheForm extends StatelessWidget {
             readOnly: true,
             maxLines: 1,
             width: size.width * 0.9,
-            height: size.height * 0.14,
+            height: 120,
             maxLength: 62,
             hintText: "",
             controller: userEmailController,
@@ -222,7 +246,7 @@ class TheForm extends StatelessWidget {
             readOnly: true,
             maxLines: 1,
             width: size.width * 0.9,
-            height: size.height * 0.14,
+            height: 120,
             maxLength: 25,
             hintText: "",
             controller: userPhoneController,

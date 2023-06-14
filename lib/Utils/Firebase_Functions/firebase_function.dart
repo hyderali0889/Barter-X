@@ -11,7 +11,6 @@ import '../../Controllers/Main_Controllers/Route_Controllers/ewaste_controller.d
 import '../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/confimation_controller.dart';
 
 class FirebaseFunctions {
-
   /*
    ██████╗ ███████╗████████╗    ████████╗██████╗  █████╗ ██████╗ ███████╗    ██████╗  █████╗ ████████╗ █████╗
   ██╔════╝ ██╔════╝╚══██╔══╝    ╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝    ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗
@@ -24,11 +23,8 @@ class FirebaseFunctions {
   void getFirebaseTradeData(context, HomeController controller) {
     try {
       controller.refreshData(true);
-      Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
-          .instance
-          .collection("Trade")
-          .get()
-          .timeout(const Duration(seconds: 30));
+      Future<QuerySnapshot<Map<String, dynamic>>> data =
+          FirebaseFirestore.instance.collection("Trade").get();
 
       controller.addTradeData(data);
     } catch (e) {
@@ -54,8 +50,7 @@ class FirebaseFunctions {
           .instance
           .collection("Trade")
           .where(TradeFormModel().cat, isEqualTo: category)
-          .get()
-          .timeout(const Duration(seconds: 30));
+          .get();
 
       controller.addTradeData(data);
     } catch (e) {
@@ -76,11 +71,8 @@ class FirebaseFunctions {
   void getFirebaseEWasteData(context, EWasteController controller) {
     try {
       controller.refreshData(true);
-      Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
-          .instance
-          .collection("EWaste")
-          .get()
-          .timeout(const Duration(seconds: 30));
+      Future<QuerySnapshot<Map<String, dynamic>>> data =
+          FirebaseFirestore.instance.collection("EWaste").get();
 
       controller.addTradeData(data);
     } catch (e) {
@@ -101,11 +93,8 @@ class FirebaseFunctions {
   void getFirebaseAuctionData(context, AuctionController controller) {
     try {
       controller.refreshData(true);
-      Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
-          .instance
-          .collection("Auction")
-          .get()
-          .timeout(const Duration(seconds: 30));
+      Future<QuerySnapshot<Map<String, dynamic>>> data =
+          FirebaseFirestore.instance.collection("Auction").get();
 
       controller.addTradeData(data);
     } catch (e) {
@@ -131,8 +120,7 @@ class FirebaseFunctions {
           .instance
           .collection("Auction")
           .where(TradeFormModel().cat, isEqualTo: category)
-          .get()
-          .timeout(const Duration(seconds: 30));
+          .get();
 
       controller.addTradeData(data);
     } catch (e) {
@@ -158,16 +146,14 @@ class FirebaseFunctions {
           .instance
           .collection("Users")
           .doc(userID)
-          .get()
-          .timeout(const Duration(seconds: 30));
+          .get();
       controller.setUserPoints(points["Points"].toString());
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
 
-
- /*
+  /*
       ██████╗ ███████╗████████╗     █████╗     ███████╗██╗███╗   ██╗ ██████╗ ██╗     ███████╗    ██████╗ ██████╗  ██████╗ ██████╗ ██╗   ██╗ ██████╗████████╗
      ██╔════╝ ██╔════╝╚══██╔══╝    ██╔══██╗    ██╔════╝██║████╗  ██║██╔════╝ ██║     ██╔════╝    ██╔══██╗██╔══██╗██╔═══██╗██╔══██╗██║   ██║██╔════╝╚══██╔══╝
      ██║  ███╗█████╗     ██║       ███████║    ███████╗██║██╔██╗ ██║██║  ███╗██║     █████╗      ██████╔╝██████╔╝██║   ██║██║  ██║██║   ██║██║        ██║
@@ -184,8 +170,7 @@ class FirebaseFunctions {
           .instance
           .collection(productCat)
           .where(TradeFormModel().productId, isEqualTo: productId)
-          .get()
-          .timeout(const Duration(seconds: 30));
+          .get();
 
       controller.addData(data);
     } catch (e) {
@@ -279,8 +264,7 @@ class FirebaseFunctions {
           .instance
           .collection("Users")
           .doc(userId)
-          .get()
-          .timeout(const Duration(seconds: 30));
+          .get();
       return data;
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
@@ -303,13 +287,28 @@ class FirebaseFunctions {
           .instance
           .collection(prodCat)
           .where(TradeFormModel().productId, isEqualTo: prodId)
-          .get()
-          .timeout(const Duration(seconds: 30));
+          .get();
 
       for (var dat in data.docs) {
         await dat.reference.delete();
-       await FirebaseStorage.instance
-            .refFromURL(dat[TradeFormModel().img]).delete();
+        await FirebaseStorage.instance
+            .refFromURL(dat[TradeFormModel().img])
+            .delete();
+      }
+
+      if (prodCat == "Auction") {
+        QuerySnapshot<Map<String, dynamic>> bidData = await FirebaseFirestore
+            .instance
+            .collection("Bids")
+            .where(TradeFormModel().bidOn, isEqualTo: prodId)
+            .get();
+
+        for (var dat in bidData.docs) {
+          await dat.reference.delete();
+          await FirebaseStorage.instance
+              .refFromURL(dat[TradeFormModel().img])
+              .delete();
+        }
       }
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
@@ -333,8 +332,7 @@ class FirebaseFunctions {
           .instance
           .collection(prodCat)
           .where(TradeFormModel().productId, isEqualTo: prodId)
-          .get()
-          .timeout(const Duration(seconds: 30));
+          .get();
 
       controller.addToData(data);
     } catch (e) {
@@ -363,6 +361,30 @@ class FirebaseFunctions {
           ele.reference.update({TradeFormModel().isActive: "False"});
         }
       });
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  /*
+   ██████╗ ███████╗████████╗     █████╗ ██╗     ██╗         ████████╗██████╗  █████╗ ██████╗ ███████╗███████╗    ███████╗ ██████╗ ██████╗      █████╗     ██╗   ██╗███████╗███████╗██████╗
+  ██╔════╝ ██╔════╝╚══██╔══╝    ██╔══██╗██║     ██║         ╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝    ██╔════╝██╔═══██╗██╔══██╗    ██╔══██╗    ██║   ██║██╔════╝██╔════╝██╔══██╗
+  ██║  ███╗█████╗     ██║       ███████║██║     ██║            ██║   ██████╔╝███████║██║  ██║█████╗  ███████╗    █████╗  ██║   ██║██████╔╝    ███████║    ██║   ██║███████╗█████╗  ██████╔╝
+  ██║   ██║██╔══╝     ██║       ██╔══██║██║     ██║            ██║   ██╔══██╗██╔══██║██║  ██║██╔══╝  ╚════██║    ██╔══╝  ██║   ██║██╔══██╗    ██╔══██║    ██║   ██║╚════██║██╔══╝  ██╔══██╗
+  ╚██████╔╝███████╗   ██║       ██║  ██║███████╗███████╗       ██║   ██║  ██║██║  ██║██████╔╝███████╗███████║    ██║     ╚██████╔╝██║  ██║    ██║  ██║    ╚██████╔╝███████║███████╗██║  ██║
+   ╚═════╝ ╚══════╝   ╚═╝       ╚═╝  ╚═╝╚══════╝╚══════╝       ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝    ╚═╝      ╚═════╝ ╚═╝  ╚═╝    ╚═╝  ╚═╝     ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝
+
+  */
+
+  getAllUserTrades(context, userId) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+          .instance
+          .collection("Trade")
+          .where(TradeFormModel().userId, isEqualTo: userId)
+          .get();
+
+      return data;
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }

@@ -1,3 +1,4 @@
+import 'package:barter_x/Controllers/Main_Controllers/Form_Controllers/bid_form_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,7 +12,6 @@ import '../Generators/random_alpha_generator.dart';
 import '../Widgets/show_modal_sheet.dart';
 
 class AddDataToFirestore {
-
   /*
    █████╗ ██████╗ ██████╗     ████████╗██████╗  █████╗ ██████╗ ███████╗
   ██╔══██╗██╔══██╗██╔══██╗    ╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
@@ -59,15 +59,14 @@ class AddDataToFirestore {
         TradeFormModel().userId: auth.currentUser!.uid,
         TradeFormModel().productId: randomId,
         TradeFormModel().isActive: true,
-        TradeFormModel().isAuction:false,
-
+        TradeFormModel().isAuction: false,
         TradeFormModel().img: downloadUrl,
         TradeFormModel().des: desController.text.trim().capitalize,
         TradeFormModel().email: auth.currentUser!.email,
         TradeFormModel().phone: auth.currentUser!.phoneNumber,
         TradeFormModel().district: controller.selectedDistrict.value,
         TradeFormModel().cat: controller.selectedCat.value
-      }).timeout(const Duration(seconds: 30));
+      });
       controller.startLoading(false);
       Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {
@@ -76,7 +75,6 @@ class AddDataToFirestore {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
-
 
   /*
    █████╗ ██████╗ ██████╗     ███████╗██╗    ██╗ █████╗ ███████╗████████╗███████╗
@@ -123,8 +121,7 @@ class AddDataToFirestore {
         TradeFormModel().title: titleController.text.trim().capitalize,
         TradeFormModel().tradeWith: tradeWithController.text.trim().capitalize,
         TradeFormModel().userId: auth.currentUser!.uid,
-        TradeFormModel().isAuction:false,
-
+        TradeFormModel().isAuction: false,
         TradeFormModel().productId: randomId,
         TradeFormModel().isActive: true,
         TradeFormModel().img: downloadUrl,
@@ -133,7 +130,7 @@ class AddDataToFirestore {
         TradeFormModel().phone: auth.currentUser!.phoneNumber,
         TradeFormModel().district: controller.selectedDistrict.value,
         TradeFormModel().cat: "E-Waste"
-      }).timeout(const Duration(seconds: 30));
+      });
       controller.startLoading(false);
       Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {
@@ -187,7 +184,7 @@ class AddDataToFirestore {
       firestore.collection("Auction").doc(DateTime.now().toString()).set({
         TradeFormModel().title: titleController.text.trim().capitalize,
         TradeFormModel().userId: auth.currentUser!.uid,
-        TradeFormModel().isAuction:true,
+        TradeFormModel().isAuction: true,
         TradeFormModel().productId: randomId,
         TradeFormModel().isActive: true,
         TradeFormModel().img: downloadUrl,
@@ -198,10 +195,69 @@ class AddDataToFirestore {
         TradeFormModel().phone: auth.currentUser!.phoneNumber,
         TradeFormModel().district: controller.selectedDistrict.value,
         TradeFormModel().cat: controller.selectedCat.value
-      }).timeout(const Duration(seconds: 30));
+      });
       controller.startLoading(false);
       Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
     } on PlatformException catch (e) {
+      controller.startLoading(false);
+
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  /*
+   █████╗ ██████╗ ██████╗     ██████╗ ██╗██████╗ ███████╗
+  ██╔══██╗██╔══██╗██╔══██╗    ██╔══██╗██║██╔══██╗██╔════╝
+  ███████║██║  ██║██║  ██║    ██████╔╝██║██║  ██║███████╗
+  ██╔══██║██║  ██║██║  ██║    ██╔══██╗██║██║  ██║╚════██║
+  ██║  ██║██████╔╝██████╔╝    ██████╔╝██║██████╔╝███████║
+  ╚═╝  ╚═╝╚═════╝ ╚═════╝     ╚═════╝ ╚═╝╚═════╝ ╚══════╝
+
+  */
+
+  addBidToFirestore(
+      context,
+      BidFormController controller,
+      TextEditingController titleController,
+      TextEditingController desController,
+      path,
+      file,
+      prodID,
+      district,
+      cat) async {
+    try {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      FirebaseAuth auth = FirebaseAuth.instance;
+
+      if (controller.image.value == null ||
+          titleController.text.isEmpty ||
+          desController.text.isEmpty) {
+        ReturnWidgets().returnBottomSheet(context,
+            "NO Image Selected or any field is empty. Please fill all the fields and try again.");
+        return;
+      }
+      controller.startLoading(true);
+
+      UploadTask fileurl = storage.ref().child(path).putFile(file);
+
+      final snapshot = await fileurl.whenComplete(() {});
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      await FirebaseFirestore.instance
+          .collection("Bids")
+          .doc(DateTime.now().toString())
+          .set({
+        TradeFormModel().title: titleController.text.trim(),
+        TradeFormModel().bidOn: prodID,
+        TradeFormModel().img: downloadUrl,
+        TradeFormModel().des: desController.text.trim(),
+        TradeFormModel().email: auth.currentUser!.email,
+        TradeFormModel().phone: auth.currentUser!.phoneNumber,
+        TradeFormModel().district: district,
+        TradeFormModel().cat: cat
+      });
+      controller.startLoading(false);
+      Get.offAllNamed(Routes().navigationScreen, arguments: [0]);
+    } catch (e) {
       controller.startLoading(false);
 
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");

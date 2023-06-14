@@ -116,8 +116,7 @@ class _AuctionProductDetailScreenState
                                           borderRadius:
                                               BorderRadius.circular(20)),
                                       child: CachedNetworkImage(
-                                        imageUrl: Get.arguments[0]
-                                            [TradeFormModel().img],
+                                        imageUrl: Get.arguments[0][TradeFormModel().img],
                                         placeholder: (context, url) =>
                                             Lottie.asset(
                                                 "assets/jsons/atom-loader.json"),
@@ -324,7 +323,7 @@ class _AuctionProductDetailScreenState
                                                             "Place Bid",
                                                             UniconsLine.podium,
                                                             () {
-                                                      Get.toNamed(
+                                                      Get.offAllNamed(
                                                           Routes().addBidForm,
                                                           arguments:
                                                               Get.arguments[0]);

@@ -99,19 +99,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         MenuIcons(
           bgColor: AppColors().secSoftGrey,
-          func: () {},
+          func: () {
+            Get.toNamed(Routes().allTrades);
+          },
           icon: UniconsLine.home_alt,
           innerText: "Trade",
         ),
         MenuIcons(
           bgColor: AppColors().primaryYellow,
-          func: () {},
+          func: () {
+            Get.toNamed(Routes().allAuctions);
+          },
           icon: UniconsLine.podium,
           innerText: "Auction",
         ),
         MenuIcons(
           bgColor: AppColors().secHalfGrey,
-          func: () {},
+          func: () {
+            Get.toNamed(Routes().allEWastes);
+          },
           icon: UniconsLine.hdd,
           innerText: "E-Waste",
         ),
@@ -122,13 +128,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         MenuIcons(
           bgColor: AppColors().secRed,
-          func: () {},
+          func: () {
+            Get.toNamed(Routes().allBids);
+          },
           icon: UniconsLine.bitcoin_alt,
           innerText: "Your Bids",
         ),
         MenuIcons(
           bgColor: AppColors().secHalfGrey,
-          func: () {},
+          func: () {
+            Get.toNamed(Routes().changePassword);
+          },
           icon: UniconsLine.key_skeleton_alt,
           innerText: "Change Password",
         ),

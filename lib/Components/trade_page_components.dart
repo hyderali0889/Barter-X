@@ -404,13 +404,13 @@ class FeaturedProducts extends StatelessWidget {
                       SizedBox(
                         width: size.width,
                         height: data.data!.docs.length < 5
-                            ? size.height * 0.35
+                            ? 290
                             : size.height * 0.58,
                         child: Column(
                           children: [
                             SizedBox(
                               width: size.width,
-                              height: size.height * 0.35,
+                              height: 280,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.data!.docs.length >= 2 ? 2 : 1,
@@ -499,7 +499,7 @@ class NewArrivals extends StatelessWidget {
                         padding: EdgeInsets.only(top: Spacing().sm),
                         child: SizedBox(
                           width: size.width,
-                          height: size.height * 0.35,
+                          height: 290,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -522,7 +522,7 @@ class NewArrivals extends StatelessWidget {
                         children: [
                           SizedBox(
                             width: size.width,
-                            height: size.height * 0.35,
+                            height: 270,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: data.data!.docs.length >= 2 ? 2 : 1,
@@ -638,13 +638,13 @@ class SpecialProducts extends StatelessWidget {
                       SizedBox(
                         width: size.width,
                         height: data.data!.docs.length < 5
-                            ? size.height * 0.35
+                            ? 290
                             : size.height * 0.58,
                         child: Column(
                           children: [
                             SizedBox(
                               width: size.width,
-                              height: size.height * 0.35,
+                              height: 280,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.data!.docs.length >= 2 ? 2 : 1,
@@ -870,7 +870,7 @@ class DataWidgetRow extends StatelessWidget {
               color: AppColors().secSoftGrey,
               borderRadius: BorderRadius.circular(10)),
           width: size.width * 0.38,
-          height: size.height * 0.4,
+          height: 300,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -894,10 +894,11 @@ class DataWidgetRow extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Container(
                     width: size.width * 0.38,
-                    height: 50,
+                    height: 30,
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(10)),
                     child: Text(data.data!.docs[index][TradeFormModel().title],
+                        maxLines: 1,
                         overflow: TextOverflow.fade,
                         style: context.textTheme.bodySmall!
                             .copyWith(fontFamily: "bold")),
@@ -905,7 +906,7 @@ class DataWidgetRow extends StatelessWidget {
                 ),
                 Container(
                   width: size.width * 0.38,
-                  height: 70,
+                  height: 40,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   child: Column(
@@ -916,7 +917,7 @@ class DataWidgetRow extends StatelessWidget {
                           overflow: TextOverflow.fade,
                           style: context.textTheme.bodySmall),
                       Text(data.data!.docs[index][TradeFormModel().tradeWith],
-                          style: context.textTheme.bodySmall),
+                          maxLines: 1, style: context.textTheme.bodySmall),
                     ],
                   ),
                 ),

@@ -13,6 +13,7 @@ import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Sc
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Screens/trade_specials.dart';
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/categories_detail_screen.dart';
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/product_details_screen.dart';
+import 'package:barter_x/Screens/Other_Screens/change_password.dart';
 import 'package:barter_x/Screens/Other_Screens/confirmation_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/ratings_screen.dart';
 import 'package:barter_x/Screens/Other_Screens/splash_screen.dart';
@@ -41,13 +42,16 @@ import '../Screens/Main_Screens/Auction_SubPages/auction_product_details_screen.
 import '../Screens/Main_Screens/Forms/bid_form.dart';
 import '../Screens/Main_Screens/Forms/e_waste_form.dart';
 import '../Screens/Main_Screens/Forms/trade_form.dart';
+import '../Screens/Other_Screens/all_auctions.dart';
+import '../Screens/Other_Screens/all_bids.dart';
+import '../Screens/Other_Screens/all_ewastes.dart';
+import '../Screens/Other_Screens/all_trades.dart';
 import '../Screens/Other_Screens/search_screen.dart';
 import './routes.dart';
 import 'package:get/get.dart';
 
 class AppRouter {
   List<GetPage> appRoutes = [
-
     /*
          dP"Yb  888888 88  88 888888 88""Yb     .dP"Y8  dP""b8 88""Yb 888888 888888 88b 88 .dP"Y8
         dP   Yb   88   88  88 88__   88__dP     `Ybo." dP   `" 88__dP 88__   88__   88Yb88 `Ybo."
@@ -56,6 +60,11 @@ class AppRouter {
     */
 
     GetPage(name: Routes().splashScreen, page: (() => const SplashScreen())),
+    GetPage(name: Routes().allTrades, page: (() => const AllTradesScreen())),
+    GetPage(name: Routes().allAuctions, page: (() => const AllAuctionsScreen())),
+    GetPage(name: Routes().allEWastes, page: (() => const AllEWasteScreen())),
+    GetPage(name: Routes().allBids, page: (() => const AllBidsScreen())),
+    GetPage(name: Routes().changePassword, page: (() => const ChangePasswordScreen())),
     // Auth Screens
     GetPage(
         name: Routes().loginScreen,
@@ -93,59 +102,73 @@ class AppRouter {
         page: (() => const NavigationScreen()),
         binding: NavigationBinding()),
 
-    // Main Screens
-
-    // GetPage(name: Routes().homeScreen, page: (() => const HomeScreen())),
-    // GetPage(name: Routes().auctionScreen, page: (() => const AuctionScreen())),
-    // GetPage(name: Routes().eWasteScreen, page: (() => const EWasteScreen())),
-    // GetPage(name: Routes().notificationScreen, page: (() => const NotificationScreen() ) , binding: NotificationBinding()),
-    // GetPage(name: Routes().profileScreen, page: (() => const ProfileScreen())),
-
     //Forms
 
     GetPage(
-      name: Routes().addTradeForm,
-      page: (() => const TradeForm()
-      ),binding: TradeFormBinding()
-    ),
+        name: Routes().addTradeForm,
+        page: (() => const TradeForm()),
+        binding: TradeFormBinding()),
 
     GetPage(
-      name: Routes().addAuctionForm,
-      page: (() => const AuctionForm()
-      ),binding: AuctionFormBinding()
-    ),
+        name: Routes().addAuctionForm,
+        page: (() => const AuctionForm()),
+        binding: AuctionFormBinding()),
 
     GetPage(
-      name: Routes().addEWasteForm,
-      page: (() => const EWasteForm()
-      ),binding: EWasteFormBinding()
-    ),
+        name: Routes().addEWasteForm,
+        page: (() => const EWasteForm()),
+        binding: EWasteFormBinding()),
     GetPage(
-      name: Routes().addBidForm,
-      page: (() => const BidForm()
-      ),binding: BidFormBinding()
-    ),
+        name: Routes().addBidForm,
+        page: (() => const BidForm()),
+        binding: BidFormBinding()),
 
- // Sub Trade Routes
+    // Sub Trade Routes
     GetPage(name: Routes().tradeFeature, page: () => const TradeFeatures()),
     GetPage(name: Routes().tradeArrivals, page: () => const TradeArrivals()),
     GetPage(name: Routes().tradeSpecials, page: () => const TradeSpecials()),
- // Auction Sub Trade Routes
-    GetPage(name: Routes().auctionTradeFeature, page: () => const AuctionFeatures()),
-    GetPage(name: Routes().auctionTradeArrivals, page: () => const AuctionArrivals()),
-    GetPage(name: Routes().auctionTradeSpecials, page: () => const AuctionSpecials()),
+    // Auction Sub Trade Routes
+    GetPage(
+        name: Routes().auctionTradeFeature,
+        page: () => const AuctionFeatures()),
+    GetPage(
+        name: Routes().auctionTradeArrivals,
+        page: () => const AuctionArrivals()),
+    GetPage(
+        name: Routes().auctionTradeSpecials,
+        page: () => const AuctionSpecials()),
 
- // Trade Details Screens
-   GetPage(name: Routes().categoryDetails, page: ()=> (const CategoryDetailScreen()) , binding: CategoryDetailsBindings() ),
-   GetPage(name: Routes().productDetails, page: ()=> (const ProductDetailScreen()) , binding: ProductDetailsBindings() ),
- // Auction Details Screens
-   GetPage(name: Routes().auctionCategoryDetails, page: ()=> (const AuctionCategoryDetailScreen()) , binding: AuctionCategoryDetailsBindings()  ) ,
-   GetPage(name: Routes().auctionProductDetails, page: ()=> (const AuctionProductDetailScreen()) , binding: AuctionProductDetailsBindings() ),
+    // Trade Details Screens
+    GetPage(
+        name: Routes().categoryDetails,
+        page: () => (const CategoryDetailScreen()),
+        binding: CategoryDetailsBindings()),
+    GetPage(
+        name: Routes().productDetails,
+        page: () => (const ProductDetailScreen()),
+        binding: ProductDetailsBindings()),
+    // Auction Details Screens
+    GetPage(
+        name: Routes().auctionCategoryDetails,
+        page: () => (const AuctionCategoryDetailScreen()),
+        binding: AuctionCategoryDetailsBindings()),
+    GetPage(
+        name: Routes().auctionProductDetails,
+        page: () => (const AuctionProductDetailScreen()),
+        binding: AuctionProductDetailsBindings()),
 
-GetPage(name: Routes().confirmationScreen, page: () => const ConfirmationScreen() , binding: ConfirmationBindings()),
-GetPage(name: Routes().ratingsScreen, page: () => const RatingsScreen() , binding: RatingsBindings()),
-GetPage(name: Routes().searchScreen, page: () => const SearchScreen() , binding: SearchBinding()),
+    GetPage(
+        name: Routes().confirmationScreen,
+        page: () => const ConfirmationScreen(),
+        binding: ConfirmationBindings()),
+    GetPage(
+        name: Routes().ratingsScreen,
+        page: () => const RatingsScreen(),
+        binding: RatingsBindings()),
+    GetPage(
+        name: Routes().searchScreen,
+        page: () => const SearchScreen(),
+        binding: SearchBinding()),
     //ENd of Routes
   ];
 }
-

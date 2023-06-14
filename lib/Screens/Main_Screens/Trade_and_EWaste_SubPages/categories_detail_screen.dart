@@ -113,7 +113,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                           mainAxisSpacing: 50,
                                           mainAxisExtent: 340),
                                   scrollDirection: Axis.vertical,
-                                  itemCount: data.data!.docs.length - 1,
+                                  itemCount: data.data!.docs.length,
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
