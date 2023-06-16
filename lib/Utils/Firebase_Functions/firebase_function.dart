@@ -190,17 +190,20 @@ class FirebaseFunctions {
 
   rateUser(double points, userId) async {
     try {
-      DocumentSnapshot<Map<String, dynamic>> point = await FirebaseFirestore
+      QuerySnapshot<Map<String, dynamic>> point = await FirebaseFirestore
           .instance
           .collection("Users")
-          .doc(userId)
+          .where(TradeFormModel().userId, isEqualTo: userId)
           .get();
-      double mainPoints = (double.parse(point["Points"]) + points) / 2;
-      await FirebaseFirestore.instance
+      double mainPoints = (double.parse(point.docs[0]["Points"]) + points) / 2;
+      QuerySnapshot newData = await FirebaseFirestore.instance
           .collection("Users")
-          .doc(userId)
-          .update({"Points": mainPoints.toString()}).timeout(
-              const Duration(seconds: 30));
+          .where(TradeFormModel().userId, isEqualTo: userId)
+          .get();
+
+      for (var data in newData.docs) {
+        data.reference.update({"Points": mainPoints.toString()});
+      }
     } catch (e) {
       print(e);
     }

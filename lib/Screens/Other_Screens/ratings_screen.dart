@@ -19,6 +19,7 @@ class _RatingsScreenState extends State<RatingsScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    List strings = ["👿", "😢", "😒", "😊", "😃", "👍", "😍"];
     return Scaffold(
       body: SafeArea(
           child: SizedBox(
@@ -47,25 +48,35 @@ class _RatingsScreenState extends State<RatingsScreen> {
                         style: context.textTheme.bodyLarge!
                             .copyWith(fontFamily: "bold")),
                     Obx(
-                      () => Slider(
-                          value: controller.value.value,
-                          label: controller.value.value.toString(),
-                          max: 5,
-                          min: -1,
-                          divisions: 6,
-                          activeColor: AppColors().secGreen,
-                          inactiveColor: AppColors().primaryBlack,
-                          onChanged: (double val) {
-                            controller.setvalue(val);
-                          }),
+                      () => Column(
+                        children: [
+                          Text(
+                            "${strings[controller.value.value.toInt() + 1]}",
+                            style: context.textTheme.bodyLarge!
+                                .copyWith(fontSize: 80),
+                          ),
+                          Slider(
+                              value: controller.value.value,
+                              label: controller.value.value.toString(),
+                              max: 5,
+                              min: -1,
+                              divisions: 6,
+                              activeColor: AppColors().secGreen,
+                              inactiveColor: AppColors().primaryBlack,
+                              onChanged: (double val) {
+                                controller.setvalue(val);
+                              }),
+                        ],
+                      ),
                     ),
                     Obx(
-                    ()=> MainButton(
+                      () => MainButton(
                           size: size,
                           actionFunction: () async {
                             controller.startLoading(true);
-                            await FirebaseFunctions()
-                                .rateUser(controller.value.value, Get.arguments);
+
+                            await FirebaseFunctions().rateUser(
+                                controller.value.value, Get.arguments);
                             Get.offAllNamed(Routes().navigationScreen);
                             controller.startLoading(false);
                           },

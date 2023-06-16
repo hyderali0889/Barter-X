@@ -248,6 +248,8 @@ class AddDataToFirestore {
           .set({
         TradeFormModel().title: titleController.text.trim(),
         TradeFormModel().bidOn: prodID,
+        TradeFormModel().userId: auth.currentUser!.uid,
+        TradeFormModel().isAccepted: false,
         TradeFormModel().img: downloadUrl,
         TradeFormModel().des: desController.text.trim(),
         TradeFormModel().email: auth.currentUser!.email,

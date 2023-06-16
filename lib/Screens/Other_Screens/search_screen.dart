@@ -66,10 +66,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                     .collection(Get.arguments)
                                     .where(TradeFormModel().title,
                                         isGreaterThanOrEqualTo:
-                                            searchingController.text.trim())
+                                            searchingController.text
+                                                .trim()
+                                                .capitalize)
                                     .where(TradeFormModel().title,
                                         isLessThan:
-                                            "${searchingController.text.trim()}z")
+                                            "${searchingController.text.trim().capitalize}z")
                                     .get()
                                 : searchingController.text.isEmpty
                                     ? FirebaseFirestore.instance
@@ -83,10 +85,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                         .collection(Get.arguments)
                                         .where(TradeFormModel().title,
                                             isGreaterThanOrEqualTo:
-                                                searchingController.text.trim())
+                                                searchingController.text
+                                                    .trim()
+                                                    .capitalize)
                                         .where(TradeFormModel().title,
                                             isLessThan:
-                                                "${searchingController.text.trim()}z")
+                                                "${searchingController.text.trim().capitalize}z")
                                         .where(TradeFormModel().district,
                                             isEqualTo: cityController.text
                                                 .trim()

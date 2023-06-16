@@ -116,7 +116,8 @@ class _AuctionProductDetailScreenState
                                           borderRadius:
                                               BorderRadius.circular(20)),
                                       child: CachedNetworkImage(
-                                        imageUrl: Get.arguments[0][TradeFormModel().img],
+                                        imageUrl: Get.arguments[0]
+                                            [TradeFormModel().img],
                                         placeholder: (context, url) =>
                                             Lottie.asset(
                                                 "assets/jsons/atom-loader.json"),
@@ -191,7 +192,7 @@ class _AuctionProductDetailScreenState
                                   const Divider(),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 20.0),
+                                        vertical: 10.0),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -282,10 +283,12 @@ class _AuctionProductDetailScreenState
                                                       .currentUser!.uid ==
                                                   Get.arguments[0]
                                                       [TradeFormModel().userId]
-                                              ? Text(
-                                                  "You cannot bid or Trade on/with your own product",
-                                                  style: context
-                                                      .textTheme.bodyLarge,
+                                              ? Center(
+                                                  child: Text(
+                                                    "* You cannot bid or Trade on/with your own product",
+                                                    style: context
+                                                        .textTheme.bodySmall,
+                                                  ),
                                                 )
                                               : Row(
                                                   mainAxisAlignment:

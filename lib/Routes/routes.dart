@@ -1,10 +1,4 @@
 class Routes {
-  // Main Screens
-  // final String homeScreen = "/home";
-  // final String auctionScreen = "/auctionScreen";
-  // final String eWasteScreen = "/eWasteScreen";
-  // final String notificationScreen = "/notificationScreen";
-  // final String profileScreen = "/profileScreen";
   //Forms
   final String addTradeForm = "/addTrade";
   final String addAuctionForm = "/addAuction";
@@ -36,6 +30,11 @@ class Routes {
   final String auctionTradeFeature = "/auctionTradeFeatures";
   final String auctionTradeArrivals = "/auctionTradeArrivals";
   final String auctionTradeSpecials = "/auctionTradeSpecials";
+  final String allproductBids = "/allProductBids";
+  final String allproductBidsDetails = "/allProductBidsDetails";
+  final String bidDetailsScreen = "/BidDetailsScreen";
+  final String auctionBidDetails = "/auctionBidDetails";
+  final String allAuctionBids = "/addAuctionBids";
 
   // Trade Detail Screens
   final String categoryDetails = "/categoryDetails";

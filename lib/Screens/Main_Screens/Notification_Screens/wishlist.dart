@@ -214,6 +214,7 @@ class TradeWidget extends StatelessWidget {
                     child: Text(
                         navController.data[index].docs[0]
                             [TradeFormModel().title],
+                        maxLines: 2,
                         overflow: TextOverflow.fade,
                         style: context.textTheme.bodySmall!
                             .copyWith(fontFamily: "bold")),
@@ -234,6 +235,7 @@ class TradeWidget extends StatelessWidget {
                       Text(
                           navController.data[index].docs[0]
                               [TradeFormModel().tradeWith],
+                          maxLines: 2,
                           style: context.textTheme.bodySmall),
                     ],
                   ),
@@ -280,11 +282,13 @@ class AuctionWidget extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 30),
       child: InkWell(
         onTap: () {
-          Get.toNamed(Routes().auctionProductDetails,
-              arguments: [navController.data[index].docs[0] , showingDate.inDays] );
+          Get.toNamed(Routes().auctionProductDetails, arguments: [
+            navController.data[index].docs[0],
+            showingDate.inDays
+          ]);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -322,6 +326,7 @@ class AuctionWidget extends StatelessWidget {
                     child: Text(
                         navController.data[index].docs[0]
                             [TradeFormModel().title],
+                        maxLines: 2,
                         overflow: TextOverflow.fade,
                         style: context.textTheme.bodySmall!
                             .copyWith(fontFamily: "bold")),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({super.key});
+class AllProdBidsDetails extends StatefulWidget {
+  const AllProdBidsDetails({super.key});
 
   @override
-  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
+  State<AllProdBidsDetails> createState() => _AllProdBidsDetailsState();
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+class _AllProdBidsDetailsState extends State<AllProdBidsDetails> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

@@ -151,8 +151,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     "Trading With : ",
@@ -161,12 +167,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                         .copyWith(
                                                             fontFamily: "bold"),
                                                   ),
-                                                  Text(
-                                                    Get.arguments[
-                                                        TradeFormModel()
-                                                            .tradeWith],
-                                                    style: context
-                                                        .textTheme.bodyMedium,
+                                                  SizedBox(
+                                                    height: 70,
+                                                    width: 150,
+                                                    child: Flexible(
+                                                      child: Text(
+                                                        Get.arguments[
+                                                            TradeFormModel()
+                                                                .tradeWith],
+                                                        style: context.textTheme
+                                                            .bodyMedium,
+                                                      ),
+                                                    ),
                                                   )
                                                 ],
                                               ),
@@ -203,7 +215,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   const Divider(),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 20.0),
+                                        vertical: 10.0),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -293,10 +305,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                       .currentUser!.uid ==
                                                   Get.arguments[
                                                       TradeFormModel().userId]
-                                              ? Text(
-                                                  "You cannot bid or Trade on/with your own product",
-                                                  style: context
-                                                      .textTheme.bodyLarge,
+                                              ? Center(
+                                                  child: Text(
+                                                    "* You cannot bid or Trade on/with your own product",
+                                                    style: context
+                                                        .textTheme.bodySmall,
+                                                  ),
                                                 )
                                               : Row(
                                                   mainAxisAlignment:
@@ -355,9 +369,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ))
                   ],
                 )),
-
-
-
                 _bannerAd != null
                     ? Align(
                         alignment: Alignment.bottomCenter,

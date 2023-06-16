@@ -1,15 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../Components/bid_card.dart';
 import '../../Components/placeholder_widget.dart';
 import '../../Components/top_row.dart';
 import '../../Models/trade_form_model.dart';
 import '../../Routes/routes.dart';
-import '../../Themes/main_colors.dart';
 
 class AllBidsScreen extends StatefulWidget {
   const AllBidsScreen({super.key});
@@ -70,53 +69,7 @@ class _AllBidsScreenState extends State<AllBidsScreen> {
                       ),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                            height: 280,
-                            width: 140,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: AppColors().secDarkGrey,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15.0),
-                                  child: CachedNetworkImage(
-                                    height: 120,
-                                    width: 80,
-                                    imageUrl: snapshot.data!.docs[index]
-                                        [TradeFormModel().img],
-                                    placeholder: (context, url) {
-                                      return Lottie.asset(
-                                          "assets/jsons/atom-loader.json");
-                                    },
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 15.0),
-                                  child: Text(
-                                    snapshot.data!.docs[index]
-                                        [TradeFormModel().title],
-                                    maxLines: 1,
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Trading With : ",
-                                      style: context.textTheme.bodySmall,
-                                    ),
-                                    Text(
-                                        snapshot.data!.docs[index]
-                                            [TradeFormModel().tradeWith],
-                                        maxLines: 1,
-                                        style: context.textTheme.bodySmall),
-                                  ],
-                                ),
-                              ],
-                            ));
+                        return BidCard(snapshot: snapshot, index: index);
                       },
                     ),
                   );

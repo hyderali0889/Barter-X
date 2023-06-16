@@ -4,6 +4,7 @@ class TradeFormModel {
   final String title = "Title";
   final String isAuction = "isAuction";
   final String bidOn = "bidingOn";
+  final String isAccepted = "isAccepted";
   final String email = "Email";
   final String phone = "Phone";
   final String date = "endDate";

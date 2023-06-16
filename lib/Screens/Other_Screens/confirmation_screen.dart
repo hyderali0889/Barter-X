@@ -97,10 +97,12 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
                           padding: const EdgeInsets.all(20.0),
                           child: Column(
                             children: [
-                              Text(
-                                controller.data.value!.docs[0]
-                                    [TradeFormModel().title],
-                                style: context.textTheme.bodyLarge,
+                              Flexible(
+                                child: Text(
+                                  controller.data.value!.docs[0]
+                                      [TradeFormModel().title],
+                                  style: context.textTheme.bodyLarge,
+                                ),
                               ),
                               const Divider(),
                               Padding(
@@ -113,10 +115,12 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
                                       style: context.textTheme.bodyMedium!
                                           .copyWith(fontFamily: "bold"),
                                     ),
-                                    Text(
-                                      controller.data.value!.docs[0]
-                                          [TradeFormModel().tradeWith],
-                                      style: context.textTheme.bodyMedium,
+                                    Flexible(
+                                      child: Text(
+                                        controller.data.value!.docs[0]
+                                            [TradeFormModel().tradeWith],
+                                        style: context.textTheme.bodyMedium,
+                                      ),
                                     ),
                                   ],
                                 ),

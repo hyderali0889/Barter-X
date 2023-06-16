@@ -24,18 +24,14 @@ class _AllEWasteScreenState extends State<AllEWasteScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: SizedBox(
-         width:size.width,
-         height:size.height,
-          child:Column(
-            children: [
-                          const TopRow(
+          child: SizedBox(
+        width: size.width,
+        height: size.height,
+        child: Column(
+          children: [
+            const TopRow(
               text: "All EWastes",
-            )
-            ,
-
-
-
+            ),
             Expanded(
               child: FutureBuilder(
                 future: FirebaseFirestore.instance
@@ -73,66 +69,68 @@ class _AllEWasteScreenState extends State<AllEWasteScreen> {
                       ),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
-
-                        return Container(
-                            height: 280,
-                            width: 140,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: AppColors().secDarkGrey,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15.0),
-                                  child: CachedNetworkImage(
-                                    height: 120,
-                                    width: 80,
-                                    imageUrl: snapshot.data!.docs[index]
-                                        [TradeFormModel().img],
-                                    placeholder: (context, url) {
-                                      return Lottie.asset(
-                                          "assets/jsons/atom-loader.json");
-                                    },
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 15.0),
-                                  child: Text(snapshot.data!.docs[index]
-                                      [TradeFormModel().title] ,
-                                    maxLines: 1,
-                                      
-                                      ),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Trading With : ",
-                                      style: context.textTheme.bodySmall,
+                        return InkWell(
+                          onTap: () {
+                            Get.toNamed(Routes().productDetails,
+                                arguments: snapshot.data!.docs[index]);
+                          },
+                          child: Container(
+                              height: 280,
+                              width: 140,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: AppColors().secDarkGrey,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 15.0),
+                                    child: CachedNetworkImage(
+                                      height: 120,
+                                      width: 80,
+                                      imageUrl: snapshot.data!.docs[index]
+                                          [TradeFormModel().img],
+                                      placeholder: (context, url) {
+                                        return Lottie.asset(
+                                            "assets/jsons/atom-loader.json");
+                                      },
                                     ),
-                                    Text(snapshot.data!.docs[index][TradeFormModel().tradeWith],
-                                    maxLines: 1,
-
-                                        style: context.textTheme.bodySmall),
-                                  ],
-                                ),
-
-                              ],
-                            ));
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15.0),
+                                    child: Text(
+                                      snapshot.data!.docs[index]
+                                          [TradeFormModel().title],
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Trading With : ",
+                                        style: context.textTheme.bodySmall,
+                                      ),
+                                      Text(
+                                          snapshot.data!.docs[index]
+                                              [TradeFormModel().tradeWith],
+                                          maxLines: 1,
+                                          style: context.textTheme.bodySmall),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                        );
                       },
                     ),
                   );
                 }),
               ),
             )
-
-
-             ],
+          ],
         ),
-       )
-      ),
+      )),
     );
   }
 }
