@@ -43,6 +43,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void getUserPoints() async {
+    if (!context.mounted) {
+      return;
+    }
     DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
         .instance
         .collection("Users")
@@ -57,6 +60,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    if (!context.mounted) {
+      return;
+    }
     loadAd();
     getUserPoints();
   }

@@ -270,7 +270,7 @@ class AuctionWidget extends StatelessWidget {
     Duration showingDate =
         date.difference(DateTime(date2.year, date2.month, date2.day));
 
-    if (showingDate.inDays < 0) {
+    if (showingDate.inDays < 1) {
       FirebaseFunctions().markAsinActive(context,
           navController.data[index].docs[0][TradeFormModel().productId]);
     }

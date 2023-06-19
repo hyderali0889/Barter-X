@@ -193,12 +193,12 @@ class FirebaseFunctions {
       QuerySnapshot<Map<String, dynamic>> point = await FirebaseFirestore
           .instance
           .collection("Users")
-          .where(TradeFormModel().userId, isEqualTo: userId)
+          .where("userId", isEqualTo: userId)
           .get();
       double mainPoints = (double.parse(point.docs[0]["Points"]) + points) / 2;
       QuerySnapshot newData = await FirebaseFirestore.instance
           .collection("Users")
-          .where(TradeFormModel().userId, isEqualTo: userId)
+          .where("userId", isEqualTo: userId)
           .get();
 
       for (var data in newData.docs) {
@@ -361,7 +361,7 @@ class FirebaseFunctions {
           .get()
           .then((value) {
         for (var ele in value.docs) {
-          ele.reference.update({TradeFormModel().isActive: "False"});
+         ele.reference.update({TradeFormModel().isActive: "False"});
         }
       });
     } catch (e) {
@@ -388,6 +388,32 @@ class FirebaseFunctions {
           .get();
 
       return data;
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
+    }
+  }
+
+  /*
+   █████╗  ██████╗ ██████╗███████╗██████╗ ████████╗    ██████╗ ██╗██████╗
+  ██╔══██╗██╔════╝██╔════╝██╔════╝██╔══██╗╚══██╔══╝    ██╔══██╗██║██╔══██╗
+  ███████║██║     ██║     █████╗  ██████╔╝   ██║       ██████╔╝██║██║  ██║
+  ██╔══██║██║     ██║     ██╔══╝  ██╔═══╝    ██║       ██╔══██╗██║██║  ██║
+  ██║  ██║╚██████╗╚██████╗███████╗██║        ██║       ██████╔╝██║██████╔╝
+  ╚═╝  ╚═╝ ╚═════╝ ╚═════╝╚══════╝╚═╝        ╚═╝       ╚═════╝ ╚═╝╚═════╝
+
+  */
+
+  acceptBid(context, bidTitle) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+          .instance
+          .collection("Bids")
+          .where(TradeFormModel().title, isEqualTo: bidTitle)
+          .get();
+
+      for (var dat in data.docs) {
+       await dat.reference.update({TradeFormModel().isAccepted: true});
+      }
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }

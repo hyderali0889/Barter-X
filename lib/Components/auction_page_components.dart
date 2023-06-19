@@ -864,7 +864,7 @@ class AuctionDataWidgetRow extends StatelessWidget {
     Duration showingDate =
         date.difference(DateTime(date2.year, date2.month, date2.day));
 
-    if (showingDate.inDays < 0) {
+    if (showingDate.inDays < 1) {
       FirebaseFunctions().markAsinActive(
           context, data.data!.docs[index][TradeFormModel().productId]);
     }
@@ -881,7 +881,7 @@ class AuctionDataWidgetRow extends StatelessWidget {
               data.data == null) {
             return;
           }
-          if (showingDate.inDays < 0) {
+          if (showingDate.inDays < 1) {
             return;
           }
           Get.toNamed(Routes().auctionProductDetails,
@@ -941,7 +941,7 @@ class AuctionDataWidgetRow extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                              showingDate.inDays < 0
+                              showingDate.inDays < 1
                                   ? "Auction Ended"
                                   : "${showingDate.inDays} Days",
                               maxLines: 1,
@@ -981,7 +981,7 @@ class AuctionDataWidgetLength extends StatelessWidget {
     Duration showingDate =
         date.difference(DateTime(date2.year, date2.month, date2.day));
 
-    if (showingDate.inDays < 0) {
+    if (showingDate.inDays < 1) {
       FirebaseFunctions().markAsinActive(context,
           data.data!.docs[rand.elementAt(3)][TradeFormModel().productId]);
     }
@@ -1001,7 +1001,7 @@ class AuctionDataWidgetLength extends StatelessWidget {
               data.data == null) {
             return;
           }
-          if (showingDate.inDays < 0) {
+          if (showingDate.inDays < 1) {
             return;
           }
           Get.toNamed(Routes().auctionProductDetails, arguments: [
@@ -1065,7 +1065,7 @@ class AuctionDataWidgetLength extends StatelessWidget {
                                     style: context.textTheme.bodySmall,
                                   ),
                                   Text(
-                                      showingDate.inDays < 0
+                                      showingDate.inDays < 1
                                           ? "Auction Ended"
                                           : "${showingDate.inDays} Days",
                                       overflow: TextOverflow.fade,

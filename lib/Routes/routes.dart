@@ -33,7 +33,7 @@ class Routes {
   final String allproductBids = "/allProductBids";
   final String allproductBidsDetails = "/allProductBidsDetails";
   final String bidDetailsScreen = "/BidDetailsScreen";
-  final String auctionBidDetails = "/auctionBidDetails";
+
   final String allAuctionBids = "/addAuctionBids";
 
   // Trade Detail Screens

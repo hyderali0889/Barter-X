@@ -36,6 +36,8 @@ import '../Bindings/Main_Bindings/Form_Bindings/bid_form_binding.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/ewaste_form_bindings.dart';
 import '../Bindings/Main_Bindings/Form_Bindings/trade_form_bindings.dart';
 import '../Bindings/Main_Bindings/Navigation_bindings/navigation_binding.dart';
+import '../Bindings/Main_Bindings/Other_Bindings/auction_bid_binding.dart';
+import '../Bindings/Main_Bindings/Other_Bindings/change_password_binding.dart';
 import '../Bindings/Main_Bindings/Other_Bindings/search_binding.dart';
 import '../Bindings/Main_Bindings/Trade_and_EWaste_Bindings/ratings_bindings.dart';
 import '../Screens/Main_Screens/Auction_SubPages/Auction_Screens/auction_arrivals.dart';
@@ -50,7 +52,6 @@ import '../Screens/Other_Screens/all_auctions.dart';
 import '../Screens/Other_Screens/all_bids.dart';
 import '../Screens/Other_Screens/all_ewastes.dart';
 import '../Screens/Other_Screens/all_trades.dart';
-import '../Screens/Other_Screens/auction_bid_details.dart';
 import '../Screens/Other_Screens/search_screen.dart';
 import './routes.dart';
 import 'package:get/get.dart';
@@ -66,10 +67,13 @@ class AppRouter {
 
     GetPage(name: Routes().splashScreen, page: (() => const SplashScreen())),
     GetPage(name: Routes().allTrades, page: (() => const AllTradesScreen())),
-    GetPage(name: Routes().allAuctions, page: (() => const AllAuctionsScreen())),
+    GetPage(
+        name: Routes().allAuctions, page: (() => const AllAuctionsScreen())),
     GetPage(name: Routes().allEWastes, page: (() => const AllEWasteScreen())),
     GetPage(name: Routes().allBids, page: (() => const AllBidsScreen())),
-    GetPage(name: Routes().changePassword, page: (() => const ChangePasswordScreen())),
+    GetPage(
+        name: Routes().changePassword,
+        page: (() => const ChangePasswordScreen()  )   , binding: ChangePasswordBinding() ),
     // Auth Screens
     GetPage(
         name: Routes().loginScreen,
@@ -142,9 +146,7 @@ class AppRouter {
     GetPage(
         name: Routes().auctionTradeSpecials,
         page: () => const AuctionSpecials()),
-    GetPage(
-        name: Routes().allproductBids,
-        page: () => const AllProductBids()),
+    GetPage(name: Routes().allproductBids, page: () => const AllProductBids()),
     GetPage(
         name: Routes().allproductBidsDetails,
         page: () => const AllProdBidsDetails()),
@@ -167,9 +169,11 @@ class AppRouter {
         name: Routes().auctionProductDetails,
         page: () => (const AuctionProductDetailScreen()),
         binding: AuctionProductDetailsBindings()),
-    GetPage(name: Routes().bidDetailsScreen, page:()=>const BidDetailScreen()),
-    GetPage(name: Routes().auctionBidDetails, page:()=>const AuctionBidDetailScreen()),
-    GetPage(name: Routes().allAuctionBids, page:()=>const AllAuctionBids()),
+    GetPage(
+        name: Routes().bidDetailsScreen, page: () => const BidDetailScreen() ,binding: AuctionBidDetailsBinding() ),
+
+
+    GetPage(name: Routes().allAuctionBids, page: () => const AllAuctionBids()),
 
     GetPage(
         name: Routes().confirmationScreen,

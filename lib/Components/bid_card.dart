@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -16,8 +17,15 @@ class BidCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(Routes().bidDetailsScreen,
+
+        if(snapshot.data!.docs[index][TradeFormModel().userId] == FirebaseAuth.instance.currentUser!.uid){
+             Get.toNamed(Routes().bidDetailsScreen,
             arguments: snapshot.data!.docs[index]);
+         }else{
+ Get.offAllNamed(Routes().bidDetailsScreen,
+            arguments: snapshot.data!.docs[index]);
+          }
+
       },
       child: Container(
           height: 280,
@@ -46,24 +54,19 @@ class BidCard extends StatelessWidget {
                   maxLines: 1,
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Bid By : ",
-                    style: context.textTheme.bodySmall,
-                  ),
-                  Text(
-                      snapshot.data!.docs[index][TradeFormModel().email]
-                          .toString()
-                          .split("@")[0],
-                      maxLines: 1,
-                      style: context.textTheme.bodySmall),
-                ],
+              Text(
+                snapshot.data!.docs[index][TradeFormModel().isAccepted]
+                    ? "Accepted ✔"
+                    : "Not yet Accepted ❌",
+                style: context.textTheme.bodySmall!.copyWith(
+                    fontFamily: "bold",
+                    color: snapshot.data!.docs[index]
+                            [TradeFormModel().isAccepted]
+                        ? AppColors().secGreen
+                        : AppColors().secRed),
               ),
             ],
           )),
     );
-
   }
 }
