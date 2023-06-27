@@ -405,7 +405,7 @@ class FeaturedProducts extends StatelessWidget {
                         width: size.width,
                         height: data.data!.docs.length < 5
                             ? 290
-                            : size.height * 0.58,
+                            : 550,
                         child: Column(
                           children: [
                             SizedBox(
@@ -638,13 +638,13 @@ class SpecialProducts extends StatelessWidget {
                       SizedBox(
                         width: size.width,
                         height: data.data!.docs.length < 5
-                            ? 290
-                            : size.height * 0.58,
+                            ? 300
+                            : 550,
                         child: Column(
                           children: [
                             SizedBox(
                               width: size.width,
-                              height: 280,
+                              height: 300,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: data.data!.docs.length >= 2 ? 2 : 1,
@@ -870,7 +870,7 @@ class DataWidgetRow extends StatelessWidget {
               color: AppColors().secSoftGrey,
               borderRadius: BorderRadius.circular(10)),
           width: size.width * 0.38,
-          height: 300,
+          height: 320,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -906,7 +906,7 @@ class DataWidgetRow extends StatelessWidget {
                 ),
                 Container(
                   width: size.width * 0.38,
-                  height: 40,
+                  height: 50,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   child: Column(
@@ -945,7 +945,7 @@ class DataWidgetLength extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25.0),
+      padding: const EdgeInsets.only(top: 25.0 , bottom:15),
       child: InkWell(
         onTap: () {
           if ((data.connectionState == ConnectionState.active ||
@@ -958,7 +958,7 @@ class DataWidgetLength extends StatelessWidget {
         },
         child: Container(
           width: size.width * 0.9,
-          height: size.height * 0.2,
+          height: 170,
           decoration: BoxDecoration(
               color: AppColors().secGreen,
               borderRadius: BorderRadius.circular(10)),
@@ -996,26 +996,36 @@ class DataWidgetLength extends StatelessWidget {
                               child: Text(
                                   data.data!.docs[rand.elementAt(3)]
                                       [TradeFormModel().title],
+
+                                       maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   style: context.textTheme.bodySmall!
                                       .copyWith(fontFamily: "bold"))),
                           Container(
                               width: size.width * 0.4,
-                              height: 40,
+                              height: 70,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10)),
-                              child: Row(
+                              child: Column(
+                                 mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Trading With : ",
                                     overflow: TextOverflow.fade,
                                     style: context.textTheme.bodySmall,
                                   ),
-                                  Text(
-                                      data.data!.docs[rand.elementAt(3)]
-                                          [TradeFormModel().tradeWith],
-                                      overflow: TextOverflow.fade,
-                                      style: context.textTheme.bodySmall),
+                                  SizedBox(
+                                    width:300,
+                                    child:
+                                       Text(
+                                          data.data!.docs[rand.elementAt(3)]
+                                              [TradeFormModel().tradeWith],
+                                          overflow: TextOverflow.fade,
+                                          maxLines: 1,
+                                          style: context.textTheme.bodySmall),
+
+                                  ),
                                 ],
                               )),
                         ],

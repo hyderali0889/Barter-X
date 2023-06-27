@@ -35,7 +35,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     loadAd();
     AdClass().loadAd();
     FirebaseFunctions().getUserPoints(
-        context, controller, FirebaseAuth.instance.currentUser!.uid);
+        context, controller, Get.arguments[TradeFormModel().userId]);
   }
 
   BannerAd? _bannerAd;
@@ -170,7 +170,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                   SizedBox(
                                                     height: 70,
                                                     width: 150,
-                                                    child: Flexible(
+                                                    child: SingleChildScrollView(
                                                       child: Text(
                                                         Get.arguments[
                                                             TradeFormModel()

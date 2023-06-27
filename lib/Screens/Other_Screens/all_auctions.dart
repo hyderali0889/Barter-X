@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../Components/placeholder_widget.dart';
 import '../../Components/top_row.dart';
@@ -64,11 +63,9 @@ class _AllAuctionsScreenState extends State<AllAuctionsScreen> {
                     child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 300,
-                        mainAxisExtent: 280,
-                        crossAxisSpacing: 50,
-                      ),
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 50,
+                              mainAxisExtent: 270),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         DateTime date = snapshot
@@ -148,7 +145,8 @@ class _AllAuctionsScreenState extends State<AllAuctionsScreen> {
                                                 [TradeFormModel().productId]);
                                       },
                                       child: Container(
-                                          width: 160,
+                                        alignment: Alignment.center,
+                                          width: 150,
                                           height: 40,
                                           decoration: BoxDecoration(
                                               color: AppColors().secRed,
@@ -166,15 +164,7 @@ class _AllAuctionsScreenState extends State<AllAuctionsScreen> {
                                                       .copyWith(
                                                           color: AppColors()
                                                               .primaryWhite)),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: Icon(
-                                                  UniconsLine.podium,
-                                                  color:
-                                                      AppColors().primaryWhite,
-                                                ),
-                                              )
+
                                             ],
                                           ))),
                                 )

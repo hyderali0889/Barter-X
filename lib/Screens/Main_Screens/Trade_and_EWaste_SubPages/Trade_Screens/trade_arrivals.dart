@@ -55,7 +55,7 @@ class _TradeArrivalsState extends State<TradeArrivals> {
                           size: size,
                           data: Get.arguments,
                           index: Get.arguments.data!.docs.length > 5
-                              ? (Get.arguments.data!.docs.length) - index
+                              ? (Get.arguments.data!.docs.length - 1) - index
                               : index),
                     );
                   },

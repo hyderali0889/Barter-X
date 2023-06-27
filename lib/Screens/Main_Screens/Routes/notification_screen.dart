@@ -98,7 +98,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 )),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
+                            padding: const EdgeInsets.only(right: 10.0 , left:10.0),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 100),
                               alignment: Alignment.center,

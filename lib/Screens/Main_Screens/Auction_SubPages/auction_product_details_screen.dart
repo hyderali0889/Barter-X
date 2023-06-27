@@ -38,7 +38,7 @@ class _AuctionProductDetailScreenState
     loadAd();
     AdClass().loadAd();
     FirebaseFunctions().getUserPoints(
-        context, controller, FirebaseAuth.instance.currentUser!.uid);
+        context, controller, Get.arguments[TradeFormModel().userId]);
   }
 
   BannerAd? _bannerAd;

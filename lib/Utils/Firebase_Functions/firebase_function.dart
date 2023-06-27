@@ -172,6 +172,7 @@ class FirebaseFunctions {
           .where(TradeFormModel().productId, isEqualTo: productId)
           .get();
 
+
       controller.addData(data);
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
@@ -188,21 +189,21 @@ class FirebaseFunctions {
 
   */
 
-  rateUser(double points, userId) async {
+  rateUser(num points,String userId) async {
     try {
       QuerySnapshot<Map<String, dynamic>> point = await FirebaseFirestore
           .instance
           .collection("Users")
           .where("userId", isEqualTo: userId)
           .get();
-      double mainPoints = (double.parse(point.docs[0]["Points"]) + points) / 2;
+      num mainPoints = (num.parse(point.docs[0]["Points"]) + points) / 2;
       QuerySnapshot newData = await FirebaseFirestore.instance
           .collection("Users")
           .where("userId", isEqualTo: userId)
           .get();
 
       for (var data in newData.docs) {
-        data.reference.update({"Points": mainPoints.toString()});
+       await data.reference.update({"Points": mainPoints});
       }
     } catch (e) {
       print(e);
@@ -361,7 +362,7 @@ class FirebaseFunctions {
           .get()
           .then((value) {
         for (var ele in value.docs) {
-         ele.reference.update({TradeFormModel().isActive: "False"});
+       ele.reference.update({TradeFormModel().isActive: "False"});
         }
       });
     } catch (e) {

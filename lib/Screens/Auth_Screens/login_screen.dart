@@ -154,6 +154,16 @@ class MainView extends StatelessWidget {
                           .login(emailController, passwordController, context , controller);
                     }),
               ),
+
+                Align(
+                            alignment: Alignment.center,
+                            child:Padding(
+padding:const EdgeInsets.all(30),
+
+                             child: Text("Customer Support Email: hyderali0889@gmail.com" , style: context.textTheme.bodySmall!.copyWith(fontSize: 10),))
+                           )
+
+
             ],
           ),
           const BottomRow()

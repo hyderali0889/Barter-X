@@ -56,7 +56,7 @@ class _RatingsScreenState extends State<RatingsScreen> {
                                 .copyWith(fontSize: 80),
                           ),
                           Slider(
-                              value: controller.value.value,
+                              value: controller.value.value.toDouble(),
                               label: controller.value.value.toString(),
                               max: 5,
                               min: -1,
@@ -76,7 +76,7 @@ class _RatingsScreenState extends State<RatingsScreen> {
                             controller.startLoading(true);
 
                             await FirebaseFunctions().rateUser(
-                                controller.value.value, Get.arguments);
+                                controller.value.value, Get.arguments.toString().trim());
                             Get.offAllNamed(Routes().navigationScreen);
                             controller.startLoading(false);
                           },

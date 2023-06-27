@@ -179,7 +179,7 @@ class FirebaseAuthFunctions {
           .set({
         "userId": FirebaseAuth.instance.currentUser!.uid.toString(),
         "Points": 0,
-        "Ratings": 0
+    
       }).timeout(const Duration(seconds: 30));
     } on FirebaseAuthException catch (e) {
       controller.startLoading1(false);

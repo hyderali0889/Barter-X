@@ -61,12 +61,11 @@ class _AllEWasteScreenState extends State<AllEWasteScreen> {
                     padding: const EdgeInsets.all(20.0),
                     child: GridView.builder(
                       gridDelegate:
+
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 300,
-                        mainAxisExtent: 240,
-                        crossAxisSpacing: 50,
-                      ),
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 50,
+                              mainAxisExtent: 270),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         return InkWell(

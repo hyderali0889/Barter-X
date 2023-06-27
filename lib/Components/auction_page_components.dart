@@ -411,7 +411,7 @@ class AuctionFeaturedProducts extends StatelessWidget {
                         width: size.width,
                         height: data.data!.docs.length < 5
                             ? 290
-                            : size.height * 0.58,
+                            : 550,
                         child: Column(
                           children: [
                             SizedBox(
@@ -645,7 +645,7 @@ class AuctionSpecialProducts extends StatelessWidget {
                         width: size.width,
                         height: data.data!.docs.length < 5
                             ? 300
-                            : size.height * 0.58,
+                            : 550,
                         child: Column(
                           children: [
                             SizedBox(
@@ -892,7 +892,7 @@ class AuctionDataWidgetRow extends StatelessWidget {
               color: AppColors().secSoftGrey,
               borderRadius: BorderRadius.circular(10)),
           width: size.width * 0.38,
-          height: 310,
+          height: 320,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -916,7 +916,7 @@ class AuctionDataWidgetRow extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Container(
                     width: size.width * 0.38,
-                    height: 20,
+                    height: 40,
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(10)),
                     child: Text(data.data!.docs[index][TradeFormModel().title],
@@ -928,7 +928,7 @@ class AuctionDataWidgetRow extends StatelessWidget {
                 ),
                 Container(
                   width: size.width * 0.38,
-                  height: 35,
+                  height: 50,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   child: Column(
@@ -993,7 +993,7 @@ class AuctionDataWidgetLength extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(top: 25.0),
+      padding: const EdgeInsets.only(top: 25.0 , bottom:15),
       child: InkWell(
         onTap: () {
           if ((data.connectionState == ConnectionState.active ||
@@ -1011,7 +1011,7 @@ class AuctionDataWidgetLength extends StatelessWidget {
         },
         child: Container(
           width: size.width * 0.9,
-          height: size.height * 0.2,
+          height: 170,
           decoration: BoxDecoration(
               color: AppColors().secGreen,
               borderRadius: BorderRadius.circular(10)),
@@ -1049,15 +1049,18 @@ class AuctionDataWidgetLength extends StatelessWidget {
                               child: Text(
                                   data.data!.docs[rand.elementAt(3)]
                                       [TradeFormModel().title],
+                                      maxLines:1,
                                   overflow: TextOverflow.fade,
                                   style: context.textTheme.bodySmall!
                                       .copyWith(fontFamily: "bold"))),
                           Container(
                               width: size.width * 0.4,
-                              height: 40,
+                              height: 70,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10)),
-                              child: Row(
+                              child: Column(
+                                 mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Ending in : ",
@@ -1069,6 +1072,8 @@ class AuctionDataWidgetLength extends StatelessWidget {
                                           ? "Auction Ended"
                                           : "${showingDate.inDays} Days",
                                       overflow: TextOverflow.fade,
+                                      maxLines:1,
+
                                       style: context.textTheme.bodySmall),
                                 ],
                               )),

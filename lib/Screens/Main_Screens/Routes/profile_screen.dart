@@ -43,9 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void getUserPoints() async {
-    if (!context.mounted) {
-      return;
-    }
+
     DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
         .instance
         .collection("Users")
@@ -60,9 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    if (!context.mounted) {
-      return;
-    }
+
     loadAd();
     getUserPoints();
   }
@@ -223,10 +219,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     borderRadius: BorderRadius.circular(15)),
                                 width: 150,
                                 height: 50,
-                                child: Text(
-                                  "Points : ${controller.userPoints.value != "" ? controller.userPoints.value : "Loading"}",
-                                  style: context.textTheme.bodyMedium!
-                                      .copyWith(fontFamily: "bold"),
+                                child: Obx(
+                                  ()=> Text(
+                                    "Points : ${controller.userPoints.value != "0" ? controller.userPoints.value : "Loading"}",
+                                    style: context.textTheme.bodyMedium!
+                                        .copyWith(fontFamily: "bold"),
+                                  ),
                                 ),
                               )
                             ],
@@ -249,6 +247,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             title: "Other Settings",
                             row: otherSettings,
                           ),
+
+                          Align(
+                            alignment: Alignment.center,
+                            child:  Padding(
+padding:const EdgeInsets.all(30),
+                             child: Text("Your id could get banned if your points are less then -3. Be nice to your customers to get positive points. For more info contact us at hyderali0889@gmail.com" , style: context.textTheme.bodySmall!.copyWith(fontSize: 10),))
+                           )
                         ],
                       ),
                     )
