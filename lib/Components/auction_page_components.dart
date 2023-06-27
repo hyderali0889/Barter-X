@@ -411,7 +411,7 @@ class AuctionFeaturedProducts extends StatelessWidget {
                         width: size.width,
                         height: data.data!.docs.length < 5
                             ? 290
-                            : 550,
+                            : 520,
                         child: Column(
                           children: [
                             SizedBox(
@@ -645,7 +645,7 @@ class AuctionSpecialProducts extends StatelessWidget {
                         width: size.width,
                         height: data.data!.docs.length < 5
                             ? 300
-                            : 550,
+                            : 520,
                         child: Column(
                           children: [
                             SizedBox(

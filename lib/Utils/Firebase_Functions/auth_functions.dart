@@ -7,7 +7,6 @@ import '../../Controllers/Auth_Controllers/login_controller.dart';
 import '../../Routes/routes.dart';
 
 class FirebaseAuthFunctions {
-
   /*
   ██╗      ██████╗  ██████╗ ██╗███╗   ██╗
   ██║     ██╔═══██╗██╔════╝ ██║████╗  ██║
@@ -34,13 +33,11 @@ class FirebaseAuthFunctions {
       controller.startLoading(true);
       FirebaseAuth authInstance = FirebaseAuth.instance;
 
-      await authInstance
-          .signInWithEmailAndPassword(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim())
-         ;
+      await authInstance.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
 
-            if (!FirebaseAuth.instance.currentUser!.emailVerified) {
+      if (!FirebaseAuth.instance.currentUser!.emailVerified) {
         await FirebaseAuth.instance.currentUser!.delete();
         controller.startLoading(false);
 
@@ -58,6 +55,24 @@ class FirebaseAuthFunctions {
         return;
       }
 
+      QuerySnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+          .instance
+          .collection("Users")
+          .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      for (var dat in data.docs) {
+        if (dat.data()["Disabled"] == true) {
+          await FirebaseAuth.instance.signOut();
+        controller.startLoading(false);
+
+
+          ReturnWidgets().returnBottomSheet(context,
+              "An Error Occurred. This Account is disabled. Please contact customer support email.");
+          return;
+        }
+      }
+
       Get.offAllNamed(Routes().routeCheck);
     } on FirebaseAuthException catch (e) {
       controller.startLoading(false);
@@ -65,7 +80,6 @@ class FirebaseAuthFunctions {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
-
 
   /*
   ██╗   ██╗███████╗██████╗ ██╗███████╗██╗   ██╗    ███████╗███╗   ███╗ █████╗ ██╗██╗
@@ -95,6 +109,7 @@ class FirebaseAuthFunctions {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
+
 /*
 ███████╗████████╗ █████╗ ██████╗ ████████╗    ████████╗██╗███╗   ███╗███████╗██████╗
 ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝    ╚══██╔══╝██║████╗ ████║██╔════╝██╔══██╗
@@ -108,14 +123,15 @@ class FirebaseAuthFunctions {
     try {
       startTimer();
 
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification().timeout(const Duration(seconds: 30));
+      await FirebaseAuth.instance.currentUser!
+          .sendEmailVerification()
+          .timeout(const Duration(seconds: 30));
     } on FirebaseAuthException catch (e) {
       stopTimer();
       controller.startTimer(false);
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
-
 
   /*
   ██████╗ ███████╗██╗     ███████╗████████╗███████╗    ██╗   ██╗███████╗███████╗██████╗
@@ -133,9 +149,7 @@ class FirebaseAuthFunctions {
 
       controller.startLoading2(true);
 
-      await FirebaseAuth.instance.currentUser!
-          .delete()
-         ;
+      await FirebaseAuth.instance.currentUser!.delete();
       controller.startLoading2(false);
 
       Get.offAllNamed(Routes().loginScreen);
@@ -145,7 +159,6 @@ class FirebaseAuthFunctions {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
-
 
   /*
    ██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗     ██████╗ ████████╗██████╗
@@ -179,7 +192,7 @@ class FirebaseAuthFunctions {
           .set({
         "userId": FirebaseAuth.instance.currentUser!.uid.toString(),
         "Points": 0,
-    
+        "Disabled": false
       }).timeout(const Duration(seconds: 30));
     } on FirebaseAuthException catch (e) {
       controller.startLoading1(false);
@@ -268,17 +281,17 @@ class FirebaseAuthFunctions {
       controller.startLoading(true);
 
       FirebaseAuth authInstance = FirebaseAuth.instance;
-      await authInstance
-          .createUserWithEmailAndPassword(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim())
-         ;
+      await authInstance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
 
       if (authInstance.currentUser == null) {
         controller.startLoading(false);
         return;
       }
-      await authInstance.currentUser!.sendEmailVerification().timeout(const Duration(seconds: 30));
+      await authInstance.currentUser!
+          .sendEmailVerification()
+          .timeout(const Duration(seconds: 30));
       controller.startLoading(false);
 
       Get.offAllNamed(Routes().emailVerificationScreen);
@@ -318,8 +331,7 @@ class FirebaseAuthFunctions {
       controller.startLoading(true);
 
       await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: emailController.text.trim())
-         ;
+          .sendPasswordResetEmail(email: emailController.text.trim());
 
       controller.startLoading(false);
     } on FirebaseAuthException catch (e) {
@@ -329,8 +341,7 @@ class FirebaseAuthFunctions {
     }
   }
 
-
-   /*
+  /*
    ███████╗███╗   ██╗██████╗      ██████╗ ███████╗    ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗
    ██╔════╝████╗  ██║██╔══██╗    ██╔═══██╗██╔════╝    ██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
    █████╗  ██╔██╗ ██║██║  ██║    ██║   ██║█████╗      █████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║

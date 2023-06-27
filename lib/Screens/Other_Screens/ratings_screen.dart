@@ -76,8 +76,9 @@ class _RatingsScreenState extends State<RatingsScreen> {
                             controller.startLoading(true);
 
                             await FirebaseFunctions().rateUser(
-                                controller.value.value, Get.arguments.toString().trim());
-                            Get.offAllNamed(Routes().navigationScreen);
+                                controller.value.value,
+                                Get.arguments.toString().trim());
+                            //   Get.offAllNamed(Routes().navigationScreen);
                             controller.startLoading(false);
                           },
                           buttonText: "Rate User",

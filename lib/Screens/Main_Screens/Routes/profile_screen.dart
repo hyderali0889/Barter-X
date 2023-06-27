@@ -1,3 +1,4 @@
+import 'package:barter_x/Utils/Firebase_Functions/firebase_function.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void getUserPoints() async {
-
     DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
         .instance
         .collection("Users")
@@ -52,6 +52,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (data.exists) {
       controller.setUserPoints(data.data()!["Points"].toString());
+    }
+
+    if (data.data()!["Points"] < -3) {
+      if (context.mounted) {
+        await FirebaseFunctions()
+            .disableUser(context, FirebaseAuth.instance.currentUser!.uid);
+      }
     }
   }
 
@@ -220,8 +227,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 width: 150,
                                 height: 50,
                                 child: Obx(
-                                  ()=> Text(
-                                    "Points : ${controller.userPoints.value != "0" ? controller.userPoints.value : "Loading"}",
+                                  () => Text(
+                                    "Points : ${controller.userPoints.value != "" ? controller.userPoints.value : "Loading"}",
                                     style: context.textTheme.bodyMedium!
                                         .copyWith(fontFamily: "bold"),
                                   ),
@@ -247,13 +254,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             title: "Other Settings",
                             row: otherSettings,
                           ),
-
                           Align(
-                            alignment: Alignment.center,
-                            child:  Padding(
-padding:const EdgeInsets.all(30),
-                             child: Text("Your id could get banned if your points are less then -3. Be nice to your customers to get positive points. For more info contact us at hyderali0889@gmail.com" , style: context.textTheme.bodySmall!.copyWith(fontSize: 10),))
-                           )
+                              alignment: Alignment.center,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(30),
+                                  child: Text(
+                                    "Your id could get banned if your points are less then -3. Be nice to your customers to get positive points. For more info contact us at hyderali0889@gmail.com",
+                                    style: context.textTheme.bodySmall!
+                                        .copyWith(fontSize: 10),
+                                  )))
                         ],
                       ),
                     )

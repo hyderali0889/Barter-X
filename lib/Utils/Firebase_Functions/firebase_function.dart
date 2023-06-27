@@ -2,13 +2,16 @@ import 'package:barter_x/Controllers/Main_Controllers/Route_Controllers/home_con
 import 'package:barter_x/Models/trade_form_model.dart';
 import 'package:barter_x/Utils/Widgets/show_modal_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
 import '../../Controllers/Main_Controllers/Auction_SubPages/auction_category_details_controller.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/auction_controller.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/notification_controller.dart';
 import '../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/category_details_controller.dart';
 import '../../Controllers/Main_Controllers/Route_Controllers/ewaste_controller.dart';
 import '../../Controllers/Main_Controllers/Trade_and_EWaste_SubPages/confimation_controller.dart';
+import '../../Routes/routes.dart';
 
 class FirebaseFunctions {
   /*
@@ -172,7 +175,6 @@ class FirebaseFunctions {
           .where(TradeFormModel().productId, isEqualTo: productId)
           .get();
 
-
       controller.addData(data);
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
@@ -189,24 +191,56 @@ class FirebaseFunctions {
 
   */
 
-  rateUser(num points,String userId) async {
+  rateUser(num points, String userId) async {
     try {
       QuerySnapshot<Map<String, dynamic>> point = await FirebaseFirestore
           .instance
           .collection("Users")
           .where("userId", isEqualTo: userId)
           .get();
-      num mainPoints = (num.parse(point.docs[0]["Points"]) + points) / 2;
+
+      num mainPoints = (point.docs[0]["Points"] + points) / 2;
+
       QuerySnapshot newData = await FirebaseFirestore.instance
           .collection("Users")
           .where("userId", isEqualTo: userId)
           .get();
 
       for (var data in newData.docs) {
-       await data.reference.update({"Points": mainPoints});
+        await data.reference.update({"Points": mainPoints});
       }
     } catch (e) {
-      print(e);
+      print("Found the error $e");
+    }
+  }
+
+  /*
+  ██████╗ ██╗███████╗ █████╗ ██████╗ ██╗     ███████╗    ██╗   ██╗███████╗███████╗██████╗
+  ██╔══██╗██║██╔════╝██╔══██╗██╔══██╗██║     ██╔════╝    ██║   ██║██╔════╝██╔════╝██╔══██╗
+  ██║  ██║██║███████╗███████║██████╔╝██║     █████╗      ██║   ██║███████╗█████╗  ██████╔╝
+  ██║  ██║██║╚════██║██╔══██║██╔══██╗██║     ██╔══╝      ██║   ██║╚════██║██╔══╝  ██╔══██╗
+  ██████╔╝██║███████║██║  ██║██████╔╝███████╗███████╗    ╚██████╔╝███████║███████╗██║  ██║
+  ╚═════╝ ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝     ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝
+
+  */
+
+  disableUser(context, String userId) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+          .instance
+          .collection("Users")
+          .where("userId", isEqualTo: userId)
+          .get();
+
+      for (var dat in data.docs) {
+        await dat.reference.update({"Disabled": true});
+      }
+
+      await FirebaseAuth.instance.signOut();
+
+      Get.offAllNamed(Routes().loginScreen);
+    } catch (e) {
+      ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
     }
   }
 
@@ -362,7 +396,7 @@ class FirebaseFunctions {
           .get()
           .then((value) {
         for (var ele in value.docs) {
-       ele.reference.update({TradeFormModel().isActive: "False"});
+          ele.reference.update({TradeFormModel().isActive: "False"});
         }
       });
     } catch (e) {
@@ -413,7 +447,7 @@ class FirebaseFunctions {
           .get();
 
       for (var dat in data.docs) {
-       await dat.reference.update({TradeFormModel().isAccepted: true});
+        await dat.reference.update({TradeFormModel().isAccepted: true});
       }
     } catch (e) {
       ReturnWidgets().returnBottomSheet(context, "An Error Occurred $e");
