@@ -7,8 +7,7 @@ import 'package:barter_x/Screens/Auth_Screens/otp_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/phone_auth.dart';
 import 'package:barter_x/Screens/Auth_Screens/reset_screen.dart';
 import 'package:barter_x/Screens/Auth_Screens/register_screen.dart';
-import 'package:barter_x/Screens/Main_Screens/Auction_SubPages/auction_profile_subs/all_prod_bids_details.dart';
-import 'package:barter_x/Screens/Main_Screens/Auction_SubPages/auction_profile_subs/all_product_bids.dart';
+
 import 'package:barter_x/Screens/Main_Screens/Forms/auction_form.dart';
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Screens/trade_arrivals.dart';
 import 'package:barter_x/Screens/Main_Screens/Trade_and_EWaste_SubPages/Trade_Screens/trade_featured.dart';
@@ -146,10 +145,6 @@ class AppRouter {
     GetPage(
         name: Routes().auctionTradeSpecials,
         page: () => const AuctionSpecials()),
-    GetPage(name: Routes().allproductBids, page: () => const AllProductBids()),
-    GetPage(
-        name: Routes().allproductBidsDetails,
-        page: () => const AllProdBidsDetails()),
 
     // Trade Details Screens
     GetPage(

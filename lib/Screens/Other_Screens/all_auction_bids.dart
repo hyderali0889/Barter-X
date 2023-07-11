@@ -69,6 +69,7 @@ class _AllAuctionBidsState extends State<AllAuctionBids> {
                             gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
+                                crossAxisSpacing: 20,
                               mainAxisSpacing: 50,
                               mainAxisExtent: 270),
                           itemCount: snapshot.data!.docs.length,

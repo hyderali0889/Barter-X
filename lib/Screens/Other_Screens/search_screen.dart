@@ -123,6 +123,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
                                         mainAxisSpacing: 50,
+                                        crossAxisSpacing: 20,
                                         mainAxisExtent: 340),
                                 scrollDirection: Axis.vertical,
                                 itemCount: snapshot.data!.docs.length,

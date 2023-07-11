@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:unicons/unicons.dart';
-
 import '../../../Components/new_product_button.dart';
 import '../../../Controllers/Main_Controllers/Auction_SubPages/auction_product_details_controller.dart';
 import '../../../Models/trade_form_model.dart';
@@ -38,7 +37,7 @@ class _AuctionProductDetailScreenState
     loadAd();
     AdClass().loadAd();
     FirebaseFunctions().getUserPoints(
-        context, controller, Get.arguments[TradeFormModel().userId]);
+        context, controller, Get.arguments[0][TradeFormModel().userId]);
   }
 
   BannerAd? _bannerAd;

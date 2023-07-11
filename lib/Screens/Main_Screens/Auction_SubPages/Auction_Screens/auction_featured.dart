@@ -48,6 +48,7 @@ class _AuctionFeaturesState extends State<AuctionFeatures> {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 50,
+                        crossAxisSpacing: 20,
                       mainAxisExtent: 340),
                   scrollDirection: Axis.vertical,
                   itemCount: Get.arguments.data!.docs.length,

@@ -42,6 +42,7 @@ class _AuctionArrivalsState extends State<AuctionArrivals> {
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
+                        crossAxisSpacing: 20,
                       mainAxisSpacing: 50,
                       mainAxisExtent: 340),
                   scrollDirection: Axis.vertical,

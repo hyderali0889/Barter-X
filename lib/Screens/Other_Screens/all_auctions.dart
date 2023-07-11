@@ -65,6 +65,7 @@ class _AllAuctionsScreenState extends State<AllAuctionsScreen> {
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 50,
+                              crossAxisSpacing: 20,
                               mainAxisExtent: 270),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
@@ -145,7 +146,7 @@ class _AllAuctionsScreenState extends State<AllAuctionsScreen> {
                                                 [TradeFormModel().productId]);
                                       },
                                       child: Container(
-                                        alignment: Alignment.center,
+                                          alignment: Alignment.center,
                                           width: 150,
                                           height: 40,
                                           decoration: BoxDecoration(
@@ -164,7 +165,6 @@ class _AllAuctionsScreenState extends State<AllAuctionsScreen> {
                                                       .copyWith(
                                                           color: AppColors()
                                                               .primaryWhite)),
-
                                             ],
                                           ))),
                                 )

@@ -110,6 +110,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
+                                            crossAxisSpacing: 20,
                                           mainAxisSpacing: 50,
                                           mainAxisExtent: 340),
                                   scrollDirection: Axis.vertical,

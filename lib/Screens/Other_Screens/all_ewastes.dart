@@ -64,6 +64,7 @@ class _AllEWasteScreenState extends State<AllEWasteScreen> {
 
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
+                                crossAxisSpacing: 20,
                               mainAxisSpacing: 50,
                               mainAxisExtent: 270),
                       itemCount: snapshot.data!.docs.length,
