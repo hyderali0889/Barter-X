@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-15   # Use older macOS runner with Xcode 15.x (more stable for now)
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v4
@@ -24,14 +24,14 @@ jobs:
       - name: Get Dependencies
         run: flutter pub get
 
-      # Important: Update CocoaPods and Firebase-related packages
-      - name: Update Pods
+      # Important: Update and install pods with the fix
+      - name: Pod Install
         run: |
           cd ios
           pod repo update
           pod install --repo-update
 
-      - name: Build IPA (for testing)
+      - name: Build IPA
         run: flutter build ipa --release --no-codesign
 
       - name: Upload IPA
