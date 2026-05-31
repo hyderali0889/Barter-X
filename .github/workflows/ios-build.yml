@@ -1,15 +1,14 @@
-name: Build iOS
+name: Build iOS for Testing
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:   # Allows manual trigger
+  workflow_dispatch:     # Click "Run workflow" manually
 
 jobs:
   build:
-    name: Build iOS IPA
     runs-on: macos-latest
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -19,22 +18,15 @@ jobs:
           flutter-version: 'stable'
           cache: true
 
-      - name: Install dependencies
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: Build iOS
-        uses: cedvdb/action-flutter-build-ios@v1
+      - name: Build IPA (unsigned)
+        run: flutter build ipa --release --no-codesign
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
         with:
-          # Optional: change if your project is not in root
-          working-directory: ./
-          
-          # Recommended build command
-          build-cmd: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
-          
-          flutterfire: false                    # Set to true only if you use FlutterFire CLI
-          
-          # Secrets (you will add these in GitHub)
-          certificate-base64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
-          certificate-password: ${{ secrets.IOS_BUILD_CERTIFICATE_PASSWORD }}
-          provisioning-profile-base64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
-          keychain-password: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+          name: MyTestApp-IPA
+          path: build/ios/ipa/*.ipa
+          retention-days: 7
