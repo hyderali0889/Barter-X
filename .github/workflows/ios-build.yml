@@ -1,0 +1,40 @@
+name: Build iOS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:   # Allows manual trigger
+
+jobs:
+  build:
+    name: Build iOS IPA
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS
+        uses: cedvdb/action-flutter-build-ios@v1
+        with:
+          # Optional: change if your project is not in root
+          working-directory: ./
+          
+          # Recommended build command
+          build-cmd: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
+          
+          flutterfire: false                    # Set to true only if you use FlutterFire CLI
+          
+          # Secrets (you will add these in GitHub)
+          certificate-base64: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}
+          certificate-password: ${{ secrets.IOS_BUILD_CERTIFICATE_PASSWORD }}
+          provisioning-profile-base64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          keychain-password: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
