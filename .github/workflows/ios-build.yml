@@ -7,27 +7,29 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-15   # Use older macOS runner with Xcode 15.x (more stable for now)
 
     steps:
       - uses: actions/checkout@v4
 
-      # === FIXED Flutter Setup ===
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.0'     # Use a specific stable version (works better)
-          # architecture: x64           # Uncomment this line if it still fails
+          flutter-version: '3.29.0'
           cache: true
-
-      - name: Flutter Doctor
-        run: flutter doctor -v
 
       - name: Clean
         run: flutter clean
 
       - name: Get Dependencies
         run: flutter pub get
+
+      # Important: Update CocoaPods and Firebase-related packages
+      - name: Update Pods
+        run: |
+          cd ios
+          pod repo update
+          pod install --repo-update
 
       - name: Build IPA (for testing)
         run: flutter build ipa --release --no-codesign
