@@ -3,7 +3,7 @@ name: Build iOS for Testing
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:     # Click "Run workflow" manually
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,16 +12,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # === IMPORTANT: Setup Flutter First ===
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 'stable'
           cache: true
 
-      - name: Get dependencies
+      - name: Get Flutter Dependencies
         run: flutter pub get
 
-      - name: Build IPA (unsigned)
+      - name: Build IPA (for testing)
         run: flutter build ipa --release --no-codesign
 
       - name: Upload IPA
